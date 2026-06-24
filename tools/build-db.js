@@ -26,7 +26,8 @@ const itemFiles = [
   path.join(RE, 'item_db_usable.yml'),
   path.join(RE, 'item_db_etc.yml'),
   path.join(CUSTOM, 'item_db.yml'),         // custom items + box overrides
-  path.join(CUSTOM, 'item_db_equip.yml'),   // F11 trophy rebalances (merged last)
+  path.join(CUSTOM, 'item_db_equip.yml'),   // F11 trophy rebalances
+  path.join(CUSTOM, 'item_db_essence.yml'), // class essences (merged last)
 ];
 
 const items = new Map();   // id -> item
