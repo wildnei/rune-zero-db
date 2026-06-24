@@ -75,6 +75,16 @@
   .systems .card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin:12px 0}
   .systems .card h4{margin:0 0 6px;color:var(--gold);font-family:'Cinzel',serif}
   .hide{display:none}
+  .ihead{display:flex;gap:14px;align-items:flex-start;margin-bottom:6px}
+  .iimg{width:60px;height:60px;flex:none;border:1px solid var(--border);border-radius:8px;background:var(--panel-2);object-fit:contain;padding:3px;image-rendering:pixelated}
+  .iimg.hide{display:none}
+  td .ico{width:20px;height:20px;vertical-align:middle;margin-right:7px;image-rendering:pixelated}
+  .eff{font-size:13.5px;margin:4px 0 4px 14px;position:relative}
+  .eff:before{content:'▪';position:absolute;left:-13px;color:var(--gold-dim)}
+  .eff.cond{color:var(--rune);font-weight:600;margin:10px 0 2px 0}
+  .eff.cond:before{content:''}
+  details.raw{margin-top:10px}
+  details.raw summary{cursor:pointer;color:var(--muted);font-size:11.5px;font-family:'JetBrains Mono';letter-spacing:.04em}
 </style>
 </head>
 <body>
@@ -118,6 +128,95 @@ function gearGroup(i){
   if(/Armor/.test(L)) return 'RZ_DROP_ARMOR';
   return null;
 }
+// item icons (public Divine Pride CDN)
+const IMG = id => 'https://static.divine-pride.net/images/items/collection/'+id+'.png';
+const ICO = id => 'https://static.divine-pride.net/images/items/item/'+id+'.png';
+let SKILLS = {};
+function skillName(a){ return SKILLS[a] || a.replace(/^[A-Z]{1,3}_/,'').replace(/_/g,' ').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase()); }
+// friendly enchant-pool names
+const FRIENDLY_GROUP={RZ_DROP_WEAPON:'Weapon Enchants',RZ_DROP_ARMOR:'Armor Enchants',RZ_DROP_SHIELD:'Shield Enchants',RZ_DROP_GARMENT:'Garment Enchants',RZ_DROP_SHOES:'Footgear Enchants',RZ_DROP_ACCESSORY:'Accessory Enchants',RZ_DROP_HEADGEAR:'Headgear Enchants'};
+const SLOT_NICE={ARMOR:'Armor',SHIELD:'Shield',GARMENT:'Garment',SHOES:'Footgear',ACC:'Accessory',HEAD:'Headgear',HEADGEAR:'Headgear'};
+function friendlyGroup(n){
+  if(FRIENDLY_GROUP[n]) return FRIENDLY_GROUP[n];
+  let m=/^RZ_([A-Z]+)_S(\d)$/.exec(n); if(m) return (SLOT_NICE[m[1]]||m[1][0]+m[1].slice(1).toLowerCase())+' Enchant Pool '+m[2];
+  if(n.startsWith('RZ_RDMOPT')) return n;
+  return n.replace(/_/g,' ').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase()); // base groups -> Title Case
+}
+// ---- bonus script -> plain language ----------------------------------------
+function plainEffect(script){
+  const RC={RC_Formless:'Formless',RC_Undead:'Undead',RC_Brute:'Brute',RC_Plant:'Plant',RC_Insect:'Insect',RC_Fish:'Fish',RC_Demon:'Demon',RC_DemiHuman:'Demi-Human',RC_Angel:'Angel',RC_Dragon:'Dragon',RC_Player_Human:'Players',RC_All:'all races',RC_NonBoss:'non-Boss',RC_NonPlayer:'monsters'};
+  const EL={Ele_Neutral:'Neutral',Ele_Water:'Water',Ele_Earth:'Earth',Ele_Fire:'Fire',Ele_Wind:'Wind',Ele_Poison:'Poison',Ele_Holy:'Holy',Ele_Dark:'Shadow',Ele_Ghost:'Ghost',Ele_Undead:'Undead',Ele_All:'all elements'};
+  const SZ={Size_Small:'Small',Size_Medium:'Medium',Size_Large:'Large',Size_All:'all sizes'};
+  const EF={Eff_Stun:'Stun',Eff_Freeze:'Freeze',Eff_Stone:'Stone Curse',Eff_Sleep:'Sleep',Eff_Silence:'Silence',Eff_Curse:'Curse',Eff_Poison:'Poison',Eff_Blind:'Blind',Eff_Bleeding:'Bleeding',Eff_Confusion:'Confusion'};
+  const CL={Class_All:'all monsters',Class_Boss:'Boss monsters',Class_Normal:'normal monsters'};
+  const out=[]; const refVars=new Set();
+  for(let raw of script.split('\n')){
+    let s=raw.trim();
+    if(!s||/^\/\//.test(s)) continue;
+    s=s.replace(/\/\/.*$/,'').replace(/;\s*$/,'').trim(); if(!s) continue;
+    let m;
+    if(m=/(\.@\w+)\s*=\s*getrefine\(\)/.exec(s)){ refVars.add(m[1]); continue; }  // track .@r = getrefine()
+    if(/\bif\s*\(/.test(s)){
+      const cm=/(getrefine\(\)|\.@\w+|BaseLevel)\s*(>=|>|==)\s*(\d+)/.exec(s);
+      if(cm){
+        if(cm[1]==='BaseLevel') out.push({cond:1,text:'If Base Level '+cm[3]+'+:'});
+        else if(cm[1]==='getrefine()'||refVars.has(cm[1])) out.push({cond:1,text:'If refined to +'+cm[3]+' or higher:'});
+      }
+      const body=/\{([^}]*)\}/.exec(s);   // single-line if { bonus...; } -> translate the inline body
+      if(body) for(let st of body[1].split(';')){ st=st.trim(); if(!st)continue; const t=translateBonus(st,{RC,EL,SZ,EF,CL}); if(t) out.push({text:t}); }
+      continue;
+    }
+    if(/^[}{]|^\.@|^(else|for|while|set\b|switch|case|default|deletearray|setarray|end|return)/.test(s)) continue;
+    const t=translateBonus(s,{RC,EL,SZ,EF,CL}); if(t) out.push({text:t});
+  }
+  return out;
+}
+function valFmt(v){ v=String(v).trim(); if(/^-?\d+$/.test(v)) return (+v>=0?'+':'')+v; if(/BaseLevel/.test(v)) return '(scales with Base Level)'; if(/getrefine/.test(v)) return '(scales with refine)'; return '+'+v; }
+function pctVal(v){ const f=valFmt(v); return /^[+\-]/.test(f)?f+'%':f; }
+function translateBonus(s,M){
+  const sk=skillName, num='(-?\\d+)', any='([A-Za-z0-9_().*+/ -]+)';
+  let m;
+  // skill damage (incl. BaseLevel scaling)
+  if(m=/bonus2 bSkillAtk,"([A-Z_0-9]+)",(.+)/.exec(s)) return sk(m[1])+' damage '+pctVal(m[2]);
+  if(m=/bonus2 bSkillCooldown,"([A-Z_0-9]+)",(-?\d+)/.exec(s)) return sk(m[1])+' cooldown '+ (+m[2]/1000)+'s';
+  if(m=/bonus2 bSkillUseSP(?:rate)?,"([A-Z_0-9]+)",(-?\d+)/.exec(s)) return sk(m[1])+' SP cost '+m[2]+(/rate/.test(s)?'%':'');
+  if(m=/bonus2 bVariableCastrate,"([A-Z_0-9]+)",(-?\d+)/.exec(s)) return sk(m[1])+' variable cast '+m[2]+'%';
+  // race/size/element add & sub
+  if(m=/bonus2 b(Magic)?AddRace2?,(RC_\w+),(-?\d+)/.exec(s)) return (m[1]?'Magic d':'D')+'amage to '+(M.RC[m[2]]||m[2])+' race +'+m[3]+'%';
+  if(m=/bonus2 bSubRace2?,(RC_\w+),(-?\d+)/.exec(s)) return 'Damage taken from '+(M.RC[m[1]]||m[1])+' race '+(-m[2])+'%';
+  if(m=/bonus2 b(Magic)?AddSize,(Size_\w+),(-?\d+)/.exec(s)) return (m[1]?'Magic d':'D')+'amage to '+(M.SZ[m[2]]||m[2])+' size +'+m[3]+'%';
+  if(m=/bonus2 bSubSize,(Size_\w+),(-?\d+)/.exec(s)) return 'Damage taken from '+(M.SZ[m[1]]||m[1])+' size '+(-m[2])+'%';
+  if(m=/bonus2 b(Magic)?AddEle,(Ele_\w+),(-?\d+)/.exec(s)) return (m[1]?'Magic d':'D')+'amage to '+(M.EL[m[2]]||m[2])+' property +'+m[3]+'%';
+  if(m=/bonus2 bSubEle,(Ele_\w+),(-?\d+)/.exec(s)) return (M.EL[m[1]]||m[1])+' resistance +'+m[2]+'%';
+  if(m=/bonus2 b(Magic)?AddClass,(Class_\w+),(-?\d+)/.exec(s)) return (m[1]?'Magic d':'D')+'amage to '+(M.CL[m[2]]||m[2])+' +'+m[3]+'%';
+  if(m=/bonus2 bSubClass,(Class_\w+),(-?\d+)/.exec(s)) return 'Damage taken from '+(M.CL[m[1]]||m[1])+' '+(-m[2])+'%';
+  if(m=/bonus2 bResEff,(Eff_\w+),(-?\d+)/.exec(s)) return (M.EF[m[1]]||m[1])+' resistance +'+(m[2]/100)+'%';
+  if(m=/bonus2 bAddEff,(Eff_\w+),(-?\d+)/.exec(s)) return (m[2]/100)+'% chance to inflict '+(M.EF[m[1]]||m[1]);
+  // simple stat / flat bonuses
+  const S={bStr:'STR',bAgi:'AGI',bVit:'VIT',bInt:'INT',bDex:'DEX',bLuk:'LUK',bAllStats:'All Stats',
+    bMaxHP:'Max HP',bMaxSP:'Max SP',bBaseAtk:'ATK',bMatk:'MATK',bDef:'DEF',bMdef:'MDEF',bCritical:'Critical',
+    bHit:'Hit',bFlee:'Flee',bFlee2:'Perfect Dodge',bAspd:'ASPD'};
+  if(m=/bonus (b\w+),(-?\d+)/.exec(s)){
+    const k=m[1],v=m[2];
+    if(S[k]) return S[k]+' '+(+v>=0?'+':'')+v;
+    const P={bMaxHPrate:'Max HP',bMaxSPrate:'Max SP',bAtkRate:'ATK',bMatkRate:'MATK',bAspdRate:'ASPD',bDefRate:'DEF',bCritAtkRate:'Critical Damage',bHealPower:'Heal Power',bHealPower2:'Healing Received',bSpeedRate:'Movement Speed',bSpeedAddRate:'Movement Speed',bAddItemHealRate:'Item Heal Rate'};
+    if(P[k]) return P[k]+' '+(+v>=0?'+':'')+v+'%';
+    const N={bVariableCastrate:'Variable Cast',bFixedCastrate:'Fixed Cast',bDelayrate:'After-cast Delay',bUseSPrate:'SP Cost',bCastrate:'Cast Time'};
+    if(N[k]) return N[k]+' '+v+'%';
+    if(k==='bShortWeaponDamageReturn') return 'Reflect '+v+'% melee damage';
+    if(k==='bLongWeaponDamageReturn') return 'Reflect '+v+'% ranged damage';
+    if(k==='bMagicDamageReturn') return 'Reflect '+v+'% magic damage';
+    if(k==='bNearAtkDef') return 'Melee damage taken -'+v+'%';
+    if(k==='bLongAtkDef') return 'Ranged damage taken -'+v+'%';
+    if(k==='bMagicAtkDef'||k==='bMagicSubDefEle') return 'Magic damage taken -'+v+'%';
+    if(k==='bAddMaxWeight') return 'Max Weight +'+(v/10);
+    if(k==='bPerfectHitRate') return 'Perfect Hit +'+v+'%';
+  }
+  // flagged bonuses (no value)
+  const F={bUnbreakableWeapon:'Weapon is indestructible',bUnbreakableArmor:'Armor is indestructible',bUnbreakableHelm:'Headgear is indestructible',bUnbreakableShield:'Shield is indestructible',bUnbreakableGarment:'Garment is indestructible',bUnbreakableShoes:'Footgear is indestructible',bNoSizeFix:'Ignores the size damage penalty',bNoCastCancel:'Casting cannot be interrupted',bNoWalkDelay:'No movement delay when hit',bNoKnockback:'Immune to knockback'};
+  if(m=/bonus (b\w+)/.exec(s)){ if(F[m[1]]) return F[m[1]]; }
+  return null; // unrecognised -> stays in the raw script
+}
 let view='items', sel=null;
 // equip-location -> our auto drop-option group (matches src patch 0010)
 const SLOT_GROUP={Weapon:'RZ_DROP_WEAPON',Armor:'RZ_DROP_ARMOR',Shield:'RZ_DROP_SHIELD',Garment:'RZ_DROP_GARMENT',Shoes:'RZ_DROP_SHOES',Headgear:'RZ_DROP_HEADGEAR',Accessory:'RZ_DROP_ACCESSORY'};
@@ -126,13 +225,14 @@ const ELE=['Neutral','Water','Earth','Fire','Wind','Poison','Holy','Shadow','Gho
 
 async function boot(){
   try{
-    const [it,mo,me,op] = await Promise.all([
+    const [it,mo,me,op,sk] = await Promise.all([
       fetch('data/items.json').then(r=>{if(!r.ok)throw 0;return r.json()}),
       fetch('data/mobs.json').then(r=>r.json()),
       fetch('data/meta.json').then(r=>r.json()),
       fetch('data/options.json').then(r=>r.json()),
+      fetch('data/skills.json').then(r=>r.json()).catch(()=>({})),
     ]);
-    ITEMS=it; MOBS=mo; META=me; OPT=op;
+    ITEMS=it; MOBS=mo; META=me; OPT=op; SKILLS=sk;
     ITEMS.forEach(i=>{i._s=(i.name+' '+(i.aegis||'')+' '+i.id+' '+(i.boosts||[]).map(b=>b.skill).join(' ')).toLowerCase(); ITEM_BY_ID.set(i.id,i);});
     MOBS.forEach(m=>{m._s=(m.name+' '+(m.aegis||'')+' '+m.id).toLowerCase(); MOB_BY_ID.set(m.id,m);});
     OPT.groups.forEach(g=>{g._s=(g.name).toLowerCase(); GROUP_BY_ID.set(g.id,g); GROUP_BY_NAME.set(g.name,g);});
@@ -192,7 +292,7 @@ function render(){
       if(q && !i._s.includes(q)) continue;
       if(ft==='Custom' && !i.custom) continue;
       else if(ft!=='All types' && ft!=='Custom' && i.type!==ft) continue;
-      total++; if(n<300){out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td>${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}${i.slots?` <span class="badge">[${i.slots}]</span>`:''}</td><td>${i.type||''}</td><td>${(i.loc||[]).join(', ')||'-'}</td></tr>`;n++;}
+      total++; if(n<300){out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td><img class="ico" src="${ICO(i.id)}" loading="lazy" onerror="this.style.display='none'">${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}${i.slots?` <span class="badge">[${i.slots}]</span>`:''}</td><td>${i.type||''}</td><td>${(i.loc||[]).join(', ')||'-'}</td></tr>`;n++;}
     }
   }else if(view==='mobs'){
     for(const m of MOBS){
@@ -211,14 +311,15 @@ function render(){
       total++; if(n<300){
         const sk=i.boosts.map(b=>b.skill).slice(0,3).join(', ')+(i.boosts.length>3?' +'+(i.boosts.length-3):'');
         const tier=(has3&&hasT)?'<span class="badge">Mixed</span>':has3?'<span class="badge mvp">3rd</span>':'<span class="badge">Trans</span>';
-        out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td>${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}</td><td class="mono" style="font-size:11.5px">${esc(sk)}</td><td>${tier}</td></tr>`;n++;
+        const skn=i.boosts.map(b=>skillName(b.skill)).slice(0,3).join(', ')+(i.boosts.length>3?' +'+(i.boosts.length-3):'');
+        out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td><img class="ico" src="${ICO(i.id)}" loading="lazy" onerror="this.style.display='none'">${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}</td><td style="font-size:12px">${esc(skn)}</td><td>${tier}</td></tr>`;n++;
       }
     }
   }else{ // enchants
     for(const g of OPT.groups){
       if(q && !g._s.includes(q)) continue;
       if(ft==='Rune Zero' && !g.name.startsWith('RZ_')) continue;
-      total++; if(n<300){out+=`<tr data-id="${g.id}"><td class="mono">${g.id}</td><td>${esc(g.name)} ${g.name.startsWith('RZ_')?'<span class="badge custom">RZ</span>':''}</td><td class="mono">${g.options.length}</td><td>${g.name.startsWith('RZ_')?'Rune Zero':'Base'}</td></tr>`;n++;}
+      total++; if(n<300){out+=`<tr data-id="${g.id}"><td class="mono">${g.id}</td><td>${esc(friendlyGroup(g.name))} ${g.name.startsWith('RZ_')?'<span class="badge custom">RZ</span>':''}</td><td class="mono">${g.options.length}</td><td>${g.name.startsWith('RZ_')?'Rune Zero':'Base'}</td></tr>`;n++;}
     }
   }
   rows.innerHTML=out||'<tr><td colspan="4" style="color:var(--muted);padding:24px;text-align:center">No matches.</td></tr>';
@@ -238,8 +339,8 @@ function showGroup(id){
   const g=GROUP_BY_ID.get(id); if(!g)return;
   if(view!=='enchants'){view='enchants';setView('enchants');}
   highlight(id);
-  let h=`<h2>${esc(g.name)} ${g.name.startsWith('RZ_')?'<span class="badge custom">Rune Zero</span>':''}</h2>`;
-  h+=`<div class="sub mono">group ${g.id} · ${g.options.length} possible options · up to ${g.maxRandom} random</div>`;
+  let h=`<h2>${esc(friendlyGroup(g.name))} ${g.name.startsWith('RZ_')?'<span class="badge custom">Rune Zero</span>':''}</h2>`;
+  h+=`<div class="sub mono">${esc(g.name)} · ${g.options.length} options · up to ${g.maxRandom} random</div>`;
   const fixed=g.options.filter(o=>o.fixed), rnd=g.options.filter(o=>!o.fixed);
   const rowOpt=o=>{const t=OPT.types[o.name]||{}; const d=(t.desc||o.name).replace('+N',(o.min===o.max?'+'+o.min:'+'+o.min+'–'+o.max)).replace('-N','-'+(o.min===o.max?o.min:o.min+'–'+o.max));
     return `<div class="droprow"><span>${esc(d)}</span><span class="rate">${(o.chance/100).toFixed(o.chance%100?2:0)}%</span></div>`;};
@@ -251,10 +352,9 @@ function showGroup(id){
 
 function showItem(id){
   const i=ITEM_BY_ID.get(id); if(!i)return;
-  if(view!=='items'){view='items';setView('items');}
+  if(view!=='items' && view!=='skills'){view='items';setView('items');}  // stay on Skill Items tab when browsing it
   highlight(id);
-  let h=`<h2>${esc(i.name)} ${i.custom?'<span class="badge custom">Rune Zero</span>':''}</h2>`;
-  h+=`<div class="sub mono">ID ${i.id} · ${esc(i.aegis||'')}</div>`;
+  let h=`<div class="ihead"><img class="iimg" src="${IMG(i.id)}" onerror="this.classList.add('hide')" alt=""><div><h2>${esc(i.name)} ${i.custom?'<span class="badge custom">Rune Zero</span>':''}</h2><div class="sub mono">ID ${i.id} · ${esc(i.aegis||'')}</div></div></div>`;
   h+='<dl class="kv">';
   h+=row('Type', i.type + (i.sub?` (${i.sub})`:''));
   if(i.slots)h+=row('Card slots', i.slots);
@@ -270,10 +370,16 @@ function showItem(id){
   h+='</dl>';
   if(i.boosts&&i.boosts.length){
     h+='<div class="sec"><h4>Boosts skills</h4>';
-    for(const b of i.boosts) h+=`<div class="droprow"><span class="mono">${esc(b.skill)}</span><span class="rate">${b.t3?'3rd class':'up to trans'}</span></div>`;
+    for(const b of i.boosts) h+=`<div class="droprow"><span>${esc(skillName(b.skill))} <span class="mono" style="color:var(--muted);font-size:11px">${esc(b.skill)}</span></span><span class="rate">${b.t3?'3rd class':'up to trans'}</span></div>`;
     h+='</div>';
   }
-  if(i.script){h+=`<div class="sec"><h4>Effect / Script</h4><pre class="script">${esc(i.script)}</pre></div>`;}
+  if(i.script){
+    const pe=plainEffect(i.script);
+    h+='<div class="sec"><h4>Effect</h4>';
+    if(pe.length) h+=pe.map(l=>`<div class="eff${l.cond?' cond':''}">${esc(l.text)}</div>`).join('');
+    else h+='<div class="eff" style="margin-left:0">A special effect — see the script below.</div>';
+    h+=`<details class="raw"><summary>▸ Show raw script</summary><pre class="script">${esc(i.script)}</pre></details></div>`;
+  }
   // dropped by
   const db=(i.droppedBy||[]).slice().sort((a,b)=>b.rate-a.rate);
   if(db.length){
@@ -286,7 +392,7 @@ function showItem(id){
   const gg=gearGroup(i), grp=gg&&GROUP_BY_NAME.get(gg);
   if(grp){
     h+=`<div class="sec"><h4>Possible random options (on drop)</h4>`;
-    h+=`<div style="font-size:13px">When this drops it can roll options from <a onclick="location.hash='group/${grp.id}'">${esc(gg)}</a> — up to ${grp.maxRandom+1}. The option count sets the floor beam color (3 green · 4 purple · 5 gold).</div>`;
+    h+=`<div style="font-size:13px">When this drops it can roll options from <a onclick="location.hash='group/${grp.id}'">${esc(friendlyGroup(gg))}</a> — up to ${grp.maxRandom+1}. The option count sets the floor beam color (3 green · 4 purple · 5 gold).</div>`;
     if(!db.length)h+='<div class="rate" style="margin-top:6px">No fixed monster drop — obtain via forging, drops, or shops.</div>';
     h+='</div>';
   }

@@ -25,7 +25,8 @@ const itemFiles = [
   path.join(RE, 'item_db_equip.yml'),
   path.join(RE, 'item_db_usable.yml'),
   path.join(RE, 'item_db_etc.yml'),
-  path.join(CUSTOM, 'item_db.yml'),       // our custom items + overrides (merged last)
+  path.join(CUSTOM, 'item_db.yml'),         // custom items + box overrides
+  path.join(CUSTOM, 'item_db_equip.yml'),   // F11 trophy rebalances (merged last)
 ];
 
 const items = new Map();   // id -> item
@@ -172,6 +173,10 @@ for (const f of [path.join(RE,'item_randomopt_group.yml'), path.join(CUSTOM,'ite
     optGroups.push({ id:g.Id, name:g.Group, maxRandom:g.MaxRandom||0, custom:f.includes('db-import'), options:opts });
   }
 
+// ---- skill names (aegis -> English, from skill_db Description) --------------
+const skillNames = {};
+for (const e of load(path.join(RE,'skill_db.yml'))) if(e.Name && e.Description) skillNames[e.Name]=e.Description;
+
 // ---- write -----------------------------------------------------------------
 if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
 const itemArr = [...items.values()].filter(i => i.name).sort((a,b)=>a.id-b.id);
@@ -180,6 +185,7 @@ const mobArr  = [...mobs.values()].filter(m => m.name).sort((a,b)=>a.id-b.id);
 fs.writeFileSync(path.join(OUT,'items.json'), JSON.stringify(itemArr));
 fs.writeFileSync(path.join(OUT,'mobs.json'),  JSON.stringify(mobArr));
 fs.writeFileSync(path.join(OUT,'options.json'), JSON.stringify({ types:optTypes, groups:optGroups }));
+fs.writeFileSync(path.join(OUT,'skills.json'), JSON.stringify(skillNames));
 fs.writeFileSync(path.join(OUT,'meta.json'), JSON.stringify({
   built: new Date().toISOString().slice(0,10),
   items: itemArr.length, mobs: mobArr.length,
