@@ -191,7 +191,16 @@ function translateBonus(s,M){
   if(m=/bonus2 b(Magic)?AddClass,(Class_\w+),(-?\d+)/.exec(s)) return (m[1]?'Magic d':'D')+'amage to '+(M.CL[m[2]]||m[2])+' +'+m[3]+'%';
   if(m=/bonus2 bSubClass,(Class_\w+),(-?\d+)/.exec(s)) return 'Damage taken from '+(M.CL[m[1]]||m[1])+' '+(-m[2])+'%';
   if(m=/bonus2 bResEff,(Eff_\w+),(-?\d+)/.exec(s)) return (M.EF[m[1]]||m[1])+' resistance +'+(m[2]/100)+'%';
-  if(m=/bonus2 bAddEff,(Eff_\w+),(-?\d+)/.exec(s)) return (m[2]/100)+'% chance to inflict '+(M.EF[m[1]]||m[1]);
+  if(m=/bonus2 bAddEff(?:WhenHit)?,(Eff_\w+),(-?\d+)/.exec(s)) return (m[2]/100)+'% chance to inflict '+(M.EF[m[1]]||m[1])+(/WhenHit/.test(s)?' when hit':'');
+  if(m=/bonus2 bSkillHeal2?,"([A-Z_0-9]+)",(-?\d+)/.exec(s)) return sk(m[1])+' healing +'+m[2]+'%';
+  if(m=/bonus2 bHPDrainValue,(-?\d+)/.exec(s)) return 'Recover '+m[1]+' HP per attack';
+  if(m=/bonus2 bSPDrainValue,(-?\d+)/.exec(s)) return 'Recover '+m[1]+' SP per attack';
+  if(m=/bonus2 bExpAddRace,(RC_\w+),(-?\d+)/.exec(s)) return 'EXP from '+(M.RC[m[1]]||m[1])+' race +'+m[2]+'%';
+  if(m=/bonus2 bDropAddRace,(RC_\w+),(-?\d+)/.exec(s)) return 'Drop rate from '+(M.RC[m[1]]||m[1])+' race +'+m[2]/100+'%';
+  if(m=/bonus2 bIgnoreDefRace,(RC_\w+)/.exec(s)) return 'Ignore DEF of '+(M.RC[m[1]]||m[1])+' race';
+  if(m=/bonus2 bWeaponAtk\w*,(\d+),(-?\d+)/.exec(s)) return 'Weapon ATK +'+m[2];
+  if(m=/bonus3 bAutoSpell\w*,"([A-Z_0-9]+)",(\d+),(\d+)/.exec(s)) return (m[3]/100)+'% chance to autocast '+sk(m[1])+' Lv'+m[2];
+  if(m=/bonus3 bAddEff\w*,(Eff_\w+),(\d+)/.exec(s)) return (m[2]/100)+'% chance to inflict '+(M.EF[m[1]]||m[1]);
   // simple stat / flat bonuses
   const S={bStr:'STR',bAgi:'AGI',bVit:'VIT',bInt:'INT',bDex:'DEX',bLuk:'LUK',bAllStats:'All Stats',
     bMaxHP:'Max HP',bMaxSP:'Max SP',bBaseAtk:'ATK',bMatk:'MATK',bDef:'DEF',bMdef:'MDEF',bCritical:'Critical',
@@ -199,7 +208,7 @@ function translateBonus(s,M){
   if(m=/bonus (b\w+),(-?\d+)/.exec(s)){
     const k=m[1],v=m[2];
     if(S[k]) return S[k]+' '+(+v>=0?'+':'')+v;
-    const P={bMaxHPrate:'Max HP',bMaxSPrate:'Max SP',bAtkRate:'ATK',bMatkRate:'MATK',bAspdRate:'ASPD',bDefRate:'DEF',bCritAtkRate:'Critical Damage',bHealPower:'Heal Power',bHealPower2:'Healing Received',bSpeedRate:'Movement Speed',bSpeedAddRate:'Movement Speed',bAddItemHealRate:'Item Heal Rate'};
+    const P={bMaxHPrate:'Max HP',bMaxSPrate:'Max SP',bAtkRate:'ATK',bMatkRate:'MATK',bAspdRate:'ASPD',bDefRate:'DEF',bCritAtkRate:'Critical Damage',bHealPower:'Heal Power',bHealPower2:'Healing Received',bSpeedRate:'Movement Speed',bSpeedAddRate:'Movement Speed',bAddItemHealRate:'Item Heal Rate',bShortAtkRate:'Melee Damage',bLongAtkRate:'Ranged Damage',bHPrecovRate:'HP Recovery',bSPrecovRate:'SP Recovery',bDoubleRate:'Double Attack Chance',bCriticalLong:'Ranged Critical'};
     if(P[k]) return P[k]+' '+(+v>=0?'+':'')+v+'%';
     const N={bVariableCastrate:'Variable Cast',bFixedCastrate:'Fixed Cast',bDelayrate:'After-cast Delay',bUseSPrate:'SP Cost',bCastrate:'Cast Time'};
     if(N[k]) return N[k]+' '+v+'%';
@@ -215,7 +224,9 @@ function translateBonus(s,M){
   // flagged bonuses (no value)
   const F={bUnbreakableWeapon:'Weapon is indestructible',bUnbreakableArmor:'Armor is indestructible',bUnbreakableHelm:'Headgear is indestructible',bUnbreakableShield:'Shield is indestructible',bUnbreakableGarment:'Garment is indestructible',bUnbreakableShoes:'Footgear is indestructible',bNoSizeFix:'Ignores the size damage penalty',bNoCastCancel:'Casting cannot be interrupted',bNoWalkDelay:'No movement delay when hit',bNoKnockback:'Immune to knockback'};
   if(m=/bonus (b\w+)/.exec(s)){ if(F[m[1]]) return F[m[1]]; }
-  return null; // unrecognised -> stays in the raw script
+  // generic fallback for any remaining single-value bonus -> prettified name
+  if(m=/^bonus (b[A-Za-z0-9]+),(-?\d+)$/.exec(s)){ const isR=/Rate$/.test(m[1]); let nm=m[1].slice(1).replace(/([a-z0-9])([A-Z])/g,'$1 $2').replace(/ Rate$/,''); return nm+' '+(+m[2]>=0?'+':'')+m[2]+(isR?'%':''); }
+  return null; // unrecognised (multi-arg/complex) -> stays in the raw script
 }
 let view='items', sel=null;
 // equip-location -> our auto drop-option group (matches src patch 0010)
@@ -272,7 +283,7 @@ function setView(v){
   const opts = v==='items'
     ? ['All types','Weapon','Armor','Card','Healing','Usable','Etc','Delayconsume','Ammo','Custom']
     : v==='mobs' ? ['All','MVP only','Normal only']
-    : v==='skills' ? ['All tiers','Up to Trans','3rd Class']
+    : v==='skills' ? ['Trans skills (up to ep13)']
     : ['Rune Zero','All groups'];
   opts.forEach(o=>{const e=document.createElement('option');e.textContent=o;f.appendChild(e);});
   $('#listTitle').textContent = v==='items'?'Items':v==='mobs'?'Monsters':v==='skills'?'Skill-Boosting Items':'Enchant / Option Pools';
@@ -304,14 +315,13 @@ function render(){
   }else if(view==='skills'){
     for(const i of ITEMS){
       if(!i.boosts||!i.boosts.length) continue;
+      const trans=i.boosts.filter(b=>!b.t3);
+      if(!trans.length) continue;                 // ep13 server: hide pure-3rd-class items
       if(q && !i._s.includes(q)) continue;
-      const has3=i.boosts.some(b=>b.t3), hasT=i.boosts.some(b=>!b.t3);
-      if(ft==='3rd Class' && !has3) continue;
-      if(ft==='Up to Trans' && !hasT) continue;
       total++; if(n<300){
-        const sk=i.boosts.map(b=>b.skill).slice(0,3).join(', ')+(i.boosts.length>3?' +'+(i.boosts.length-3):'');
-        const tier=(has3&&hasT)?'<span class="badge">Mixed</span>':has3?'<span class="badge mvp">3rd</span>':'<span class="badge">Trans</span>';
-        const skn=i.boosts.map(b=>skillName(b.skill)).slice(0,3).join(', ')+(i.boosts.length>3?' +'+(i.boosts.length-3):'');
+        const has3=i.boosts.some(b=>b.t3);
+        const skn=trans.map(b=>skillName(b.skill)).slice(0,3).join(', ')+(trans.length>3?' +'+(trans.length-3):'');
+        const tier=has3?'<span class="badge">+3rd</span>':'<span class="badge">Trans</span>';
         out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td><img class="ico" src="${ICO(i.id)}" loading="lazy" onerror="this.style.display='none'">${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}</td><td style="font-size:12px">${esc(skn)}</td><td>${tier}</td></tr>`;n++;
       }
     }
