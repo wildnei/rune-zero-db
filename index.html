@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rune Zero — Game Database</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#13151c; --panel:#1a1d26; --panel-2:#21252f; --border:#2c313f;
+    --gold:#c9a24b; --gold-dim:#9c7d3a; --rune:#5ad0c4;
+    --text:#e8e5dc; --muted:#959aa8;
+    --common:#9aa0ac; --rare:#5b9dd9; --mythic:#b07ad6; --legendary:#e0a93b;
+    --good:#6bc77a; --warn:#e0794b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.55}
+  a{color:var(--rune);text-decoration:none;cursor:pointer}
+  a:hover{text-decoration:underline}
+  code,.mono{font-family:'JetBrains Mono',monospace}
+
+  header.top{position:sticky;top:0;z-index:30;background:rgba(19,21,28,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+  .top-inner{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .brand{font-family:'Cinzel',serif;font-weight:700;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;font-size:15px;text-shadow:0 0 18px rgba(201,162,75,.3)}
+  .brand small{color:var(--muted);font-family:'JetBrains Mono';font-size:10px;letter-spacing:.2em;display:block}
+  nav.tabs{display:flex;gap:4px;margin-left:8px}
+  nav.tabs button{background:none;border:1px solid transparent;color:var(--muted);padding:7px 14px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
+  nav.tabs button.active{color:var(--gold);background:var(--panel);border-color:var(--border)}
+  nav.tabs button:hover{color:var(--text)}
+  .search-wrap{margin-left:auto;display:flex;gap:8px;align-items:center;flex:1;min-width:240px;max-width:520px}
+  input.search{flex:1;background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:9px;padding:9px 13px;font-size:14px;outline:none}
+  input.search:focus{border-color:var(--gold-dim)}
+  select{background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 10px;font-size:13px}
+
+  .shell{max-width:1280px;margin:0 auto;padding:18px 20px 80px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:880px){.shell{grid-template-columns:1fr}}
+  .col h3{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dim);margin:2px 0 10px}
+
+  .list{border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  table{border-collapse:collapse;width:100%;font-size:13.5px}
+  th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+  thead th{position:sticky;top:0;background:var(--panel-2);font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  tbody tr{cursor:pointer}
+  tbody tr:hover{background:rgba(255,255,255,.03)}
+  tbody tr.sel{background:rgba(201,162,75,.10)}
+  td.mono{font-family:'JetBrains Mono';color:var(--muted)}
+  .badge{font-family:'JetBrains Mono';font-size:10px;padding:1px 6px;border-radius:5px;border:1px solid var(--border);color:var(--muted)}
+  .badge.custom{color:var(--rune);border-color:var(--rune)}
+  .badge.mvp{color:var(--legendary);border-color:var(--gold-dim)}
+  .scry{max-height:calc(100vh - 200px);overflow:auto;display:block}
+  .count{font-size:12px;color:var(--muted);margin:8px 2px}
+
+  .detail{border:1px solid var(--border);border-radius:12px;background:var(--panel);padding:18px 20px;min-height:200px;position:sticky;top:80px;max-height:calc(100vh - 100px);overflow:auto}
+  .detail .empty{color:var(--muted);text-align:center;padding:50px 0}
+  .detail h2{font-family:'Cinzel',serif;font-size:22px;margin:0 0 2px;color:var(--text)}
+  .detail .sub{color:var(--muted);font-size:13px;margin-bottom:14px}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;font-size:13.5px;margin:12px 0}
+  .kv dt{color:var(--muted)}
+  .kv dd{margin:0}
+  .sec{margin-top:16px;border-top:1px solid var(--border);padding-top:12px}
+  .sec h4{font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dim);margin:0 0 8px}
+  pre.script{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:11px 13px;font-size:12px;overflow:auto;color:var(--rune);white-space:pre-wrap;line-height:1.5}
+  .droprow{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .droprow:last-child{border-bottom:none}
+  .rate{font-family:'JetBrains Mono';color:var(--muted);font-size:12px}
+  .note{border-left:3px solid var(--rune);background:var(--panel-2);border-radius:8px;padding:10px 12px;font-size:13px;margin:12px 0;color:var(--text)}
+  .pill{display:inline-block;font-family:'JetBrains Mono';font-size:11px;background:var(--panel-2);border:1px solid var(--border);color:var(--muted);padding:3px 9px;border-radius:999px;margin:2px 4px 2px 0}
+
+  .loading,.errbox{max-width:680px;margin:80px auto;text-align:center;color:var(--muted)}
+  .errbox code{background:var(--panel-2);padding:2px 8px;border-radius:6px;color:var(--gold)}
+  .systems{max-width:880px;margin:0 auto;padding:8px 4px}
+  .systems h2{font-family:'Cinzel',serif;color:var(--gold)}
+  .systems .card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin:12px 0}
+  .systems .card h4{margin:0 0 6px;color:var(--gold);font-family:'Cinzel',serif}
+  .hide{display:none}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">Rune&nbsp;Zero<small>GAME DATABASE</small></div>
+    <nav class="tabs">
+      <button data-view="items" class="active">Items</button>
+      <button data-view="mobs">Monsters</button>
+      <button data-view="skills">Skill Items</button>
+      <button data-view="enchants">Enchants</button>
+      <button data-view="systems">Systems</button>
+    </nav>
+    <div class="search-wrap" id="searchWrap">
+      <input class="search" id="search" placeholder="Search by name, ID, or aegis…" autocomplete="off">
+      <select id="filterType"></select>
+    </div>
+  </div>
+</header>
+
+<div id="app">
+  <div class="loading" id="loading">
+    <div style="font-family:'Cinzel',serif;font-size:20px;color:var(--gold)">Loading the database…</div>
+    <div id="loadmsg" style="margin-top:8px">fetching items &amp; monsters</div>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+let ITEMS=[], MOBS=[], META={}, OPT={types:{},groups:[]}, ITEM_BY_ID=new Map(), MOB_BY_ID=new Map(), GROUP_BY_ID=new Map(), GROUP_BY_NAME=new Map();
+function gearGroup(i){
+  if(i.type==='Weapon') return 'RZ_DROP_WEAPON';
+  if(i.type!=='Armor') return null;
+  const L=(i.loc||[]).join(' ');
+  if(/Head/.test(L)) return 'RZ_DROP_HEADGEAR';
+  if(/Left_Hand/.test(L)) return 'RZ_DROP_SHIELD';
+  if(/Garment/.test(L)) return 'RZ_DROP_GARMENT';
+  if(/Shoes/.test(L)) return 'RZ_DROP_SHOES';
+  if(/Accessory/.test(L)) return 'RZ_DROP_ACCESSORY';
+  if(/Armor/.test(L)) return 'RZ_DROP_ARMOR';
+  return null;
+}
+let view='items', sel=null;
+// equip-location -> our auto drop-option group (matches src patch 0010)
+const SLOT_GROUP={Weapon:'RZ_DROP_WEAPON',Armor:'RZ_DROP_ARMOR',Shield:'RZ_DROP_SHIELD',Garment:'RZ_DROP_GARMENT',Shoes:'RZ_DROP_SHOES',Headgear:'RZ_DROP_HEADGEAR',Accessory:'RZ_DROP_ACCESSORY'};
+const RACE=['Formless','Undead','Brute','Plant','Insect','Fish','Demon','Demihuman','Angel','Dragon'];
+const ELE=['Neutral','Water','Earth','Fire','Wind','Poison','Holy','Shadow','Ghost','Undead'];
+
+async function boot(){
+  try{
+    const [it,mo,me,op] = await Promise.all([
+      fetch('data/items.json').then(r=>{if(!r.ok)throw 0;return r.json()}),
+      fetch('data/mobs.json').then(r=>r.json()),
+      fetch('data/meta.json').then(r=>r.json()),
+      fetch('data/options.json').then(r=>r.json()),
+    ]);
+    ITEMS=it; MOBS=mo; META=me; OPT=op;
+    ITEMS.forEach(i=>{i._s=(i.name+' '+(i.aegis||'')+' '+i.id+' '+(i.boosts||[]).map(b=>b.skill).join(' ')).toLowerCase(); ITEM_BY_ID.set(i.id,i);});
+    MOBS.forEach(m=>{m._s=(m.name+' '+(m.aegis||'')+' '+m.id).toLowerCase(); MOB_BY_ID.set(m.id,m);});
+    OPT.groups.forEach(g=>{g._s=(g.name).toLowerCase(); GROUP_BY_ID.set(g.id,g); GROUP_BY_NAME.set(g.name,g);});
+    initUI();
+  }catch(e){
+    $('#app').innerHTML='<div class="errbox"><h2 style="color:var(--gold);font-family:Cinzel">Couldn’t load the data files</h2>'
+      +'<p>Browsers block <code>fetch()</code> of local files. Serve this folder over http:</p>'
+      +'<p><code>npx serve wiki</code> &nbsp;or&nbsp; <code>python -m http.server</code> (then open the shown URL).</p>'
+      +'<p style="color:var(--muted);font-size:12px">Hosting it (GitHub Pages, Netlify, any static host) also works.</p></div>';
+  }
+}
+
+function initUI(){
+  $('#app').innerHTML =
+    '<div class="shell" id="browse"><div class="col"><h3 id="listTitle"></h3>'
+    +'<div class="count" id="count"></div><div class="list"><div class="scry"><table>'
+    +'<thead id="thead"></thead><tbody id="rows"></tbody></table></div></div></div>'
+    +'<div class="col"><h3>Detail</h3><div class="detail" id="detail"><div class="empty">Select an entry to view details.</div></div></div></div>'
+    +'<div class="systems hide" id="systems"></div>';
+  renderSystems();
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>setView(b.dataset.view));
+  $('#search').addEventListener('input', debounce(render, 160));
+  $('#filterType').addEventListener('change', render);
+  window.addEventListener('hashchange', routeHash);
+  setView('items'); routeHash();
+}
+
+function setView(v){
+  view=v;
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+  $('#searchWrap').style.visibility = v==='systems'?'hidden':'visible';
+  $('#browse').classList.toggle('hide', v==='systems');
+  $('#systems').classList.toggle('hide', v!=='systems');
+  if(v==='systems') return;
+  // type filter options
+  const f=$('#filterType'); f.innerHTML='';
+  const opts = v==='items'
+    ? ['All types','Weapon','Armor','Card','Healing','Usable','Etc','Delayconsume','Ammo','Custom']
+    : v==='mobs' ? ['All','MVP only','Normal only']
+    : v==='skills' ? ['All tiers','Up to Trans','3rd Class']
+    : ['Rune Zero','All groups'];
+  opts.forEach(o=>{const e=document.createElement('option');e.textContent=o;f.appendChild(e);});
+  $('#listTitle').textContent = v==='items'?'Items':v==='mobs'?'Monsters':v==='skills'?'Skill-Boosting Items':'Enchant / Option Pools';
+  $('#thead').innerHTML = v==='items'
+    ? '<tr><th>ID</th><th>Name</th><th>Type</th><th>Slot</th></tr>'
+    : v==='mobs' ? '<tr><th>ID</th><th>Lv</th><th>Name</th><th>Element</th></tr>'
+    : v==='skills' ? '<tr><th>ID</th><th>Item</th><th>Boosts skill(s)</th><th>Tier</th></tr>'
+    : '<tr><th>ID</th><th>Group</th><th>Options</th><th>Source</th></tr>';
+  render();
+}
+
+function render(){
+  const q=$('#search').value.trim().toLowerCase(), ft=$('#filterType').value;
+  const rows=$('#rows'); let out='', n=0, total=0;
+  if(view==='items'){
+    for(const i of ITEMS){
+      if(q && !i._s.includes(q)) continue;
+      if(ft==='Custom' && !i.custom) continue;
+      else if(ft!=='All types' && ft!=='Custom' && i.type!==ft) continue;
+      total++; if(n<300){out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td>${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}${i.slots?` <span class="badge">[${i.slots}]</span>`:''}</td><td>${i.type||''}</td><td>${(i.loc||[]).join(', ')||'-'}</td></tr>`;n++;}
+    }
+  }else if(view==='mobs'){
+    for(const m of MOBS){
+      if(q && !m._s.includes(q)) continue;
+      if(ft==='MVP only' && !m.mvp) continue;
+      if(ft==='Normal only' && m.mvp) continue;
+      total++; if(n<300){out+=`<tr data-id="${m.id}"><td class="mono">${m.id}</td><td class="mono">${m.lvl||''}</td><td>${esc(m.name)} ${m.mvp?'<span class="badge mvp">MVP</span>':''}</td><td>${ELE[m.element]||m.element||''}${m.eleLv?' '+m.eleLv:''}</td></tr>`;n++;}
+    }
+  }else if(view==='skills'){
+    for(const i of ITEMS){
+      if(!i.boosts||!i.boosts.length) continue;
+      if(q && !i._s.includes(q)) continue;
+      const has3=i.boosts.some(b=>b.t3), hasT=i.boosts.some(b=>!b.t3);
+      if(ft==='3rd Class' && !has3) continue;
+      if(ft==='Up to Trans' && !hasT) continue;
+      total++; if(n<300){
+        const sk=i.boosts.map(b=>b.skill).slice(0,3).join(', ')+(i.boosts.length>3?' +'+(i.boosts.length-3):'');
+        const tier=(has3&&hasT)?'<span class="badge">Mixed</span>':has3?'<span class="badge mvp">3rd</span>':'<span class="badge">Trans</span>';
+        out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td>${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}</td><td class="mono" style="font-size:11.5px">${esc(sk)}</td><td>${tier}</td></tr>`;n++;
+      }
+    }
+  }else{ // enchants
+    for(const g of OPT.groups){
+      if(q && !g._s.includes(q)) continue;
+      if(ft==='Rune Zero' && !g.name.startsWith('RZ_')) continue;
+      total++; if(n<300){out+=`<tr data-id="${g.id}"><td class="mono">${g.id}</td><td>${esc(g.name)} ${g.name.startsWith('RZ_')?'<span class="badge custom">RZ</span>':''}</td><td class="mono">${g.options.length}</td><td>${g.name.startsWith('RZ_')?'Rune Zero':'Base'}</td></tr>`;n++;}
+    }
+  }
+  rows.innerHTML=out||'<tr><td colspan="4" style="color:var(--muted);padding:24px;text-align:center">No matches.</td></tr>';
+  $('#count').textContent = `${total.toLocaleString()} ${view==='enchants'?'group':'match'}${total!==1?(view==='enchants'?'s':'es'):''}${total>300?' (showing first 300 — refine your search)':''}`;
+  const pre = view==='items'?'item/':view==='mobs'?'mob/':view==='skills'?'item/':'group/';
+  rows.querySelectorAll('tr[data-id]').forEach(tr=>tr.onclick=()=>{ location.hash = pre+tr.dataset.id; });
+}
+
+function routeHash(){
+  const h=location.hash.slice(1);
+  if(h.startsWith('item/')){ if(view==='systems')setView('items'); showItem(+h.slice(5)); }
+  else if(h.startsWith('mob/')){ showMob(+h.slice(4)); }
+  else if(h.startsWith('group/')){ showGroup(+h.slice(6)); }
+}
+
+function showGroup(id){
+  const g=GROUP_BY_ID.get(id); if(!g)return;
+  if(view!=='enchants'){view='enchants';setView('enchants');}
+  highlight(id);
+  let h=`<h2>${esc(g.name)} ${g.name.startsWith('RZ_')?'<span class="badge custom">Rune Zero</span>':''}</h2>`;
+  h+=`<div class="sub mono">group ${g.id} · ${g.options.length} possible options · up to ${g.maxRandom} random</div>`;
+  const fixed=g.options.filter(o=>o.fixed), rnd=g.options.filter(o=>!o.fixed);
+  const rowOpt=o=>{const t=OPT.types[o.name]||{}; const d=(t.desc||o.name).replace('+N',(o.min===o.max?'+'+o.min:'+'+o.min+'–'+o.max)).replace('-N','-'+(o.min===o.max?o.min:o.min+'–'+o.max));
+    return `<div class="droprow"><span>${esc(d)}</span><span class="rate">${(o.chance/100).toFixed(o.chance%100?2:0)}%</span></div>`;};
+  if(fixed.length){h+='<div class="sec"><h4>Guaranteed slot — one of</h4>'+fixed.map(rowOpt).join('')+'</div>';}
+  if(rnd.length){h+=`<div class="sec"><h4>Random extras (up to ${g.maxRandom})</h4>`+rnd.map(rowOpt).join('')+'</div>';}
+  if(g.name.startsWith('RZ_DROP_'))h+='<div class="note">Auto-applied to dropped '+g.name.replace('RZ_DROP_','').toLowerCase()+' gear (Zero-native). The option count drives the floor drop-beam color.</div>';
+  $('#detail').innerHTML=h;
+}
+
+function showItem(id){
+  const i=ITEM_BY_ID.get(id); if(!i)return;
+  if(view!=='items'){view='items';setView('items');}
+  highlight(id);
+  let h=`<h2>${esc(i.name)} ${i.custom?'<span class="badge custom">Rune Zero</span>':''}</h2>`;
+  h+=`<div class="sub mono">ID ${i.id} · ${esc(i.aegis||'')}</div>`;
+  h+='<dl class="kv">';
+  h+=row('Type', i.type + (i.sub?` (${i.sub})`:''));
+  if(i.slots)h+=row('Card slots', i.slots);
+  if(i.loc&&i.loc.length)h+=row('Equip', i.loc.join(', '));
+  if(i.atk!=null)h+=row('ATK', i.atk);
+  if(i.matk!=null)h+=row('MATK', i.matk);
+  if(i.def!=null)h+=row('DEF', i.def);
+  if(i.wlv!=null)h+=row('Weapon Lv', i.wlv);
+  if(i.alv!=null)h+=row('Armor Lv', i.alv);
+  if(i.weight!=null)h+=row('Weight', (i.weight/10).toFixed(1));
+  if(i.refine!=null)h+=row('Refineable', i.refine?'Yes':'No');
+  h+=row('Jobs', (i.jobs&&i.jobs.length)?i.jobs.join(', '):'All');
+  h+='</dl>';
+  if(i.boosts&&i.boosts.length){
+    h+='<div class="sec"><h4>Boosts skills</h4>';
+    for(const b of i.boosts) h+=`<div class="droprow"><span class="mono">${esc(b.skill)}</span><span class="rate">${b.t3?'3rd class':'up to trans'}</span></div>`;
+    h+='</div>';
+  }
+  if(i.script){h+=`<div class="sec"><h4>Effect / Script</h4><pre class="script">${esc(i.script)}</pre></div>`;}
+  // dropped by
+  const db=(i.droppedBy||[]).slice().sort((a,b)=>b.rate-a.rate);
+  if(db.length){
+    h+='<div class="sec"><h4>Dropped by</h4>';
+    for(const d of db.slice(0,40)) h+=`<div class="droprow"><a onclick="location.hash='mob/${d.id}'">${esc(d.mob)} ${d.mvp?'<span class="badge mvp">MVP</span>':''}</a><span class="rate">${pct(d.rate)}</span></div>`;
+    if(db.length>40)h+=`<div class="rate" style="margin-top:6px">…and ${db.length-40} more</div>`;
+    h+='</div>';
+  }
+  // possible enchants / random options (equipment, Zero-native)
+  const gg=gearGroup(i), grp=gg&&GROUP_BY_NAME.get(gg);
+  if(grp){
+    h+=`<div class="sec"><h4>Possible random options (on drop)</h4>`;
+    h+=`<div style="font-size:13px">When this drops it can roll options from <a onclick="location.hash='group/${grp.id}'">${esc(gg)}</a> — up to ${grp.maxRandom+1}. The option count sets the floor beam color (3 green · 4 purple · 5 gold).</div>`;
+    if(!db.length)h+='<div class="rate" style="margin-top:6px">No fixed monster drop — obtain via forging, drops, or shops.</div>';
+    h+='</div>';
+  }
+  $('#detail').innerHTML=h;
+}
+
+function showMob(id){
+  const m=MOB_BY_ID.get(id); if(!m)return;
+  if(view!=='mobs'){view='mobs';setView('mobs');}
+  highlight(id);
+  let h=`<h2>${esc(m.name)} ${m.mvp?'<span class="badge mvp">MVP</span>':''}</h2>`;
+  h+=`<div class="sub mono">ID ${m.id} · ${esc(m.aegis||'')}</div>`;
+  h+='<dl class="kv">';
+  h+=row('Level', m.lvl); h+=row('HP', (m.hp||0).toLocaleString());
+  h+=row('Element', (ELE[m.element]||m.element||'')+(m.eleLv?` Lv${m.eleLv}`:''));
+  h+=row('Race', RACE[m.race]!==undefined?RACE[m.race]:m.race);
+  h+=row('Size', ['Small','Medium','Large'][m.size]||m.size);
+  h+=row('ATK', (m.atkMin||0)+(m.atkMax?'–'+m.atkMax:''));
+  h+=row('DEF / MDEF', (m.def||0)+' / '+(m.mdef||0));
+  h+=row('Base / Job EXP', (m.baseExp||0).toLocaleString()+' / '+(m.jobExp||0).toLocaleString());
+  if(m.stats)h+=row('Stats', `STR ${m.stats.str} AGI ${m.stats.agi} VIT ${m.stats.vit} INT ${m.stats.int} DEX ${m.stats.dex} LUK ${m.stats.luk}`);
+  h+='</dl>';
+  const drops=(m.drops||[]).slice().sort((a,b)=>b.rate-a.rate);
+  if(drops.length){h+='<div class="sec"><h4>Drops</h4>';for(const d of drops)h+=dropLink(d);h+='</div>';}
+  if(m.mvpDrops&&m.mvpDrops.length){h+='<div class="sec"><h4>MVP Reward</h4>';for(const d of m.mvpDrops)h+=dropLink(d);h+='</div>';}
+  if(m.spawns&&m.spawns.length){
+    h+='<div class="sec"><h4>Spawns</h4>';
+    for(const s of m.spawns.slice(0,30)) h+=`<div class="droprow"><span class="mono">${esc(s.map)}</span><span class="rate">${s.amt}</span></div>`;
+    if(m.spawns.length>30)h+=`<div class="rate" style="margin-top:6px">…and ${m.spawns.length-30} more maps</div>`;
+    h+='</div>';
+  }
+  $('#detail').innerHTML=h;
+}
+function dropLink(d){return `<div class="droprow">${d.id?`<a onclick="location.hash='item/${d.id}'">${esc(d.name)}</a>`:esc(d.name)}<span class="rate">${pct(d.rate)}</span></div>`;}
+
+function highlight(id){
+  setTimeout(()=>{document.querySelectorAll('#rows tr').forEach(tr=>tr.classList.toggle('sel',+tr.dataset.id===id));
+    const s=document.querySelector('#rows tr.sel'); if(s)s.scrollIntoView({block:'nearest'});},0);
+}
+function renderSystems(){
+  $('#systems').innerHTML=`<h2>Rune Zero — Server Systems</h2>
+  <p style="color:var(--muted)">This database reflects the live server, including Rune Zero's customizations. For the full design wiki, see the <a href="../index.html">Server Codex</a>.</p>
+  <div class="card"><h4>Random Options on every drop (Zero-native)</h4><p>Dropped weapons, armor, garments, shoes, accessories and headgear roll <b>random options</b> by slot. The floor drop-beam color shows the count: 3 = green, 4 = purple, <b>5 = gold</b>, cards/MVP = gold shine. Weapon %-damage rolls are 5–20%.</p></div>
+  <div class="card"><h4>Refinement — never breaks</h4><p>Enriched ore refines safely +1→+7; HD ore pushes +8→+10 and only <b>downgrades</b> on fail. Ores are crafted from bulk ore + Valor Coin. Card removal is 100% safe.</p></div>
+  <div class="card"><h4>Valor &amp; Hunter Coins</h4><p>Valor Coin drops from almost every monster (the universal crafting/economy currency); Hunter Coin comes only from Hunter's Guild contracts. Both are play-only.</p></div>
+  <div class="card"><h4>Variable EXP rate</h4><p>Each character picks a permanent rate (1×/3×/8×/15×/25×); slower rates earn bigger permanent drop bonuses. Pay-to-fast, never pay-to-win.</p></div>
+  <div class="card"><h4>Custom items</h4><p>${(META.customItems||0)} Rune Zero items are flagged <span class="badge custom">RZ</span> in the Items tab (use the <b>Custom</b> filter). The DB has ${(META.items||0).toLocaleString()} items and ${(META.mobs||0).toLocaleString()} monsters; built ${META.built||''}.</p></div>`;
+}
+
+const row=(k,v)=> v!=null&&v!==''?`<dt>${k}</dt><dd>${v}</dd>`:'';
+const esc=s=>String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const pct=r=>r>=100?(r/100).toFixed(r%100?2:0)+'%':(r/100).toFixed(2)+'%';
+function debounce(f,ms){let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>f(...a),ms);};}
+boot();
+</script>
+</body>
+</html>

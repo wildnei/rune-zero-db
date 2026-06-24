@@ -1,0 +1,19 @@
+{
+  "name": "wiki",
+  "version": "1.0.0",
+  "description": "Rune Zero game item & monster database (static site)",
+  "main": "index.js",
+  "scripts": {
+    "build": "node tools/build-db.js",
+    "serve": "node tools/serve.js",
+    "start": "node tools/build-db.js && node tools/serve.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "js-yaml": "^5.1.0",
+    "yaml": "^2.9.0"
+  }
+}
