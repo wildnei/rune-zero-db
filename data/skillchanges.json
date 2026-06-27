@@ -1,0 +1,2302 @@
+[
+ {
+  "class": "Alchemist",
+  "classOrder": 2,
+  "skill": "Bomb (Demonstration)",
+  "aegis": "AM_DEMONSTRATION",
+  "id": 229,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "800",
+    "after": "300"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "200",
+    "after": "100"
+   },
+   {
+    "field": "SpCost",
+    "before": "10",
+    "after": "6"
+   }
+  ],
+  "build": "Bomb-spam zoning Alchemist/Creator"
+ },
+ {
+  "class": "Alchemist",
+  "classOrder": 2,
+  "skill": "Acid Terror",
+  "aegis": "AM_ACIDTERROR",
+  "id": 230,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "15",
+    "after": "10"
+   }
+  ],
+  "build": "Acid Terror bleed-harassment build"
+ },
+ {
+  "class": "Alchemist",
+  "classOrder": 2,
+  "skill": "Sphere Mine (Marine Sphere)",
+  "aegis": "AM_SPHEREMINE",
+  "id": 233,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "1600",
+    "after": "500"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "400",
+    "after": "150"
+   },
+   {
+    "field": "SpCost",
+    "before": "10",
+    "after": "6"
+   }
+  ],
+  "build": "Mine-laying trap Alchemist/Creator"
+ },
+ {
+  "class": "Assassin",
+  "classOrder": 2,
+  "skill": "Grimtooth",
+  "aegis": "AS_GRIMTOOTH",
+  "id": 137,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "3",
+    "after": "1"
+   }
+  ],
+  "build": "Near-free Grimtooth harass under Hiding"
+ },
+ {
+  "class": "Assassin",
+  "classOrder": 2,
+  "skill": "Venom Splasher",
+  "aegis": "AS_SPLASHER",
+  "id": 141,
+  "usability": [
+   {
+    "field": "Cooldown",
+    "before": "2000–11000/lv",
+    "after": "300"
+   },
+   {
+    "field": "CastTime",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "500",
+    "after": "150"
+   },
+   {
+    "field": "SP",
+    "before": "per-lv",
+    "after": "12"
+   }
+  ],
+  "damage": {
+   "before": "-100+400+100*lv",
+   "after": "-100+700+180*lv (POISONREACT bonus kept)"
+  },
+  "build": "Venom Splasher corpse-bomb burst"
+ },
+ {
+  "class": "Assassin",
+  "classOrder": 2,
+  "skill": "Throw Venom Knife",
+  "aegis": "AS_VENOMKNIFE",
+  "id": 1004,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "35",
+    "after": "10"
+   }
+  ],
+  "build": "Ranged Venom Knife poison harass"
+ },
+ {
+  "class": "Bard/Clown",
+  "classOrder": 2,
+  "skill": "Musical Strike (Melody Strike)",
+  "aegis": "BA_MUSICALSTRIKE",
+  "id": 316,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "300",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "12",
+    "after": "8"
+   }
+  ],
+  "build": "Spammable instrument ranged-poke Clown"
+ },
+ {
+  "class": "Crusader",
+  "classOrder": 2,
+  "skill": "Shield Boomerang",
+  "aegis": "CR_SHIELDBOOMERANG",
+  "id": 251,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "700",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "12",
+    "after": "8"
+   }
+  ],
+  "build": "Shield Boomerang kiting Crusader/Paladin"
+ },
+ {
+  "class": "Crusader",
+  "classOrder": 2,
+  "skill": "Grand Cross",
+  "aegis": "CR_GRANDCROSS",
+  "id": 254,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "1000",
+    "after": "400"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "300"
+   },
+   {
+    "field": "AfterCastWalkDelay",
+    "before": "1000",
+    "after": "0"
+   },
+   {
+    "field": "Cooldown",
+    "before": "1000",
+    "after": "300"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "500",
+    "after": "300"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 37..100",
+    "after": "per-lv 25..50"
+   },
+   {
+    "field": "HpRateCost",
+    "before": "20",
+    "after": "0"
+   }
+  ],
+  "damage": {
+   "before": "40*lv (MATK)",
+   "after": "100+80*lv (MATK)"
+  },
+  "build": "Sustained Grand Cross holy-AoE Crusader/Paladin"
+ },
+ {
+  "class": "Dancer/Gypsy",
+  "classOrder": 2,
+  "skill": "Throw Arrow (Slinging Arrow)",
+  "aegis": "DC_THROWARROW",
+  "id": 324,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "300",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "12",
+    "after": "8"
+   }
+  ],
+  "build": "Spammable whip ranged-poke Gypsy"
+ },
+ {
+  "class": "Knight",
+  "classOrder": 2,
+  "skill": "Brandish Spear",
+  "aegis": "KN_BRANDISHSPEAR",
+  "id": 57,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "Cooldown",
+    "before": "1000",
+    "after": "0"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "350",
+    "after": "150"
+   },
+   {
+    "field": "SpCost",
+    "before": "24",
+    "after": "14"
+   }
+  ],
+  "damage": {
+   "before": "-100+400+100*lv+STR*3",
+   "after": "-100+600+180*lv+STR*5"
+  },
+  "build": "Brandish-spam AoE Spear Knight"
+ },
+ {
+  "class": "Knight",
+  "classOrder": 2,
+  "skill": "Charge Attack",
+  "aegis": "KN_CHARGEATK",
+  "id": 1001,
+  "usability": [
+   {
+    "field": "Cooldown",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "40",
+    "after": "20"
+   }
+  ],
+  "build": "Mobile charge-burst gap-closer Knight"
+ },
+ {
+  "class": "Priest",
+  "classOrder": 2,
+  "skill": "Turn Undead",
+  "aegis": "PR_TURNUNDEAD",
+  "id": 77,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "800",
+    "after": "300"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "3000",
+    "after": "300"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "200",
+    "after": "100"
+   },
+   {
+    "field": "SpCost",
+    "before": "20",
+    "after": "14"
+   }
+  ],
+  "build": "Sustained anti-undead Priest"
+ },
+ {
+  "class": "Priest",
+  "classOrder": 2,
+  "skill": "Magnus Exorcismus",
+  "aegis": "PR_MAGNUS",
+  "id": 79,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "4000",
+    "after": "800"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "1000",
+    "after": "300"
+   },
+   {
+    "field": "Cooldown",
+    "before": "6000",
+    "after": "500"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "1000",
+    "after": "300"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 40..58",
+    "after": "per-lv 25..40"
+   }
+  ],
+  "damage": {
+   "before": "flat 100% (+30 vs undead/demon)",
+   "after": "+50+60*lv base (+30 vs undead/demon kept)"
+  },
+  "build": "Battle/MX holy-AoE Priest (gemstone kept)"
+ },
+ {
+  "class": "Priest",
+  "classOrder": 2,
+  "skill": "Holy Light",
+  "aegis": "AL_HOLYLIGHT",
+  "id": 156,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "800",
+    "after": "300"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "200",
+    "after": "100"
+   },
+   {
+    "field": "SpCost",
+    "before": "15",
+    "after": "8"
+   }
+  ],
+  "build": "Holy Light offensive battle-priest"
+ },
+ {
+  "class": "Rogue",
+  "classOrder": 2,
+  "skill": "Raid (Sightless Mind)",
+  "aegis": "RG_RAID",
+  "id": 214,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "15",
+    "after": "10"
+   }
+  ],
+  "damage": {
+   "before": "-100+50+150*lv",
+   "after": "-100+100+250*lv"
+  },
+  "build": "Raid-opener PBAoE burst Rogue/Stalker"
+ },
+ {
+  "class": "Rogue",
+  "classOrder": 2,
+  "skill": "Divest Weapon (Strip Weapon)",
+  "aegis": "RG_STRIPWEAPON",
+  "id": 215,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 17..25",
+    "after": "12"
+   }
+  ],
+  "build": "Cheaper strip-control Rogue/Stalker"
+ },
+ {
+  "class": "Rogue",
+  "classOrder": 2,
+  "skill": "Divest Shield (Strip Shield)",
+  "aegis": "RG_STRIPSHIELD",
+  "id": 216,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 12..20",
+    "after": "10"
+   }
+  ],
+  "build": "Cheaper strip-control Rogue/Stalker"
+ },
+ {
+  "class": "Rogue",
+  "classOrder": 2,
+  "skill": "Divest Armor (Strip Armor)",
+  "aegis": "RG_STRIPARMOR",
+  "id": 217,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 17..25",
+    "after": "12"
+   }
+  ],
+  "build": "Cheaper strip-control Rogue/Stalker"
+ },
+ {
+  "class": "Rogue",
+  "classOrder": 2,
+  "skill": "Divest Helm (Strip Helm)",
+  "aegis": "RG_STRIPHELM",
+  "id": 218,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 12..20",
+    "after": "10"
+   }
+  ],
+  "build": "Cheaper strip-control Rogue/Stalker"
+ },
+ {
+  "class": "Rogue",
+  "classOrder": 2,
+  "skill": "Gank (Snatch/Intimidate)",
+  "aegis": "RG_INTIMIDATE",
+  "id": 219,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 13..25",
+    "after": "10"
+   }
+  ],
+  "build": "Steal-and-warp attack utility Rogue"
+ },
+ {
+  "class": "Rogue",
+  "classOrder": 2,
+  "skill": "Scribble (Graffiti)",
+  "aegis": "RG_GRAFFITI",
+  "id": 220,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "15",
+    "after": "8"
+   }
+  ],
+  "build": "Cheaper utility ground-tag Rogue"
+ },
+ {
+  "class": "Sage",
+  "classOrder": 2,
+  "skill": "Spell Breaker",
+  "aegis": "SA_SPELLBREAKER",
+  "id": 277,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "560",
+    "after": "200"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "140",
+    "after": "100"
+   },
+   {
+    "field": "SpCost",
+    "before": "10",
+    "after": "8"
+   }
+  ],
+  "build": "Anti-caster cast-cancel Sage/Professor"
+ },
+ {
+  "class": "Wizard",
+  "classOrder": 2,
+  "skill": "Jupitel Thunder",
+  "aegis": "WZ_JUPITEL",
+  "id": 84,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "per-lv 2000..3800",
+    "after": "400"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 20..47",
+    "after": "per-lv 15..30"
+   }
+  ],
+  "damage": {
+   "before": "flat 100% MATK per hit (no ratio)",
+   "after": "50+30*lv per hit"
+  },
+  "build": "Jupitel Thunder spam single-target Wizard"
+ },
+ {
+  "class": "Assassin Cross",
+  "classOrder": 3,
+  "skill": "Enchant Deadly Poison",
+  "aegis": "ASC_EDP",
+  "id": 378,
+  "usability": [
+   {
+    "field": "Cooldown",
+    "before": "2000",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 60..100",
+    "after": "per-lv 30..50"
+   }
+  ],
+  "build": "Keepable EDP uptime self-buff"
+ },
+ {
+  "class": "Assassin Cross",
+  "classOrder": 3,
+  "skill": "Soul Breaker (Soul Destroyer)",
+  "aegis": "ASC_BREAKER",
+  "id": 379,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "250",
+    "after": "150"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "1000",
+    "after": "200"
+   },
+   {
+    "field": "Cooldown",
+    "before": "250",
+    "after": "200"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "250",
+    "after": "100"
+   },
+   {
+    "field": "SpCost",
+    "before": "20",
+    "after": "14"
+   }
+  ],
+  "build": "Soul Breaker spam ranged hybrid Sin X"
+ },
+ {
+  "class": "Assassin Cross",
+  "classOrder": 3,
+  "skill": "Meteor Assault",
+  "aegis": "ASC_METEORASSAULT",
+  "id": 406,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "250",
+    "after": "100"
+   },
+   {
+    "field": "Cooldown",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "250",
+    "after": "100"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 10..28",
+    "after": "per-lv 10..19"
+   }
+  ],
+  "damage": {
+   "before": "100+120*lv",
+   "after": "150+220*lv"
+  },
+  "build": "Meteor Assault AoE clear/farm Sin X"
+ },
+ {
+  "class": "Champion",
+  "classOrder": 3,
+  "skill": "Investigate (Occult Impaction)",
+  "aegis": "MO_INVESTIGATE",
+  "id": 266,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "500",
+    "after": "150"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "500",
+    "after": "150"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 10..20",
+    "after": "10"
+   }
+  ],
+  "damage": {
+   "before": "-100+100*lv",
+   "after": "-100+220*lv"
+  },
+  "build": "Spammable DEF-piercing Investigate Champion"
+ },
+ {
+  "class": "Champion",
+  "classOrder": 3,
+  "skill": "Finger Offensive (Throw Spirit Sphere)",
+  "aegis": "MO_FINGEROFFENSIVE",
+  "id": 267,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "Cooldown",
+    "before": "1000",
+    "after": "200"
+   },
+   {
+    "field": "AfterCastWalkDelay",
+    "before": "per-lv 200..800",
+    "after": "0"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 12..28",
+    "after": "12"
+   }
+  ],
+  "damage": {
+   "before": "500+200*lv",
+   "after": "700+330*lv"
+  },
+  "build": "Ranged Finger Offensive Champion"
+ },
+ {
+  "class": "Champion",
+  "classOrder": 3,
+  "skill": "Raging Palm Strike",
+  "aegis": "CH_PALMSTRIKE",
+  "id": 370,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "300",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 2..10",
+    "after": "2"
+   }
+  ],
+  "build": "Cheap Palm->Tiger->Chain combo opener"
+ },
+ {
+  "class": "Champion",
+  "classOrder": 3,
+  "skill": "Glacier Fist (Tiger Fist)",
+  "aegis": "CH_TIGERFIST",
+  "id": 371,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 4..12",
+    "after": "4"
+   }
+  ],
+  "build": "Cheap combo follow-up Champion"
+ },
+ {
+  "class": "Champion",
+  "classOrder": 3,
+  "skill": "Chain Crush Combo",
+  "aegis": "CH_CHAINCRUSH",
+  "id": 372,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 4..22",
+    "after": "4"
+   }
+  ],
+  "build": "Cheap combo finisher Champion"
+ },
+ {
+  "class": "Clown/Gypsy",
+  "classOrder": 3,
+  "skill": "Tarot Card of Fate",
+  "aegis": "CG_TAROTCARD",
+  "id": 489,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "300",
+    "after": "200"
+   },
+   {
+    "field": "Cooldown",
+    "before": "3000",
+    "after": "500"
+   },
+   {
+    "field": "SP",
+    "before": "40",
+    "after": "20"
+   }
+  ],
+  "build": "Tarot-pressure debuff-gamble build"
+ },
+ {
+  "class": "Clown/Gypsy",
+  "classOrder": 3,
+  "skill": "Arrow Vulcan (Vulcan Arrow)",
+  "aegis": "CG_ARROWVULCAN",
+  "id": 394,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "1500",
+    "after": "400"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "AfterCastWalkDelay",
+    "before": "2000",
+    "after": "0"
+   },
+   {
+    "field": "Cooldown",
+    "before": "1500",
+    "after": "300"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 12..30",
+    "after": "per-lv 12..20"
+   }
+  ],
+  "damage": {
+   "before": "400+100*lv",
+   "after": "600+180*lv"
+  },
+  "build": "Arrow Vulcan spam Clown/Gypsy nuke"
+ },
+ {
+  "class": "Creator",
+  "classOrder": 3,
+  "skill": "Acid Demonstration",
+  "aegis": "CR_ACIDDEMONSTRATION",
+  "id": 490,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "1000",
+    "after": "300"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "1000",
+    "after": "300"
+   },
+   {
+    "field": "SpCost",
+    "before": "50",
+    "after": "30"
+   }
+  ],
+  "build": "AD-spam Creator (bottles required)"
+ },
+ {
+  "class": "High Wizard",
+  "classOrder": 3,
+  "skill": "Magic Crasher (Stave Crasher)",
+  "aegis": "HW_MAGICCRASHER",
+  "id": 365,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "8",
+    "after": "5"
+   }
+  ],
+  "build": "Staff-poke weave for High Wizard"
+ },
+ {
+  "class": "High Wizard",
+  "classOrder": 3,
+  "skill": "Napalm Vulcan",
+  "aegis": "HW_NAPALMVULCAN",
+  "id": 400,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "800",
+    "after": "300"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "Cooldown",
+    "before": "1000",
+    "after": "200"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "200",
+    "after": "100"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 30..70",
+    "after": "per-lv 20..40"
+   }
+  ],
+  "damage": {
+   "before": "-100+70*lv",
+   "after": "-100+180*lv"
+  },
+  "build": "Napalm Vulcan spam High Wizard"
+ },
+ {
+  "class": "High Wizard",
+  "classOrder": 3,
+  "skill": "Ganbantein",
+  "aegis": "HW_GANBANTEIN",
+  "id": 483,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "5000",
+    "after": "500"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "3000",
+    "after": "800"
+   },
+   {
+    "field": "SpCost",
+    "before": "40",
+    "after": "25"
+   }
+  ],
+  "build": "Reactive dispel-ground utility (gemstones kept)"
+ },
+ {
+  "class": "Lord Knight",
+  "classOrder": 3,
+  "skill": "Spiral Pierce",
+  "aegis": "LK_SPIRALPIERCE",
+  "id": 397,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "per-lv 50..250",
+    "after": "0"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "1000",
+    "after": "300"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "300",
+    "after": "150"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 18..30",
+    "after": "18"
+   }
+  ],
+  "build": "Spiral Pierce spam spear/sword Lord Knight"
+ },
+ {
+  "class": "Lord Knight",
+  "classOrder": 3,
+  "skill": "Head Crush (Traumatic Blow)",
+  "aegis": "LK_HEADCRUSH",
+  "id": 398,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "23",
+    "after": "14"
+   }
+  ],
+  "damage": {
+   "before": "40*lv",
+   "after": "100+120*lv"
+  },
+  "build": "Bleed-striker spammable melee opener"
+ },
+ {
+  "class": "Lord Knight",
+  "classOrder": 3,
+  "skill": "Joint Beat (Vital Strike)",
+  "aegis": "LK_JOINTBEAT",
+  "id": 399,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "per-lv 800..1000",
+    "after": "300"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 12..20",
+    "after": "10"
+   }
+  ],
+  "damage": {
+   "before": "10*lv-50",
+   "after": "50+70*lv (BREAK_NECK still 2x)"
+  },
+  "build": "Break/debuff joint-breaker Knight"
+ },
+ {
+  "class": "Paladin",
+  "classOrder": 3,
+  "skill": "Pressure (Gloria Domini)",
+  "aegis": "PA_PRESSURE",
+  "id": 367,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "1000",
+    "after": "300"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "1000",
+    "after": "300"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "400",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 30..50",
+    "after": "25"
+   }
+  ],
+  "build": "Pressure-spam holy nuke Paladin"
+ },
+ {
+  "class": "Professor",
+  "classOrder": 3,
+  "skill": "Soul Change (Soul Exhale)",
+  "aegis": "PF_SOULCHANGE",
+  "id": 374,
+  "usability": [
+   {
+    "field": "FixedCastTime",
+    "before": "3000",
+    "after": "500"
+   }
+  ],
+  "build": "Fast SP-battery support Professor"
+ },
+ {
+  "class": "Professor",
+  "classOrder": 3,
+  "skill": "Soul Burn (Soul Siphon)",
+  "aegis": "PF_SOULBURN",
+  "id": 375,
+  "usability": [
+   {
+    "field": "Cooldown",
+    "before": "per-lv 10000..15000",
+    "after": "2000"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 80..120",
+    "after": "per-lv 40..60"
+   }
+  ],
+  "build": "SP-denial Professor on rotation"
+ },
+ {
+  "class": "Professor",
+  "classOrder": 3,
+  "skill": "Mind Breaker",
+  "aegis": "PF_MINDBREAKER",
+  "id": 402,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "per-lv 800..1200",
+    "after": "300"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 12..24",
+    "after": "12"
+   }
+  ],
+  "build": "Caster-support MATK-up/MDEF-down Professor"
+ },
+ {
+  "class": "Professor",
+  "classOrder": 3,
+  "skill": "Fiber Lock (Spider Web)",
+  "aegis": "PF_SPIDERWEB",
+  "id": 405,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "30",
+    "after": "15"
+   }
+  ],
+  "build": "Lockdown/root Professor (Spiderweb item kept)"
+ },
+ {
+  "class": "Sniper",
+  "classOrder": 3,
+  "skill": "Falcon Assault",
+  "aegis": "SN_FALCONASSAULT",
+  "id": 381,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "Cooldown",
+    "before": "none (stock)",
+    "after": "200"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "500",
+    "after": "150"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 30..46",
+    "after": "per-lv 20..28"
+   }
+  ],
+  "damage": {
+   "before": "(150+70*lv)/100 modifier",
+   "after": "(250+150*lv)/100 modifier"
+  },
+  "build": "Blitz/Falcon Assault chaining Sniper"
+ },
+ {
+  "class": "Stalker",
+  "classOrder": 3,
+  "skill": "Back Stab",
+  "aegis": "RG_BACKSTAP",
+  "id": 212,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "Cooldown",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "16",
+    "after": "10"
+   }
+  ],
+  "damage": {
+   "before": "200+40*lv (bow penalty halves)",
+   "after": "350+90*lv (bow penalty halves)"
+  },
+  "build": "Back Stab hit-and-run Stalker"
+ },
+ {
+  "class": "Whitesmith",
+  "classOrder": 3,
+  "skill": "Melt Down (Shattering Strike)",
+  "aegis": "WS_MELTDOWN",
+  "id": 384,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 50..90",
+    "after": "15"
+   }
+  ],
+  "build": "Break-buff kept in rotation"
+ },
+ {
+  "class": "Whitesmith",
+  "classOrder": 3,
+  "skill": "Cart Boost",
+  "aegis": "WS_CARTBOOST",
+  "id": 387,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "20",
+    "after": "10"
+   }
+  ],
+  "build": "Cheap mobility/ATK self-buff upkeep"
+ },
+ {
+  "class": "Whitesmith",
+  "classOrder": 3,
+  "skill": "Cart Termination",
+  "aegis": "WS_CARTTERMINATION",
+  "id": 485,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "15",
+    "after": "10"
+   },
+   {
+    "field": "ZenyCost",
+    "before": "per-lv 600..1500",
+    "after": "0"
+   }
+  ],
+  "build": "Affordable Cart Termination spam Whitesmith"
+ },
+ {
+  "class": "Whitesmith",
+  "classOrder": 3,
+  "skill": "Maximum Power Thrust",
+  "aegis": "WS_OVERTHRUSTMAX",
+  "id": 486,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "15",
+    "after": "10"
+   },
+   {
+    "field": "ZenyCost",
+    "before": "per-lv 3000..5000",
+    "after": "0"
+   }
+  ],
+  "build": "Free-recast ATK buff for Whitesmith"
+ },
+ {
+  "class": "Gunslinger",
+  "classOrder": 4,
+  "skill": "Bull's Eye",
+  "aegis": "GS_BULLSEYE",
+  "id": 503,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "800",
+    "after": "300"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "1000",
+    "after": "300"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "200",
+    "after": "150"
+   },
+   {
+    "field": "SpCost",
+    "before": "30",
+    "after": "20"
+   }
+  ],
+  "damage": {
+   "before": "+400 (500%) vs brute/demihuman/player",
+   "after": "+1400 (1500%) vs brute/demihuman/player"
+  },
+  "build": "Coma-rate burst single shot Gunslinger"
+ },
+ {
+  "class": "Gunslinger",
+  "classOrder": 4,
+  "skill": "Tracking",
+  "aegis": "GS_TRACKING",
+  "id": 512,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "per-lv 600..1500",
+    "after": "400"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "1500",
+    "after": "300"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 15..60",
+    "after": "25"
+   }
+  ],
+  "build": "Tracking rifle-sniper Gunslinger"
+ },
+ {
+  "class": "Gunslinger",
+  "classOrder": 4,
+  "skill": "Disarm",
+  "aegis": "GS_DISARM",
+  "id": 513,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "1600",
+    "after": "300"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "1000",
+    "after": "300"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "400",
+    "after": "150"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 15..35",
+    "after": "12"
+   }
+  ],
+  "build": "Strip-control Gunslinger"
+ },
+ {
+  "class": "Gunslinger",
+  "classOrder": 4,
+  "skill": "Piercing Shot",
+  "aegis": "GS_PIERCINGSHOT",
+  "id": 514,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "1200",
+    "after": "200"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "300",
+    "after": "150"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 11..15",
+    "after": "8"
+   }
+  ],
+  "damage": {
+   "before": "rifle 150+30*lv / other 100+20*lv",
+   "after": "rifle 350+90*lv / other 250+70*lv"
+  },
+  "build": "Piercing Shot DEF-ignoring bleed poke"
+ },
+ {
+  "class": "Gunslinger",
+  "classOrder": 4,
+  "skill": "Rapid Shower",
+  "aegis": "GS_RAPIDSHOWER",
+  "id": 515,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "1500",
+    "after": "300"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 22..40",
+    "after": "18"
+   }
+  ],
+  "build": "Rapid Shower single-target spam Gunslinger"
+ },
+ {
+  "class": "Gunslinger",
+  "classOrder": 4,
+  "skill": "Desperado",
+  "aegis": "GS_DESPERADO",
+  "id": 516,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "1000",
+    "after": "300"
+   },
+   {
+    "field": "AfterCastWalkDelay",
+    "before": "1000",
+    "after": "0"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 32..50",
+    "after": "30"
+   }
+  ],
+  "build": "Desperado PBAoE-farm Gunslinger"
+ },
+ {
+  "class": "Gunslinger",
+  "classOrder": 4,
+  "skill": "Gatling Fever",
+  "aegis": "GS_GATLINGFEVER",
+  "id": 517,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "800",
+    "after": "200"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "1000",
+    "after": "300"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "200",
+    "after": "100"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 30..48",
+    "after": "25"
+   }
+  ],
+  "build": "Cheap-uptime gatling ATK/ASPD buff"
+ },
+ {
+  "class": "Gunslinger",
+  "classOrder": 4,
+  "skill": "Dust",
+  "aegis": "GS_DUST",
+  "id": 518,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "1000",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 3..30",
+    "after": "8"
+   }
+  ],
+  "damage": {
+   "before": "50*lv",
+   "after": "150+130*lv"
+  },
+  "build": "Kiting knockback shotgun Gunslinger"
+ },
+ {
+  "class": "Gunslinger",
+  "classOrder": 4,
+  "skill": "Full Buster",
+  "aegis": "GS_FULLBUSTER",
+  "id": 519,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "800",
+    "after": "200"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "per-lv 1200..3000",
+    "after": "300"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "200",
+    "after": "100"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 20..65",
+    "after": "25"
+   }
+  ],
+  "build": "Full Buster shotgun nuke-spam Gunslinger"
+ },
+ {
+  "class": "Gunslinger",
+  "classOrder": 4,
+  "skill": "Spread Attack",
+  "aegis": "GS_SPREADATTACK",
+  "id": 520,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "1000",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 13..40",
+    "after": "15"
+   }
+  ],
+  "build": "Spread Attack shotgun-AoE Gunslinger"
+ },
+ {
+  "class": "Ninja",
+  "classOrder": 4,
+  "skill": "Throw Shuriken",
+  "aegis": "NJ_SYURIKEN",
+  "id": 523,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "5",
+    "after": "2"
+   }
+  ],
+  "damage": {
+   "before": "+5*lv",
+   "after": "+150+45*lv"
+  },
+  "build": "Low-SP Shuriken-poke main attack Ninja"
+ },
+ {
+  "class": "Ninja",
+  "classOrder": 4,
+  "skill": "Throw Kunai",
+  "aegis": "NJ_KUNAI",
+  "id": 524,
+  "usability": [
+   {
+    "field": "Cooldown",
+    "before": "200",
+    "after": "150"
+   },
+   {
+    "field": "SpCost",
+    "before": "10",
+    "after": "6"
+   }
+  ],
+  "damage": {
+   "before": "-100+100*lv",
+   "after": "-100+180*lv"
+  },
+  "build": "Kunai-spam ranged Ninja (kunai ammo kept)"
+ },
+ {
+  "class": "Ninja",
+  "classOrder": 4,
+  "skill": "Throw Huuma Shuriken",
+  "aegis": "NJ_HUUMA",
+  "id": 525,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "1000",
+    "after": "300"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 15..35",
+    "after": "20"
+   }
+  ],
+  "build": "Huuma AoE-spam Ninja"
+ },
+ {
+  "class": "Ninja",
+  "classOrder": 4,
+  "skill": "Mist Slash (Kirikage)",
+  "aegis": "NJ_KIRIKAGE",
+  "id": 530,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 10..14",
+    "after": "8"
+   }
+  ],
+  "build": "Shadow-jump crit-strike assassin-Ninja"
+ },
+ {
+  "class": "Ninja",
+  "classOrder": 4,
+  "skill": "Cicada Skin Shedding (Utsusemi)",
+  "aegis": "NJ_UTSUSEMI",
+  "id": 531,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "1000",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 12..24",
+    "after": "10"
+   }
+  ],
+  "build": "Keepable dodge/knockback escape buff"
+ },
+ {
+  "class": "Ninja",
+  "classOrder": 4,
+  "skill": "Crimson Fire Bloom (Kouenka)",
+  "aegis": "NJ_KOUENKA",
+  "id": 534,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "per-lv 560..5600",
+    "after": "300"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "per-lv 140..1400",
+    "after": "100"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 18..36",
+    "after": "14"
+   }
+  ],
+  "build": "Crimson Fire nuke Ninja"
+ },
+ {
+  "class": "Ninja",
+  "classOrder": 4,
+  "skill": "Spear of Ice (Hyousensou)",
+  "aegis": "NJ_HYOUSENSOU",
+  "id": 537,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "per-lv 560..5600",
+    "after": "300"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "per-lv 140..1400",
+    "after": "100"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 15..42",
+    "after": "14"
+   }
+  ],
+  "build": "Water-element multi-hit nuke Ninja"
+ },
+ {
+  "class": "Ninja",
+  "classOrder": 4,
+  "skill": "Ice Meteor (Hyousyouraku)",
+  "aegis": "NJ_HYOUSYOURAKU",
+  "id": 539,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "per-lv 1700..2500",
+    "after": "500"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "800",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 40..60",
+    "after": "30"
+   },
+   {
+    "field": "ItemCost",
+    "before": "Ice_Stone per cast",
+    "after": "removed"
+   }
+  ],
+  "build": "Ice Meteor self-AoE Ninja"
+ },
+ {
+  "class": "Ninja",
+  "classOrder": 4,
+  "skill": "Lightning Spear of Ice (Raigeki Sai)",
+  "aegis": "NJ_RAIGEKISAI",
+  "id": 541,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "1700",
+    "after": "300"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "300",
+    "after": "150"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 16..32",
+    "after": "14"
+   },
+   {
+    "field": "ItemCost",
+    "before": "Wind_Stone per cast",
+    "after": "removed"
+   }
+  ],
+  "build": "Wind-burst ground-AoE Ninja"
+ },
+ {
+  "class": "Ninja",
+  "classOrder": 4,
+  "skill": "Wind Blade (Kamaitachi)",
+  "aegis": "NJ_KAMAITACHI",
+  "id": 542,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "1200",
+    "after": "300"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "300",
+    "after": "150"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 24..40",
+    "after": "20"
+   },
+   {
+    "field": "ItemCost",
+    "before": "Wind_Stone per cast",
+    "after": "removed"
+   }
+  ],
+  "build": "Wind line-AoE Ninja"
+ },
+ {
+  "class": "Ninja",
+  "classOrder": 4,
+  "skill": "Final Strike (Issen)",
+  "aegis": "NJ_ISSEN",
+  "id": 544,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "3000",
+    "after": "500"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 55..100",
+    "after": "50"
+   }
+  ],
+  "build": "Final Strike HP-dump burst assassin-Ninja"
+ },
+ {
+  "class": "Soul Linker",
+  "classOrder": 4,
+  "skill": "Kaizel",
+  "aegis": "SL_KAIZEL",
+  "id": 462,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "per-lv 2000..3600",
+    "after": "1000"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "per-lv 500..900",
+    "after": "300"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 60..120",
+    "after": "50"
+   }
+  ],
+  "build": "Auto-resurrect buff on key allies"
+ },
+ {
+  "class": "Soul Linker",
+  "classOrder": 4,
+  "skill": "Kaahi",
+  "aegis": "SL_KAAHI",
+  "id": 463,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "30",
+    "after": "15"
+   }
+  ],
+  "build": "Cheap HP-regen-on-hit buff"
+ },
+ {
+  "class": "Soul Linker",
+  "classOrder": 4,
+  "skill": "Kaupe",
+  "aegis": "SL_KAUPE",
+  "id": 464,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 20..40",
+    "after": "15"
+   }
+  ],
+  "build": "Party one-hit dodge buff"
+ },
+ {
+  "class": "Soul Linker",
+  "classOrder": 4,
+  "skill": "Kaite",
+  "aegis": "SL_KAITE",
+  "id": 465,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "per-lv 2400..4800",
+    "after": "800"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "per-lv 600..1200",
+    "after": "300"
+   },
+   {
+    "field": "SpCost",
+    "before": "70",
+    "after": "40"
+   }
+  ],
+  "build": "Pre-cast reflect-magic shield support SL"
+ },
+ {
+  "class": "Soul Linker",
+  "classOrder": 4,
+  "skill": "Estin",
+  "aegis": "SL_STIN",
+  "id": 467,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 18..30",
+    "after": "14"
+   }
+  ],
+  "damage": {
+   "before": "+10*lv (small target; -99 non-small)",
+   "after": "+130+70*lv (small target; -99 non-small)"
+  },
+  "build": "Estin knockback-bolt feeding Esma combo"
+ },
+ {
+  "class": "Soul Linker",
+  "classOrder": 4,
+  "skill": "Estun",
+  "aegis": "SL_STUN",
+  "id": 468,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 18..30",
+    "after": "14"
+   }
+  ],
+  "damage": {
+   "before": "+5*lv",
+   "after": "+120+60*lv"
+  },
+  "build": "Estun stun-bolt feeding Esma combo"
+ },
+ {
+  "class": "Soul Linker",
+  "classOrder": 4,
+  "skill": "Esma",
+  "aegis": "SL_SMA",
+  "id": 469,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "1600",
+    "after": "300"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "400",
+    "after": "100"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 8..80",
+    "after": "20"
+   }
+  ],
+  "build": "Esma-nuke Soul Linker (needs Estin/Estun mark)"
+ },
+ {
+  "class": "Soul Linker",
+  "classOrder": 4,
+  "skill": "Eswoo",
+  "aegis": "SL_SWOO",
+  "id": 470,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "800",
+    "after": "200"
+   },
+   {
+    "field": "AfterCastActDelay",
+    "before": "500",
+    "after": "200"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "200",
+    "after": "100"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 75..15",
+    "after": "15"
+   }
+  ],
+  "build": "Shrink/slow control Soul Linker"
+ },
+ {
+  "class": "Soul Linker",
+  "classOrder": 4,
+  "skill": "Eske",
+  "aegis": "SL_SKE",
+  "id": 471,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "per-lv 800..2400",
+    "after": "500"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "per-lv 200..600",
+    "after": "150"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 15..45",
+    "after": "15"
+   }
+  ],
+  "build": "Quick ATK-up spirit buff"
+ },
+ {
+  "class": "Soul Linker",
+  "classOrder": 4,
+  "skill": "Eska",
+  "aegis": "SL_SKA",
+  "id": 472,
+  "usability": [
+   {
+    "field": "CastTime",
+    "before": "per-lv 800..2400",
+    "after": "500"
+   },
+   {
+    "field": "FixedCastTime",
+    "before": "per-lv 200..600",
+    "after": "150"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 60..100",
+    "after": "40"
+   }
+  ],
+  "build": "Movement-lock control buff SL"
+ },
+ {
+  "class": "Star Gladiator",
+  "classOrder": 4,
+  "skill": "Solar Heat (Warmth of the Sun)",
+  "aegis": "SG_SUN_WARM",
+  "id": 428,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "20",
+    "after": "10"
+   }
+  ],
+  "damage": {
+   "before": "flat 100% per tick (no ratio)",
+   "after": "-100+60+60*lv per tick"
+  },
+  "build": "Sun-build PBAoE damage aura"
+ },
+ {
+  "class": "Star Gladiator",
+  "classOrder": 4,
+  "skill": "Lunar Heat (Warmth of the Moon)",
+  "aegis": "SG_MOON_WARM",
+  "id": 429,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "20",
+    "after": "10"
+   }
+  ],
+  "damage": {
+   "before": "flat 100% per tick (no ratio)",
+   "after": "-100+60+60*lv per tick"
+  },
+  "build": "Moon-build PBAoE damage aura"
+ },
+ {
+  "class": "Star Gladiator",
+  "classOrder": 4,
+  "skill": "Stellar Heat (Warmth of the Stars)",
+  "aegis": "SG_STAR_WARM",
+  "id": 430,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "10",
+    "after": "6"
+   }
+  ],
+  "damage": {
+   "before": "flat 100% per tick (no ratio)",
+   "after": "-100+60+60*lv per tick"
+  },
+  "build": "Star-build PBAoE damage aura"
+ },
+ {
+  "class": "Star Gladiator",
+  "classOrder": 4,
+  "skill": "Comfort of the Sun",
+  "aegis": "SG_SUN_COMFORT",
+  "id": 431,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 70..40",
+    "after": "30"
+   }
+  ],
+  "build": "Sun-build self ATK/resist buff"
+ },
+ {
+  "class": "Star Gladiator",
+  "classOrder": 4,
+  "skill": "Comfort of the Moon",
+  "aegis": "SG_MOON_COMFORT",
+  "id": 432,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 70..40",
+    "after": "30"
+   }
+  ],
+  "build": "Moon-build self buff"
+ },
+ {
+  "class": "Star Gladiator",
+  "classOrder": 4,
+  "skill": "Comfort of the Stars",
+  "aegis": "SG_STAR_COMFORT",
+  "id": 433,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 70..40",
+    "after": "30"
+   }
+  ],
+  "build": "Star-build self buff"
+ },
+ {
+  "class": "Star Gladiator",
+  "classOrder": 4,
+  "skill": "Union (Fusion)",
+  "aegis": "SG_FUSION",
+  "id": 444,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "100",
+    "after": "50"
+   }
+  ],
+  "build": "Union toggle powering Heat auras"
+ },
+ {
+  "class": "TaeKwon",
+  "classOrder": 4,
+  "skill": "Running (Sprint)",
+  "aegis": "TK_RUN",
+  "id": 411,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "300",
+    "after": "200"
+   },
+   {
+    "field": "SpCost",
+    "before": "per-lv 100..10",
+    "after": "10"
+   }
+  ],
+  "build": "Cheap Sprint run-toggle TaeKwon"
+ },
+ {
+  "class": "TaeKwon",
+  "classOrder": 4,
+  "skill": "Tornado Kick (Storm Kick)",
+  "aegis": "TK_STORMKICK",
+  "id": 413,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 2..14",
+    "after": "4"
+   }
+  ],
+  "damage": {
+   "before": "60+20*lv",
+   "after": "200+80*lv"
+  },
+  "build": "Spin-kick AoE TaeKwon"
+ },
+ {
+  "class": "TaeKwon",
+  "classOrder": 4,
+  "skill": "Heel Drop (Down Kick)",
+  "aegis": "TK_DOWNKICK",
+  "id": 415,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 2..14",
+    "after": "4"
+   }
+  ],
+  "damage": {
+   "before": "60+20*lv",
+   "after": "250+100*lv"
+  },
+  "build": "Single-target stun-kick TaeKwon"
+ },
+ {
+  "class": "TaeKwon",
+  "classOrder": 4,
+  "skill": "Roundhouse Kick (Turn Kick)",
+  "aegis": "TK_TURNKICK",
+  "id": 417,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 2..14",
+    "after": "4"
+   }
+  ],
+  "damage": {
+   "before": "90+30*lv",
+   "after": "220+90*lv"
+  },
+  "build": "Splash spin-kick TaeKwon"
+ },
+ {
+  "class": "TaeKwon",
+  "classOrder": 4,
+  "skill": "Counter Kick",
+  "aegis": "TK_COUNTER",
+  "id": 419,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 2..14",
+    "after": "4"
+   }
+  ],
+  "damage": {
+   "before": "90+30*lv",
+   "after": "300+150*lv"
+  },
+  "build": "Counter-combo finisher burst TaeKwon"
+ },
+ {
+  "class": "TaeKwon",
+  "classOrder": 4,
+  "skill": "Flying Kick (Jump Kick)",
+  "aegis": "TK_JUMPKICK",
+  "id": 421,
+  "usability": [
+   {
+    "field": "SpCost",
+    "before": "per-lv 70..10",
+    "after": "10"
+   }
+  ],
+  "damage": {
+   "before": "-70+10*lv (non-combo cast)",
+   "after": "150+90*lv (non-combo cast)"
+  },
+  "build": "Gap-closing Jump Kick TaeKwon"
+ }
+]

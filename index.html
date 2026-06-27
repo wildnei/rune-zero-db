@@ -98,6 +98,7 @@
       <button data-view="skills">Skill Items</button>
       <button data-view="enchants">Enchants</button>
       <button data-view="systems">Systems</button>
+      <button data-view="balance">Skill Changes</button>
     </nav>
     <div class="search-wrap" id="searchWrap">
       <input class="search" id="search" placeholder="Search by name, ID, or aegis…" autocomplete="off">
@@ -262,7 +263,8 @@ function initUI(){
     +'<div class="count" id="count"></div><div class="list"><div class="scry"><table>'
     +'<thead id="thead"></thead><tbody id="rows"></tbody></table></div></div></div>'
     +'<div class="col"><h3>Detail</h3><div class="detail" id="detail"><div class="empty">Select an entry to view details.</div></div></div></div>'
-    +'<div class="systems hide" id="systems"></div>';
+    +'<div class="systems hide" id="systems"></div>'
+    +'<div class="systems hide" id="balance"></div>';
   renderSystems();
   document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>setView(b.dataset.view));
   $('#search').addEventListener('input', debounce(render, 160));
@@ -274,9 +276,12 @@ function initUI(){
 function setView(v){
   view=v;
   document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
-  $('#searchWrap').style.visibility = v==='systems'?'hidden':'visible';
-  $('#browse').classList.toggle('hide', v==='systems');
+  const isPanel = (v==='systems'||v==='balance');
+  $('#searchWrap').style.visibility = isPanel?'hidden':'visible';
+  $('#browse').classList.toggle('hide', isPanel);
   $('#systems').classList.toggle('hide', v!=='systems');
+  $('#balance').classList.toggle('hide', v!=='balance');
+  if(v==='balance'){ renderBalance(); return; }
   if(v==='systems') return;
   // type filter options
   const f=$('#filterType'); f.innerHTML='';
@@ -441,6 +446,44 @@ function dropLink(d){return `<div class="droprow">${d.id?`<a onclick="location.h
 function highlight(id){
   setTimeout(()=>{document.querySelectorAll('#rows tr').forEach(tr=>tr.classList.toggle('sel',+tr.dataset.id===id));
     const s=document.querySelector('#rows tr.sel'); if(s)s.scrollIntoView({block:'nearest'});},0);
+}
+let BALANCE=null;
+async function renderBalance(){
+  const el=$('#balance');
+  const be=x=>String(x).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+  if(!BALANCE){
+    el.innerHTML='<div style="padding:24px;color:var(--muted)">Loading skill changes…</div>';
+    try{ BALANCE=await fetch('data/skillchanges.json').then(r=>r.json()); }
+    catch(e){ el.innerHTML='<div style="padding:24px">Could not load <code>data/skillchanges.json</code>.</div>'; return; }
+  }
+  const tierName=['Novice','1st Class','2nd Class','Transcendent','Expanded'];
+  const groups={};
+  BALANCE.forEach(s=>{const k=s.classOrder+'|'+s.class;(groups[k]=groups[k]||[]).push(s);});
+  const keys=Object.keys(groups).sort((a,b)=>{const ao=+a.split('|')[0],bo=+b.split('|')[0];return ao-bo||a.split('|')[1].localeCompare(b.split('|')[1]);});
+  const usab=BALANCE.filter(s=>s.usability&&s.usability.length).length, dmg=BALANCE.filter(s=>s.damage).length;
+  let h='<div style="max-width:1100px;margin:0 auto;padding:8px 4px 40px">'
+    +'<h2 style="font-family:Cinzel,serif;color:var(--gold);margin:6px 0">Skill Changes — before → after</h2>'
+    +'<p style="color:var(--muted);margin:0 0 18px">Every skill Rune Zero rebalanced, grouped by class. '
+    +'<b style="color:#7fd1ff">Usability</b> = cooldown / cast / SP eased so a skill becomes spammable &amp; affordable; '
+    +'<b style="color:#ff9b6b">Damage</b> = source ratio buffed so it hits hard enough to main. '
+    +BALANCE.length+' skills ('+usab+' usability, '+dmg+' damage). All values [TUNABLE].</p>';
+  let lastTier=-1;
+  keys.forEach(k=>{
+    const arr=groups[k], ord=+k.split('|')[0], cls=k.split('|')[1];
+    if(ord!==lastTier){ lastTier=ord; h+='<h3 style="font-family:Cinzel,serif;color:var(--gold);border-bottom:1px solid var(--line);padding-bottom:4px;margin:26px 0 12px">'+tierName[ord]+'</h3>'; }
+    h+='<div class="card" style="margin-bottom:12px"><h4 style="margin:0 0 8px">'+be(cls)+'</h4>';
+    arr.forEach(s=>{
+      h+='<div style="padding:7px 0;border-top:1px solid var(--line)"><b>'+be(s.skill)+'</b> <span style="color:var(--muted);font-size:12px">'+be(s.aegis)+'</span>';
+      if(s.build) h+=' <span style="color:var(--muted)">— <i>'+be(s.build)+'</i></span>';
+      h+='<div style="margin-top:5px;display:flex;flex-wrap:wrap;gap:6px">';
+      (s.usability||[]).forEach(u=>{ h+='<span style="background:rgba(127,209,255,.12);border:1px solid rgba(127,209,255,.35);border-radius:4px;padding:1px 7px;font-size:12px">'+be(u.field)+': '+be(u.before)+' → <b>'+be(u.after)+'</b></span>'; });
+      if(s.damage) h+='<span style="background:rgba(255,155,107,.12);border:1px solid rgba(255,155,107,.4);border-radius:4px;padding:1px 7px;font-size:12px">DMG: '+be(s.damage.before)+' → <b>'+be(s.damage.after)+'</b></span>';
+      h+='</div></div>';
+    });
+    h+='</div>';
+  });
+  h+='</div>';
+  el.innerHTML=h;
 }
 function renderSystems(){
   $('#systems').innerHTML=`<h2>Rune Zero — Server Systems</h2>
