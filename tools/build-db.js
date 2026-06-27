@@ -28,7 +28,8 @@ const itemFiles = [
   path.join(CUSTOM, 'item_db.yml'),         // custom items + box overrides
   path.join(CUSTOM, 'item_db_equip.yml'),   // F11 trophy rebalances
   path.join(CUSTOM, 'item_db_essence.yml'), // class essences
-  path.join(CUSTOM, 'item_db_eden_weapons.yml'), // Eden badge weapons (merged last)
+  path.join(CUSTOM, 'item_db_eden_weapons.yml'), // Eden badge weapons
+  path.join(CUSTOM, 'item_db_cash.yml'),         // cash-shop cosmetics + bundles (merged last)
 ];
 
 const items = new Map();   // id -> item
