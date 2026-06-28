@@ -219,6 +219,17 @@ for (const f of [path.join(RE,'item_randomopt_group.yml'), path.join(CUSTOM,'ite
     optGroups.push({ id:g.Id, name:g.Group, maxRandom:g.MaxRandom||0, custom:f.includes('db-import'), options:opts });
   }
 
+// ---- element damage table (attr_fix.yml) -----------------------------------
+// matrix[defLevel-1][attackEleIdx][defendEleIdx] = damage % (100 = normal).
+// Powers the wiki's "what to hit it with" matchup. Element order = RO index 0-9
+// (note: index 7 is "Dark"/Shadow in the YAML).
+const ELE_ORDER=['Neutral','Water','Earth','Fire','Wind','Poison','Holy','Dark','Ghost','Undead'];
+const elemMatrix=[];
+for (const lvl of load(path.join(RE,'attr_fix.yml'))) {
+  const li=(lvl.Level||1)-1; elemMatrix[li]=[];
+  ELE_ORDER.forEach((atk,ai)=>{ const row=lvl[atk]||{}; elemMatrix[li][ai]=ELE_ORDER.map(def=>row[def]!=null?row[def]:100); });
+}
+
 // ---- write -----------------------------------------------------------------
 if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
 const itemArr = [...items.values()].filter(i => i.name).sort((a,b)=>a.id-b.id);
@@ -228,6 +239,7 @@ fs.writeFileSync(path.join(OUT,'items.json'), JSON.stringify(itemArr));
 fs.writeFileSync(path.join(OUT,'mobs.json'),  JSON.stringify(mobArr));
 fs.writeFileSync(path.join(OUT,'options.json'), JSON.stringify({ types:optTypes, groups:optGroups }));
 fs.writeFileSync(path.join(OUT,'skills.json'), JSON.stringify(skillNames));
+fs.writeFileSync(path.join(OUT,'elements.json'), JSON.stringify({ order:ELE_ORDER, matrix:elemMatrix }));
 fs.writeFileSync(path.join(OUT,'meta.json'), JSON.stringify({
   built: new Date().toISOString().slice(0,10),
   items: itemArr.length, mobs: mobArr.length,
