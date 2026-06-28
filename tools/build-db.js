@@ -230,6 +230,26 @@ for (const lvl of load(path.join(RE,'attr_fix.yml'))) {
   ELE_ORDER.forEach((atk,ai)=>{ const row=lvl[atk]||{}; elemMatrix[li][ai]=ELE_ORDER.map(def=>row[def]!=null?row[def]:100); });
 }
 
+// ---- Hunting Log quests (custom IDs 710000-719999) -------------------------
+// Mirrors custom/db-import/quest_db.yml so the wiki can show every milestone.
+// Reward text is parsed from the quest Title's "(...)" suffix.
+const mobByAegis = new Map();
+for (const m of mobs.values()) if (m.aegis) mobByAegis.set(m.aegis, { name: m.name, id: m.id });
+const hunting = { monster: [], region: [] };
+for (const q of load(path.join(CUSTOM, 'quest_db.yml'))) {
+  if (q.Id == null || q.Id < 710000 || q.Id > 719999) continue;
+  const mt = /(?:Hunting Log:|Region:)\s*(.+?)\s*\(([^)]+)\)\s*$/.exec(q.Title || '');
+  const title = mt ? mt[1].trim() : (q.Title || '');
+  const reward = mt ? mt[2].trim() : '';
+  const targets = (q.Targets || []).map(t => {
+    const mob = t.Mob ? mobByAegis.get(t.Mob) : null;
+    return { mob: mob ? mob.name : (t.Mob || null), mobId: mob ? mob.id : null,
+             count: t.Count || 0, map: t.Location || null, mapName: t.MapName || t.Location || null };
+  });
+  const rec = { id: q.Id, title, reward, targets };
+  (targets.some(t => t.map) ? hunting.region : hunting.monster).push(rec);
+}
+
 // ---- write -----------------------------------------------------------------
 if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
 const itemArr = [...items.values()].filter(i => i.name).sort((a,b)=>a.id-b.id);
@@ -240,6 +260,7 @@ fs.writeFileSync(path.join(OUT,'mobs.json'),  JSON.stringify(mobArr));
 fs.writeFileSync(path.join(OUT,'options.json'), JSON.stringify({ types:optTypes, groups:optGroups }));
 fs.writeFileSync(path.join(OUT,'skills.json'), JSON.stringify(skillNames));
 fs.writeFileSync(path.join(OUT,'elements.json'), JSON.stringify({ order:ELE_ORDER, matrix:elemMatrix }));
+fs.writeFileSync(path.join(OUT,'hunting.json'), JSON.stringify(hunting));
 fs.writeFileSync(path.join(OUT,'meta.json'), JSON.stringify({
   built: new Date().toISOString().slice(0,10),
   items: itemArr.length, mobs: mobArr.length,
