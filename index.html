@@ -9,89 +9,175 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#13151c; --panel:#1a1d26; --panel-2:#21252f; --border:#2c313f;
-    --gold:#c9a24b; --gold-dim:#9c7d3a; --rune:#5ad0c4;
-    --text:#e8e5dc; --muted:#959aa8;
-    --common:#9aa0ac; --rare:#5b9dd9; --mythic:#b07ad6; --legendary:#e0a93b;
-    --good:#6bc77a; --warn:#e0794b;
+    --bg:#eef1f7; --panel:#ffffff; --panel-2:#f3f5fa; --panel-3:#e9edf5;
+    --border:#dde2ec; --border-2:#cdd4e2;
+    --gold:#b27c1b; --gold-deep:#8a5e10; --gold-soft:#f3e4c0;
+    --rune:#0d9488; --rune-deep:#0b766e;
+    --text:#1b2230; --ink:#0e1320; --muted:#6c7488; --faint:#9aa2b4;
+    --common:#7f8794; --rare:#2f7fd6; --mythic:#8b5cf6; --legendary:#df8a1e;
+    --good:#1f9d57; --warn:#e0794b; --bad:#d6453f;
+    --shadow:0 1px 2px rgba(18,28,51,.04),0 4px 16px rgba(18,28,51,.06);
+    --shadow-lg:0 8px 30px rgba(18,28,51,.10);
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.55}
-  a{color:var(--rune);text-decoration:none;cursor:pointer}
-  a:hover{text-decoration:underline}
+  body{margin:0;background:
+      radial-gradient(1200px 480px at 80% -120px,#e7ecfa 0,rgba(231,236,250,0) 70%),
+      radial-gradient(900px 420px at -5% -80px,#eafaf6 0,rgba(234,250,246,0) 65%),
+      var(--bg);
+    color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--rune-deep);text-decoration:none;cursor:pointer;font-weight:500}
+  a:hover{color:var(--rune);text-decoration:underline}
   code,.mono{font-family:'JetBrains Mono',monospace}
+  ::selection{background:rgba(13,148,136,.18)}
 
-  header.top{position:sticky;top:0;z-index:30;background:rgba(19,21,28,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
-  .top-inner{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-  .brand{font-family:'Cinzel',serif;font-weight:700;letter-spacing:.18em;color:var(--gold);text-transform:uppercase;font-size:15px;text-shadow:0 0 18px rgba(201,162,75,.3)}
-  .brand small{color:var(--muted);font-family:'JetBrains Mono';font-size:10px;letter-spacing:.2em;display:block}
-  nav.tabs{display:flex;gap:4px;margin-left:8px}
-  nav.tabs button{background:none;border:1px solid transparent;color:var(--muted);padding:7px 14px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer}
-  nav.tabs button.active{color:var(--gold);background:var(--panel);border-color:var(--border)}
-  nav.tabs button:hover{color:var(--text)}
+  header.top{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.82);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--border)}
+  .top-inner{max-width:1320px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Cinzel',serif;font-weight:700;letter-spacing:.16em;color:var(--gold-deep);text-transform:uppercase;font-size:15px}
+  .brand .mark{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:#fff;font-size:16px;
+    background:linear-gradient(135deg,#13b3a3,#0d9488);box-shadow:0 3px 10px rgba(13,148,136,.35)}
+  .brand small{color:var(--faint);font-family:'JetBrains Mono';font-size:9.5px;letter-spacing:.2em;display:block;font-weight:500}
+  nav.tabs{display:flex;gap:3px;margin-left:6px;flex-wrap:wrap}
+  nav.tabs button{background:none;border:1px solid transparent;color:var(--muted);padding:7px 13px;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.12s}
+  nav.tabs button.active{color:var(--gold-deep);background:linear-gradient(180deg,#fff,var(--panel-2));border-color:var(--border-2);box-shadow:var(--shadow)}
+  nav.tabs button:hover{color:var(--ink);background:var(--panel-2)}
   .search-wrap{margin-left:auto;display:flex;gap:8px;align-items:center;flex:1;min-width:240px;max-width:520px}
-  input.search{flex:1;background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:9px;padding:9px 13px;font-size:14px;outline:none}
-  input.search:focus{border-color:var(--gold-dim)}
-  select{background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 10px;font-size:13px}
+  input.search{flex:1;background:#fff;border:1px solid var(--border-2);color:var(--text);border-radius:10px;padding:9px 13px;font-size:14px;outline:none;box-shadow:var(--shadow);transition:.12s}
+  input.search:focus{border-color:var(--rune);box-shadow:0 0 0 3px rgba(13,148,136,.13)}
+  input.search::placeholder{color:var(--faint)}
+  select{background:#fff;border:1px solid var(--border-2);color:var(--text);border-radius:9px;padding:8px 10px;font-size:13px;box-shadow:var(--shadow);cursor:pointer}
 
-  .shell{max-width:1280px;margin:0 auto;padding:18px 20px 80px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .shell{max-width:1320px;margin:0 auto;padding:18px 22px 90px;display:grid;grid-template-columns:1fr 1fr;gap:22px}
   @media(max-width:880px){.shell{grid-template-columns:1fr}}
-  .col h3{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dim);margin:2px 0 10px}
+  .col h3{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:2px 0 10px}
 
-  .list{border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .list{border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--panel);box-shadow:var(--shadow)}
   table{border-collapse:collapse;width:100%;font-size:13.5px}
-  th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
-  thead th{position:sticky;top:0;background:var(--panel-2);font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
-  tbody tr{cursor:pointer}
-  tbody tr:hover{background:rgba(255,255,255,.03)}
-  tbody tr.sel{background:rgba(201,162,75,.10)}
-  td.mono{font-family:'JetBrains Mono';color:var(--muted)}
-  .badge{font-family:'JetBrains Mono';font-size:10px;padding:1px 6px;border-radius:5px;border:1px solid var(--border);color:var(--muted)}
-  .badge.custom{color:var(--rune);border-color:var(--rune)}
-  .badge.mvp{color:var(--legendary);border-color:var(--gold-dim)}
+  th,td{padding:9px 13px;text-align:left;border-bottom:1px solid var(--border)}
+  thead th{position:sticky;top:0;background:var(--panel-3);font-family:'JetBrains Mono';font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;z-index:1}
+  tbody tr{cursor:pointer;transition:background .1s}
+  tbody tr:hover{background:var(--panel-2)}
+  tbody tr.sel{background:linear-gradient(90deg,rgba(13,148,136,.12),rgba(13,148,136,.04));box-shadow:inset 3px 0 0 var(--rune)}
+  td.mono{font-family:'JetBrains Mono';color:var(--faint);font-size:12px}
+  .badge{display:inline-block;font-family:'JetBrains Mono';font-size:10px;font-weight:600;padding:1px 6px;border-radius:6px;border:1px solid var(--border-2);color:var(--muted);background:var(--panel-2);vertical-align:middle}
+  .badge.custom{color:var(--rune-deep);border-color:rgba(13,148,136,.4);background:rgba(13,148,136,.08)}
+  .badge.mvp{color:#fff;border-color:transparent;background:linear-gradient(135deg,#f0b94e,#d6891b);box-shadow:0 1px 4px rgba(214,137,27,.4)}
   .scry{max-height:calc(100vh - 200px);overflow:auto;display:block}
   .count{font-size:12px;color:var(--muted);margin:8px 2px}
 
-  .detail{border:1px solid var(--border);border-radius:12px;background:var(--panel);padding:18px 20px;min-height:200px;position:sticky;top:80px;max-height:calc(100vh - 100px);overflow:auto}
-  .detail .empty{color:var(--muted);text-align:center;padding:50px 0}
-  .detail h2{font-family:'Cinzel',serif;font-size:22px;margin:0 0 2px;color:var(--text)}
-  .detail .sub{color:var(--muted);font-size:13px;margin-bottom:14px}
-  .kv{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;font-size:13.5px;margin:12px 0}
+  .detail{border:1px solid var(--border);border-radius:14px;background:var(--panel);padding:20px 22px;min-height:200px;position:sticky;top:78px;max-height:calc(100vh - 96px);overflow:auto;box-shadow:var(--shadow)}
+  .detail .empty{color:var(--faint);text-align:center;padding:60px 0}
+  .detail h2{font-family:'Cinzel',serif;font-size:22px;margin:0 0 2px;color:var(--ink);line-height:1.2}
+  .detail .sub{color:var(--muted);font-size:12.5px;margin-bottom:14px}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:13.5px;margin:12px 0}
   .kv dt{color:var(--muted)}
-  .kv dd{margin:0}
-  .sec{margin-top:16px;border-top:1px solid var(--border);padding-top:12px}
-  .sec h4{font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dim);margin:0 0 8px}
-  pre.script{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:11px 13px;font-size:12px;overflow:auto;color:var(--rune);white-space:pre-wrap;line-height:1.5}
-  .droprow{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .kv dd{margin:0;font-weight:500}
+  .sec{margin-top:16px;border-top:1px solid var(--border);padding-top:13px}
+  .sec h4{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);margin:0 0 9px}
+  pre.script{background:#0f1626;border:1px solid #1d2740;border-radius:9px;padding:11px 13px;font-size:12px;overflow:auto;color:#6fe0d2;white-space:pre-wrap;line-height:1.5}
+  .droprow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
   .droprow:last-child{border-bottom:none}
-  .rate{font-family:'JetBrains Mono';color:var(--muted);font-size:12px}
-  .note{border-left:3px solid var(--rune);background:var(--panel-2);border-radius:8px;padding:10px 12px;font-size:13px;margin:12px 0;color:var(--text)}
-  .pill{display:inline-block;font-family:'JetBrains Mono';font-size:11px;background:var(--panel-2);border:1px solid var(--border);color:var(--muted);padding:3px 9px;border-radius:999px;margin:2px 4px 2px 0}
+  .droprow .dl{display:flex;align-items:center;gap:8px;min-width:0}
+  .rate{font-family:'JetBrains Mono';color:var(--muted);font-size:12px;white-space:nowrap}
+  .note{border-left:3px solid var(--rune);background:linear-gradient(90deg,rgba(13,148,136,.07),transparent);border-radius:0 8px 8px 0;padding:10px 13px;font-size:13px;margin:12px 0;color:var(--text)}
+  .pill{display:inline-block;font-family:'JetBrains Mono';font-size:11px;background:var(--panel-2);border:1px solid var(--border-2);color:var(--muted);padding:3px 9px;border-radius:999px;margin:2px 4px 2px 0}
 
   .loading,.errbox{max-width:680px;margin:80px auto;text-align:center;color:var(--muted)}
-  .errbox code{background:var(--panel-2);padding:2px 8px;border-radius:6px;color:var(--gold)}
-  .systems{max-width:880px;margin:0 auto;padding:8px 4px}
-  .systems h2{font-family:'Cinzel',serif;color:var(--gold)}
-  .systems .card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin:12px 0}
-  .systems .card h4{margin:0 0 6px;color:var(--gold);font-family:'Cinzel',serif}
+  .errbox code{background:var(--panel-2);padding:2px 8px;border-radius:6px;color:var(--gold-deep)}
+  .systems{max-width:960px;margin:0 auto;padding:8px 4px}
+  .systems h2{font-family:'Cinzel',serif;color:var(--gold-deep);font-size:26px}
+  .syscards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:760px){.syscards{grid-template-columns:1fr}}
+  .systems .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .systems .card:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--rune),#37c0b2)}
+  .systems .card.g:before{background:linear-gradient(180deg,#e7a93a,#d6891b)}
+  .systems .card h4{margin:0 0 7px;color:var(--ink);font-family:'Cinzel',serif;font-size:16px;display:flex;align-items:center;gap:9px}
+  .systems .card h4 .si{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:16px;background:var(--panel-2);border:1px solid var(--border);flex:none}
+  .systems .card p{margin:0;font-size:13.5px;color:var(--text)}
   .hide{display:none}
   .ihead{display:flex;gap:14px;align-items:flex-start;margin-bottom:6px}
-  .iimg{width:60px;height:60px;flex:none;border:1px solid var(--border);border-radius:8px;background:var(--panel-2);object-fit:contain;padding:3px;image-rendering:pixelated}
+  .iimg{width:62px;height:62px;flex:none;border:1px solid var(--border-2);border-radius:11px;background:var(--panel-2);object-fit:contain;padding:4px;image-rendering:pixelated}
   .iimg.hide{display:none}
-  td .ico{width:20px;height:20px;vertical-align:middle;margin-right:7px;image-rendering:pixelated}
-  .eff{font-size:13.5px;margin:4px 0 4px 14px;position:relative}
-  .eff:before{content:'▪';position:absolute;left:-13px;color:var(--gold-dim)}
-  .eff.cond{color:var(--rune);font-weight:600;margin:10px 0 2px 0}
+  td .ico{width:22px;height:22px;vertical-align:middle;margin-right:8px;image-rendering:pixelated;flex:none}
+  .eff{font-size:13.5px;margin:4px 0 4px 15px;position:relative}
+  .eff:before{content:'▸';position:absolute;left:-14px;color:var(--rune)}
+  .eff.cond{color:var(--gold-deep);font-weight:700;margin:11px 0 2px 0}
   .eff.cond:before{content:''}
   details.raw{margin-top:10px}
   details.raw summary{cursor:pointer;color:var(--muted);font-size:11.5px;font-family:'JetBrains Mono';letter-spacing:.04em}
+
+  /* ---- visual primitives ------------------------------------------------- */
+  /* element chip */
+  .ele{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:2px 9px 2px 7px;border-radius:999px;border:1px solid;line-height:1.5}
+  .ele i{font-style:normal;font-size:12px}
+  /* in-game loot-beam dot */
+  .beamdot{width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 0 2px rgba(255,255,255,.7),0 0 6px currentColor;display:inline-block}
+  .beamleg{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin:3px 12px 3px 0}
+  .beampill{display:inline-block;width:16px;height:30px;border-radius:4px;vertical-align:middle;
+    box-shadow:inset 0 0 6px rgba(255,255,255,.5);background:linear-gradient(180deg,currentColor,transparent)}
+  /* rate bar (drop rarity) */
+  .ratewrap{display:flex;align-items:center;gap:7px}
+  .ratebar{width:46px;height:5px;border-radius:3px;background:var(--panel-3);overflow:hidden;flex:none}
+  .ratebar i{display:block;height:100%;border-radius:3px}
+  /* monster stat mini-bars */
+  .stats6{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 16px;margin:10px 0}
+  .statb{font-size:12px}
+  .statb .lab{display:flex;justify-content:space-between;color:var(--muted);font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.04em}
+  .statb .bar{height:5px;border-radius:3px;background:var(--panel-3);margin-top:2px;overflow:hidden}
+  .statb .bar i{display:block;height:100%;background:linear-gradient(90deg,#37c0b2,#0d9488);border-radius:3px}
+  /* hp bar */
+  .hpbar{height:7px;border-radius:4px;background:var(--panel-3);overflow:hidden;margin-top:4px}
+  .hpbar i{display:block;height:100%;background:linear-gradient(90deg,#5fc97a,#1f9d57)}
+  /* class avatar (skill changes) */
+  .clsava{width:46px;height:46px;border-radius:50%;flex:none;display:grid;place-items:center;overflow:hidden;
+    background:radial-gradient(circle at 50% 30%,#fff,var(--panel-2));border:2px solid var(--border-2);box-shadow:var(--shadow)}
+  .clsava img{width:42px;height:46px;object-fit:contain;object-position:bottom;image-rendering:pixelated;margin-bottom:-2px}
+  .clsava span{font-size:22px}
+  /* before -> after comparison */
+  .cmp{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
+  .cmpchip{display:flex;align-items:center;gap:7px;background:var(--panel-2);border:1px solid var(--border);border-radius:9px;padding:5px 9px 5px 8px;font-size:12px}
+  .cmpchip .cf{color:var(--muted);font-family:'JetBrains Mono';font-size:10px;letter-spacing:.04em;text-transform:uppercase}
+  .cmpbar{position:relative;width:84px;height:14px;border-radius:4px;background:var(--panel-3);overflow:hidden;flex:none}
+  .cmpbar .b4{position:absolute;left:0;top:0;bottom:0;background:repeating-linear-gradient(45deg,#cdd4e2,#cdd4e2 3px,#d9dfea 3px,#d9dfea 6px);opacity:.8}
+  .cmpbar .af{position:absolute;left:0;top:0;bottom:0;border-radius:4px}
+  .cmpbar.up .af{background:linear-gradient(90deg,#5fc97a,#1f9d57)}
+  .cmpbar.down .af{background:linear-gradient(90deg,#6fb6ef,#2f7fd6)}
+  .cmpval{font-family:'JetBrains Mono';font-size:11.5px}
+  .cmpval b{color:var(--ink)}
+  .cmpval .o{color:var(--faint);text-decoration:line-through;font-size:10.5px}
+  .delta{font-family:'JetBrains Mono';font-size:11px;font-weight:700;padding:0 5px;border-radius:5px}
+  .delta.g{color:var(--good);background:rgba(31,157,87,.1)}
+  .delta.b{color:var(--rare);background:rgba(47,127,214,.1)}
+  /* tier rail in skill changes */
+  .tierhead{display:flex;align-items:center;gap:10px;margin:28px 0 14px}
+  .tierhead .tn{font-family:'Cinzel',serif;color:var(--gold-deep);font-size:18px}
+  .tierhead .tl{flex:1;height:1px;background:linear-gradient(90deg,var(--border-2),transparent)}
+  .clscard{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow)}
+  .clscard>.ch{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+  .clscard>.ch .cn{font-family:'Cinzel',serif;font-size:17px;color:var(--ink)}
+  .clscard>.ch .cc{margin-left:auto;font-size:11px;color:var(--muted);font-family:'JetBrains Mono'}
+  .skrow{padding:9px 0;border-top:1px solid var(--border)}
+  .skrow:first-of-type{border-top:none}
+  .skrow .sn{font-weight:600;color:var(--ink)}
+  .skrow .sa{color:var(--faint);font-size:11.5px;font-family:'JetBrains Mono'}
+  .skrow .sb{color:var(--muted);font-size:12px;font-style:italic}
+  .tag{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:5px;letter-spacing:.03em;text-transform:uppercase}
+  .tag.dmg{color:#fff;background:linear-gradient(135deg,#ef8a5b,#e0794b)}
+  .tag.use{color:#fff;background:linear-gradient(135deg,#5aa6ea,#2f7fd6)}
+  .hero{background:linear-gradient(120deg,#fff,var(--panel-2));border:1px solid var(--border);border-radius:16px;padding:18px 22px;margin-bottom:18px;box-shadow:var(--shadow);display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+  .hero .hx{flex:1;min-width:240px}
+  .hero h2{margin:0 0 4px}
+  .hero p{margin:0;color:var(--muted);font-size:13.5px}
+  .statline{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .statbox{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:9px 14px;text-align:center;min-width:84px;box-shadow:var(--shadow)}
+  .statbox b{display:block;font-size:20px;color:var(--rune-deep);font-family:'Cinzel',serif;line-height:1.1}
+  .statbox small{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.08em}
 </style>
 </head>
 <body>
 
 <header class="top">
   <div class="top-inner">
-    <div class="brand">Rune&nbsp;Zero<small>GAME DATABASE</small></div>
+    <div class="brand"><span class="mark">✦</span><span>Rune&nbsp;Zero<small>GAME DATABASE</small></span></div>
     <nav class="tabs">
       <button data-view="items" class="active">Items</button>
       <button data-view="mobs">Monsters</button>
@@ -235,6 +321,43 @@ const SLOT_GROUP={Weapon:'RZ_DROP_WEAPON',Armor:'RZ_DROP_ARMOR',Shield:'RZ_DROP_
 const RACE=['Formless','Undead','Brute','Plant','Insect','Fish','Demon','Demihuman','Angel','Dragon'];
 const ELE=['Neutral','Water','Earth','Fire','Wind','Poison','Holy','Shadow','Ghost','Undead'];
 
+// ---- visual helpers --------------------------------------------------------
+const ELE_C=['#8a93a3','#2f8fd6','#9a6b33','#e0623a','#2bb3a3','#9b59c6','#e0a93b','#6a4fb0','#8e7bd0','#6b8e4f'];
+const ELE_I=['◇','💧','🌿','🔥','🌪️','☠️','✨','🌑','👻','💀'];
+function eleChip(idx,lv){
+  const i=+idx||0, c=ELE_C[i]||'#8a93a3', nm=ELE[i]||idx;
+  return `<span class="ele" style="color:${c};border-color:${c}66;background:${c}14"><i>${ELE_I[i]||'◇'}</i>${esc(nm)}${lv?' '+lv:''}</span>`;
+}
+const RACE_I=['🌀','💀','🐾','🌱','🐛','🐟','😈','🧑','😇','🐉'];
+function raceChip(idx){const i=+idx; return `<span class="ele" style="color:#5b637a;border-color:var(--border-2);background:var(--panel-2)"><i>${RACE_I[i]||'•'}</i>${esc(RACE[i]!==undefined?RACE[i]:idx)}</span>`;}
+const SIZE_N=['Small','Medium','Large'], SIZE_I=['▫','◻','⬛'];
+function sizeChip(idx){const i=+idx; return `<span class="ele" style="color:#5b637a;border-color:var(--border-2);background:var(--panel-2)"><i>${SIZE_I[i]||'◻'}</i>${SIZE_N[i]||idx}</span>`;}
+
+// In-game loot-beam color for a drop, mirroring scripts/gen-dropbeams.js.
+// ctx: {srcMvp:boolean (source monster is MVP), prize:boolean (it's an MVP reward)}
+const BEAM={blue:'#3a8fe0',yellow:'#e3c038',purple:'#a45bd6',green:'#2fa85f',red:'#e0473f'};
+function dropBeam(itemId,rate,ctx){
+  const it=ITEM_BY_ID.get(itemId); if(!it) return null;
+  if(it.type==='Card'){ return ctx&&ctx.srcMvp ? {c:BEAM.purple,t:'MVP-card beam'} : {c:BEAM.blue,t:'card beam'}; }
+  if(it.type==='Weapon'||it.type==='Armor'){
+    if((ctx&&ctx.prize)||rate<=10) return {c:BEAM.red,t:'rare-gear beam'};
+    if(rate<=100) return {c:BEAM.green,t:'gear beam'};
+  }
+  return null;
+}
+function beamDot(b){return b?`<span class="beamdot" style="color:${b.c}" title="${b.t}"></span>`:'';}
+
+// rarity bar from a drop rate (0.01% units; rarer = fuller + hotter colour)
+function rarity(rate){
+  if(rate<=10) return {p:100,c:'#df8a1e',n:'legendary'};
+  if(rate<=50) return {p:82,c:'#8b5cf6',n:'very rare'};
+  if(rate<=100) return {p:64,c:'#2f7fd6',n:'rare'};
+  if(rate<=1000) return {p:42,c:'#13a99a',n:'uncommon'};
+  return {p:22,c:'#9aa2b4',n:'common'};
+}
+function rateBar(rate){const r=rarity(rate);return `<span class="ratewrap"><span class="ratebar" title="${r.n}"><i style="width:${r.p}%;background:${r.c}"></i></span><span class="rate">${pct(rate)}</span></span>`;}
+function statBar(v,max){const p=Math.max(4,Math.min(100,Math.round(v/max*100)));return `<div class="bar"><i style="width:${p}%"></i></div>`;}
+
 async function boot(){
   try{
     const [it,mo,me,op,sk] = await Promise.all([
@@ -315,7 +438,7 @@ function render(){
       if(q && !m._s.includes(q)) continue;
       if(ft==='MVP only' && !m.mvp) continue;
       if(ft==='Normal only' && m.mvp) continue;
-      total++; if(n<300){out+=`<tr data-id="${m.id}"><td class="mono">${m.id}</td><td class="mono">${m.lvl||''}</td><td>${esc(m.name)} ${m.mvp?'<span class="badge mvp">MVP</span>':''}</td><td>${ELE[m.element]||m.element||''}${m.eleLv?' '+m.eleLv:''}</td></tr>`;n++;}
+      total++; if(n<300){out+=`<tr data-id="${m.id}"><td class="mono">${m.id}</td><td class="mono">${m.lvl||''}</td><td>${esc(m.name)} ${m.mvp?'<span class="badge mvp">MVP</span>':''}</td><td>${eleChip(m.element,m.eleLv)}</td></tr>`;n++;}
     }
   }else if(view==='skills'){
     for(const i of ITEMS){
@@ -343,11 +466,13 @@ function render(){
   rows.querySelectorAll('tr[data-id]').forEach(tr=>tr.onclick=()=>{ location.hash = pre+tr.dataset.id; });
 }
 
+const VIEWS=['items','mobs','skills','enchants','systems','balance'];
 function routeHash(){
   const h=location.hash.slice(1);
   if(h.startsWith('item/')){ if(view==='systems')setView('items'); showItem(+h.slice(5)); }
   else if(h.startsWith('mob/')){ showMob(+h.slice(4)); }
   else if(h.startsWith('group/')){ showGroup(+h.slice(6)); }
+  else if(VIEWS.includes(h)){ setView(h); }   // shareable tab links e.g. #balance
 }
 
 function showGroup(id){
@@ -399,7 +524,7 @@ function showItem(id){
   const db=(i.droppedBy||[]).slice().sort((a,b)=>b.rate-a.rate);
   if(db.length){
     h+='<div class="sec"><h4>Dropped by</h4>';
-    for(const d of db.slice(0,40)) h+=`<div class="droprow"><a onclick="location.hash='mob/${d.id}'">${esc(d.mob)} ${d.mvp?'<span class="badge mvp">MVP</span>':''}</a><span class="rate">${pct(d.rate)}</span></div>`;
+    for(const d of db.slice(0,40)){ const b=dropBeam(i.id,d.rate,{srcMvp:d.mvp}); h+=`<div class="droprow"><span class="dl">${beamDot(b)}<a onclick="location.hash='mob/${d.id}'">${esc(d.mob)}</a> ${d.mvp?'<span class="badge mvp">★ MVP</span>':''}</span>${rateBar(d.rate)}</div>`; }
     if(db.length>40)h+=`<div class="rate" style="margin-top:6px">…and ${db.length-40} more</div>`;
     h+='</div>';
   }
@@ -418,21 +543,24 @@ function showMob(id){
   const m=MOB_BY_ID.get(id); if(!m)return;
   if(view!=='mobs'){view='mobs';setView('mobs');}
   highlight(id);
-  let h=`<h2>${esc(m.name)} ${m.mvp?'<span class="badge mvp">MVP</span>':''}</h2>`;
+  let h=`<h2>${esc(m.name)} ${m.mvp?'<span class="badge mvp">★ MVP</span>':''}</h2>`;
   h+=`<div class="sub mono">ID ${m.id} · ${esc(m.aegis||'')}</div>`;
+  h+=`<div style="display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px">${eleChip(m.element,m.eleLv)}${raceChip(m.race)}${sizeChip(m.size)}<span class="ele" style="color:#5b637a;border-color:var(--border-2);background:var(--panel-2)"><i>📈</i>Lv ${m.lvl||'?'}</span></div>`;
+  // HP bar (log-scaled: 100 .. 10M)
+  const hp=m.hp||0, hpPct=Math.max(3,Math.min(100,Math.round((Math.log10(Math.max(hp,1))-2)/5*100)));
+  h+=`<div class="sec" style="border-top:none;padding-top:6px"><div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--muted)">HP</span><b class="mono">${hp.toLocaleString()}</b></div><div class="hpbar"><i style="width:${hpPct}%"></i></div></div>`;
   h+='<dl class="kv">';
-  h+=row('Level', m.lvl); h+=row('HP', (m.hp||0).toLocaleString());
-  h+=row('Element', (ELE[m.element]||m.element||'')+(m.eleLv?` Lv${m.eleLv}`:''));
-  h+=row('Race', RACE[m.race]!==undefined?RACE[m.race]:m.race);
-  h+=row('Size', ['Small','Medium','Large'][m.size]||m.size);
   h+=row('ATK', (m.atkMin||0)+(m.atkMax?'–'+m.atkMax:''));
   h+=row('DEF / MDEF', (m.def||0)+' / '+(m.mdef||0));
   h+=row('Base / Job EXP', (m.baseExp||0).toLocaleString()+' / '+(m.jobExp||0).toLocaleString());
-  if(m.stats)h+=row('Stats', `STR ${m.stats.str} AGI ${m.stats.agi} VIT ${m.stats.vit} INT ${m.stats.int} DEX ${m.stats.dex} LUK ${m.stats.luk}`);
   h+='</dl>';
+  if(m.stats){const S=m.stats,smax=Math.max(120,S.str,S.agi,S.vit,S.int,S.dex,S.luk);
+    h+='<div class="stats6">'+[['STR',S.str],['AGI',S.agi],['VIT',S.vit],['INT',S.int],['DEX',S.dex],['LUK',S.luk]]
+      .map(([n,v])=>`<div class="statb"><div class="lab"><span>${n}</span><span>${v}</span></div>${statBar(v,smax)}</div>`).join('')+'</div>';}
+  const dRow=(d,ctx)=>{const b=dropBeam(d.id,d.rate,ctx);return `<div class="droprow"><span class="dl">${beamDot(b)}${d.id?`<a onclick="location.hash='item/${d.id}'">${esc(d.name)}</a>`:esc(d.name)}</span>${rateBar(d.rate)}</div>`;};
   const drops=(m.drops||[]).slice().sort((a,b)=>b.rate-a.rate);
-  if(drops.length){h+='<div class="sec"><h4>Drops</h4>';for(const d of drops)h+=dropLink(d);h+='</div>';}
-  if(m.mvpDrops&&m.mvpDrops.length){h+='<div class="sec"><h4>MVP Reward</h4>';for(const d of m.mvpDrops)h+=dropLink(d);h+='</div>';}
+  if(drops.length){h+='<div class="sec"><h4>Drops</h4>';for(const d of drops)h+=dRow(d,{srcMvp:m.mvp});h+='</div>';}
+  if(m.mvpDrops&&m.mvpDrops.length){h+='<div class="sec"><h4>★ MVP Reward</h4>';for(const d of m.mvpDrops)h+=dRow(d,{srcMvp:m.mvp,prize:true});h+='</div>';}
   if(m.spawns&&m.spawns.length){
     h+='<div class="sec"><h4>Spawns</h4>';
     for(const s of m.spawns.slice(0,30)) h+=`<div class="droprow"><span class="mono">${esc(s.map)}</span><span class="rate">${s.amt}</span></div>`;
@@ -448,13 +576,14 @@ function highlight(id){
     const s=document.querySelector('#rows tr.sel'); if(s)s.scrollIntoView({block:'nearest'});},0);
 }
 const CLASS_EMOJI={'Novice':'🔰','Swordman':'🗡️','Knight':'⚔️','Crusader':'🛡️','Merchant':'💰','Blacksmith':'🔨','Whitesmith':'🔨','Alchemist':'⚗️','Creator':'⚗️','Thief':'🥷','Assassin':'🗡️','Assassin Cross':'🗡️','Rogue':'🃏','Stalker':'🃏','Mage':'✨','Wizard':'🔮','High Wizard':'🔮','Sage':'📖','Professor':'📖','Acolyte':'🙏','Priest':'✨','High Priest':'✨','Monk':'👊','Champion':'👊','Archer':'🏹','Hunter':'🏹','Sniper':'🏹','Bard/Clown':'🎵','Dancer/Gypsy':'💃','Clown/Gypsy':'🎵','Lord Knight':'⚔️','Paladin':'🛡️','Gunslinger':'🔫','Ninja':'🥷','TaeKwon':'🦵','Star Gladiator':'☀️','Soul Linker':'🔗','Super Novice':'🔰'};
-// Real-sprite upgrade path: drop a PNG at assets/classes/<class-key>.png (e.g. lord-knight.png) and it
-// auto-replaces the emoji. Key = class name lowercased, spaces/slashes -> '-'.
+// Class job sprite (animated .gif in assets/classes/<key>.gif). Key = class name
+// lowercased, spaces/slashes -> '-'. Falls back to an emoji if the sprite is absent.
 function clsIcon(cls){
   const key=cls.toLowerCase().replace(/[\/ ]+/g,'-');
   const emoji=CLASS_EMOJI[cls]||'🔰';
-  return '<img src="assets/classes/'+key+'.png" alt="" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'inline-block\'" style="width:26px;height:26px;object-fit:contain;vertical-align:-7px;margin-right:7px;image-rendering:pixelated">'
-    +'<span style="display:none;margin-right:6px;font-size:19px;vertical-align:-2px">'+emoji+'</span>';
+  return '<span class="clsava"><img src="assets/classes/'+key+'.gif" alt="'+esc(cls)+'" loading="lazy" '
+    +'onerror="this.style.display=\'none\';this.parentNode.querySelector(\'span\').style.display=\'grid\'">'
+    +'<span style="display:none;place-items:center;width:100%;height:100%">'+emoji+'</span></span>';
 }
 let BALANCE=null;
 async function renderBalance(){
@@ -466,27 +595,46 @@ async function renderBalance(){
     catch(e){ el.innerHTML='<div style="padding:24px">Could not load <code>data/skillchanges.json</code>.</div>'; return; }
   }
   const tierName=['Novice','1st Class','2nd Class','Transcendent','Expanded'];
+  const FIELD={CastTime:['Cast','ms'],FixedCastTime:['Fixed cast','ms'],AfterCastActDelay:['Delay','ms'],AfterCastWalkDelay:['Walk delay','ms'],Cooldown:['Cooldown','ms'],SpCost:['SP',''],SP:['SP',''],HpRateCost:['HP cost','%'],ZenyCost:['Zeny','z'],ItemCost:['Items','']};
+  const num=x=>{const m=/-?\d+(\.\d+)?/.exec(String(x));return m?parseFloat(m[0]):null;};
+  const lvCoef=x=>{const m=/(\d+)\s*\*\s*lv/i.exec(String(x));return m?+m[1]:null;};
+  // visual before->after bar: track sized to max(before,after); hatched ghost=before, colour=after
+  function cmpBar(before,after,dir){ // dir 'up'(green, bigger=better) | 'down'(blue, smaller=better)
+    const mx=Math.max(before,after,1)||1;
+    return `<span class="cmpbar ${dir}"><span class="b4" style="width:${Math.round(before/mx*100)}%"></span><span class="af" style="width:${Math.round(after/mx*100)}%"></span></span>`;
+  }
+  function usChip(u){
+    const f=FIELD[u.field]||[u.field,''], b=num(u.before), a=num(u.after);
+    let bar='',delta='';
+    if(b!=null&&a!=null&&b>0){ bar=cmpBar(b,a,'down'); const d=Math.round((a/b-1)*100); if(d!==0) delta=`<span class="delta b">${d>0?'+':''}${d}%</span>`; }
+    return `<span class="cmpchip"><span class="cf">${be(f[0])}</span>${bar}<span class="cmpval"><span class="o">${be(u.before)}${f[1]}</span> <b>${be(u.after)}${f[1]}</b></span>${delta}</span>`;
+  }
+  function dmgChip(d){
+    const b=lvCoef(d.before), a=lvCoef(d.after); let bar='',delta='';
+    if(b!=null&&a!=null&&b>0){ bar=cmpBar(b,a,'up'); const g=Math.round((a/b-1)*100); if(g) delta=`<span class="delta g">${g>0?'+':''}${g}%</span>`; }
+    return `<span class="cmpchip"><span class="cf" style="color:var(--warn)">DMG /lv</span>${bar}<span class="cmpval"><span class="o">${be(d.before)}</span> <b>${be(d.after)}</b></span>${delta}</span>`;
+  }
   const groups={};
   BALANCE.forEach(s=>{const k=s.classOrder+'|'+s.class;(groups[k]=groups[k]||[]).push(s);});
   const keys=Object.keys(groups).sort((a,b)=>{const ao=+a.split('|')[0],bo=+b.split('|')[0];return ao-bo||a.split('|')[1].localeCompare(b.split('|')[1]);});
   const usab=BALANCE.filter(s=>s.usability&&s.usability.length).length, dmg=BALANCE.filter(s=>s.damage).length;
-  let h='<div style="max-width:1100px;margin:0 auto;padding:8px 4px 40px">'
-    +'<h2 style="font-family:Cinzel,serif;color:var(--gold);margin:6px 0">Skill Changes — before → after</h2>'
-    +'<p style="color:var(--muted);margin:0 0 18px">Every skill Rune Zero rebalanced, grouped by class. '
-    +'<b style="color:#7fd1ff">Usability</b> = cooldown / cast / SP eased so a skill becomes spammable &amp; affordable; '
-    +'<b style="color:#ff9b6b">Damage</b> = source ratio buffed so it hits hard enough to main. '
-    +BALANCE.length+' skills ('+usab+' usability, '+dmg+' damage). All values [TUNABLE].</p>';
+  let h='<div style="max-width:1100px;margin:0 auto;padding:8px 4px 50px">'
+    +'<div class="hero"><div class="hx"><h2 style="font-family:Cinzel,serif;color:var(--gold-deep)">Skill Changes — before → after</h2>'
+    +'<p>Every skill Rune Zero rebalanced, grouped by class. <b style="color:var(--rare)">Usability</b> bars shrink — cast / cooldown / SP eased so a skill becomes spammable &amp; affordable. <b style="color:var(--warn)">Damage</b> bars grow — per-level ratio buffed so it hits hard enough to main on. Hatched = old, solid = new.</p></div>'
+    +`<div class="statline"><div class="statbox"><b>${BALANCE.length}</b><small>Skills</small></div><div class="statbox"><b>${usab}</b><small>Usability</small></div><div class="statbox"><b>${dmg}</b><small>Damage</small></div></div></div>`;
   let lastTier=-1;
   keys.forEach(k=>{
     const arr=groups[k], ord=+k.split('|')[0], cls=k.split('|')[1];
-    if(ord!==lastTier){ lastTier=ord; h+='<h3 style="font-family:Cinzel,serif;color:var(--gold);border-bottom:1px solid var(--line);padding-bottom:4px;margin:26px 0 12px">'+tierName[ord]+'</h3>'; }
-    h+='<div class="card" style="margin-bottom:12px"><h4 style="margin:0 0 8px;display:flex;align-items:center">'+clsIcon(cls)+'<span>'+be(cls)+'</span></h4>';
+    if(ord!==lastTier){ lastTier=ord; h+=`<div class="tierhead"><span class="tn">${tierName[ord]}</span><span class="tl"></span></div>`; }
+    h+=`<div class="clscard"><div class="ch">${clsIcon(cls)}<span class="cn">${be(cls)}</span><span class="cc">${arr.length} skill${arr.length!==1?'s':''}</span></div>`;
     arr.forEach(s=>{
-      h+='<div style="padding:7px 0;border-top:1px solid var(--line)"><b>'+be(s.skill)+'</b> <span style="color:var(--muted);font-size:12px">'+be(s.aegis)+'</span>';
-      if(s.build) h+=' <span style="color:var(--muted)">— <i>'+be(s.build)+'</i></span>';
-      h+='<div style="margin-top:5px;display:flex;flex-wrap:wrap;gap:6px">';
-      (s.usability||[]).forEach(u=>{ h+='<span style="background:rgba(127,209,255,.12);border:1px solid rgba(127,209,255,.35);border-radius:4px;padding:1px 7px;font-size:12px">'+be(u.field)+': '+be(u.before)+' → <b>'+be(u.after)+'</b></span>'; });
-      if(s.damage) h+='<span style="background:rgba(255,155,107,.12);border:1px solid rgba(255,155,107,.4);border-radius:4px;padding:1px 7px;font-size:12px">DMG: '+be(s.damage.before)+' → <b>'+be(s.damage.after)+'</b></span>';
+      h+=`<div class="skrow"><span class="sn">${be(s.skill)}</span> <span class="sa">${be(s.aegis)}</span>`;
+      if(s.damage) h+=' <span class="tag dmg">dmg</span>';
+      if(s.usability&&s.usability.length) h+=' <span class="tag use">usability</span>';
+      if(s.build) h+=`<div class="sb">${be(s.build)}</div>`;
+      h+='<div class="cmp">';
+      (s.usability||[]).forEach(u=>h+=usChip(u));
+      if(s.damage) h+=dmgChip(s.damage);
       h+='</div></div>';
     });
     h+='</div>';
@@ -495,25 +643,40 @@ async function renderBalance(){
   el.innerHTML=h;
 }
 function renderSystems(){
+  const card=(ic,title,body,cls)=>`<div class="card${cls?' '+cls:''}"><h4><span class="si">${ic}</span>${title}</h4><p>${body}</p></div>`;
+  const beamLeg=`<div class="card g" style="grid-column:1/-1"><h4><span class="si">🔦</span>Loot Rarity Beams — what the colours mean</h4>
+    <p style="margin-bottom:10px">When something worth noticing drops, a coloured light pillar marks it on the ground so you never walk past a rare drop. <b>Purely a spotting aid</b> — it changes nothing about how often things drop (Rune Zero stays low-rate). Two families so a glance tells you the loot type:</p>
+    <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center">
+      <div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:JetBrains Mono">Cards (by source)</div>
+        <span class="beamleg" style="color:${BEAM.blue}"><span class="beampill"></span>Normal monster</span>
+        <span class="beamleg" style="color:${BEAM.purple}"><span class="beampill"></span>MVP card</span></div>
+      <div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:JetBrains Mono">Equipment (by rarity)</div>
+        <span class="beamleg" style="color:${BEAM.green}"><span class="beampill"></span>Rare gear (≤1%)</span>
+        <span class="beamleg" style="color:${BEAM.red}"><span class="beampill"></span>Very rare / MVP prize</span></div>
+    </div>
+    <p style="margin-top:10px;font-size:12.5px;color:var(--muted)">You'll see these same dots beside every drop in the Monsters &amp; Items tabs.</p></div>`;
   $('#systems').innerHTML=`<h2>Rune Zero — Server Systems</h2>
-  <p style="color:var(--muted)">This database reflects the live server, including Rune Zero's customizations. For the full design wiki, see the <a href="../index.html">Server Codex</a>.</p>
-  <div class="card"><h4>Random Options on every drop (Zero-native)</h4><p>Dropped weapons, armor, garments, shoes, accessories and headgear roll <b>random options</b> by slot. The floor drop-beam color shows the count: 3 = green, 4 = purple, <b>5 = gold</b>, cards/MVP = gold shine. Weapon %-damage rolls are 5–20%.</p></div>
-  <div class="card"><h4>Refinement — never breaks</h4><p>Enriched ore refines safely +1→+7; HD ore pushes +8→+10 and only <b>downgrades</b> on fail. Ores are crafted from bulk ore + Valor Coin. Card removal is 100% safe.</p></div>
-  <div class="card"><h4>Valor &amp; Hunter Coins</h4><p>Valor Coin drops from almost every monster (the universal crafting/economy currency); Hunter Coin comes only from Hunter's Guild contracts. Both are play-only.</p></div>
-  <div class="card"><h4>Variable EXP rate</h4><p>Each character picks a permanent rate (1×/3×/8×/15×/25×); slower rates earn bigger permanent drop bonuses. Pay-to-fast, never pay-to-win.</p></div>
-  <div class="card"><h4>Champion / Lucky / Frenzy monsters</h4><p>Any normal kill has a small chance to spawn a roaming <b>special</b> of that same monster: a <b>Champion</b> (mini-boss, ~3× strength, flanked by 2–3 normal minions, drops a guaranteed <b>5-option gold</b> item + bonus coins), a <b>Frenzy</b> (fast, aggressive brawler → EXP burst), or a rare <b>Lucky</b> (loot piñata → drop table worth ~100 kills). Each wears a continuous coloured aura and a map-wide announce.</p></div>
-  <div class="card"><h4>Monster Hunter (bounties)</h4><p>Hunt a target monster enough times and claim a skill/stat reward item. An editable bounty board: each row binds a monster → kill requirement → reward. Progress tracked per character.</p></div>
-  <div class="card"><h4>Memorial growing gear &amp; instances</h4><p>A 5-piece <b>Memorial set</b> crafted from instance materials that <b>grows with you</b> — refine-gated bonuses (+3/+6/+9) plus a non-destructive random-option enchanter, with a scaling set bonus. Materials drop from level-gated <b>Memorial instances</b> (Orc's Memory, Nidhoggur's Nest) in Normal/Hard.</p></div>
-  <div class="card"><h4>Class Essences</h4><p>Trans-class <b>Essence</b> accessories (Lv 1 &amp; 2 per class, ${''}IDs 40800+) that grant a class stat plus % boosts to that class's signature skills — faithful to the kRO Zero essence system, tuned for our high-damage server.</p></div>
-  <div class="card"><h4>Legacy MVP trophies (high-damage)</h4><p>Dead legacy MVP gear revived into refine-gated chase pieces — e.g. Majestic Goat: Bash / Bowling Bash <b>+28%</b> at +9. The server is intentionally high-damage; trophy spikes are meaningful, not timid.</p></div>
-  <div class="card"><h4>Services Hub (Eden HQ)</h4><p>The official Eden Group HQ doubles as the all-in-one hub: register for the Eden badge, take bounty-board missions, and find every service — forge, refine, enchant, instances, Monster Hunter, stylist, storage — in one familiar map. <code>@go eden</code> warps there.</p></div>
-  <div class="card"><h4>Forge — risk &amp; reward</h4><p>Forge any weapon with <b>5 random properties</b> and a chosen <b>element</b> (baked into the weapon, separate from the options). ~70% success; failure consumes the materials. More ore, low coin.</p></div>
-  <div class="card"><h4>Eden weapons</h4><p>A per-class weapon line bought with the <b>Eden badge</b> at the Eden Armory: each arrives <b>already enhanced</b> (5 random options rolled on purchase), is <b>refine-gated</b> (grows at +3/+6/+9), and is re-rollable at the Re-roll Specialist. Account-bound personal progression.</p></div>
-  <div class="card"><h4>Daily &amp; weekly loops</h4><p><b>Daily Tasks</b>: 3 rotating jobs (kill / instance / hand-in) reset at server midnight, with an escalating <b>login streak</b> — a recurring day-7 jackpot. <b>Weekly Hunt</b>: a rotating featured MVP with a cross-player leaderboard and tiered rewards, on the same weekly clock as the shop. The retention spine.</p></div>
-  <div class="card"><h4>Cash shop — cosmetics + pay-to-fast</h4><p>The <b>Rune Zero Boutique</b> sells <b>weekly-rotating cosmetic sets</b> (costumes, dyes — zero stats) plus pay-to-fast bundles (EXP/common-drop boosts, convenience, VIP). <b>No power, no cards, no card/drop-on-card boosts ever sold</b> — pay-to-fast, not pay-to-win.</p></div>
-  <div class="card"><h4>Class &amp; monster balance</h4><p>High-damage, multi-build philosophy: <b>52 underused skills</b> made spammable/affordable and <b>15 given real damage</b> so every class has 2–3 viable builds (metas spread, not one dominant per class). To match, <b>26 MVPs were toughened ~2.5–3× HP</b> and elites bumped — bosses bite back. All tuned additively; numbers iterate from live testing.</p></div>
-  <div class="card" style="border-color:#7a5cff"><h4>🔭 Planned</h4><p>An in-game <b>economy pass</b> (rationalising the coin/currency set) and a full <b>balance tuning</b> sweep once class damage is tested in-game.</p></div>
-  <div class="card"><h4>Custom items</h4><p>${(META.customItems||0)} Rune Zero items are flagged <span class="badge custom">RZ</span> in the Items tab (use the <b>Custom</b> filter). The DB has ${(META.items||0).toLocaleString()} items and ${(META.mobs||0).toLocaleString()} monsters; built ${META.built||''}.</p></div>`;
+  <p style="color:var(--muted);margin-bottom:18px">This database reflects the live server, including Rune Zero's customizations. For the full design wiki, see the <a href="../index.html">Server Codex</a>.</p>
+  <div class="syscards">
+  ${beamLeg}
+  ${card('🎲','Random Options on every drop','Dropped weapons, armor, garments, shoes, accessories and headgear roll <b>random options</b> by slot (Zero-native). A second floor beam shows the <b>option count</b>: more options = rarer roll. Weapon %-damage rolls are 5–20%.')}
+  ${card('🔨','Refinement — never breaks','Enriched ore refines safely +1→+7; HD ore pushes +8→+10 and only <b>downgrades</b> on fail. Ores are crafted from bulk ore + Valor Coin. Card removal is 100% safe.')}
+  ${card('🪙','Valor &amp; Hunter Coins','Valor Coin drops from almost every monster (the universal crafting/economy currency); Hunter Coin comes only from Hunter\'s Guild contracts. Both are play-only.')}
+  ${card('📈','Variable EXP rate','Each character picks a permanent rate (1×/3×/8×/15×/25×); slower rates earn bigger permanent drop bonuses. Pay-to-fast, never pay-to-win.')}
+  ${card('👑','Champion / Lucky / Frenzy monsters','Any normal kill has a small chance to spawn a roaming <b>special</b> of that monster: a <b>Champion</b> (mini-boss, ~3× strength, minions, guaranteed top-roll drop), a <b>Frenzy</b> (fast brawler → EXP burst), or a rare <b>Lucky</b> (loot piñata ≈100 kills). Each wears a coloured aura + map announce, and rolls <b>1–3 affixes</b> (Sturdy, Vigorous, Swift, Deadly, Resilient, Evasive) that stack onto its name — e.g. <i>“Swift Deadly Champion Poring”</i>. More affixes = a <b>small</b> Valor + EXP bonus (cards stay 1×).')}
+  ${card('🎯','Monster Hunter (bounties)','Hunt a target monster enough times and claim a skill/stat reward item. An editable bounty board: each row binds a monster → kill requirement → reward. Progress tracked per character.')}
+  ${card('🌱','Memorial growing gear &amp; instances','A 5-piece <b>Memorial set</b> crafted from instance materials that <b>grows with you</b> — refine-gated bonuses (+3/+6/+9) plus a non-destructive option enchanter and a scaling set bonus. Materials drop from level-gated <b>Memorial instances</b> (Orc\'s Memory, Nidhoggur\'s Nest) in Normal/Hard.')}
+  ${card('💠','Class Essences','Trans-class <b>Essence</b> accessories (Lv 1 &amp; 2 per class, IDs 40800+) granting a class stat plus % boosts to that class\'s signature skills — faithful to kRO Zero, tuned for our high-damage server.')}
+  ${card('🏆','Legacy MVP trophies (high-damage)','Dead legacy MVP gear revived into refine-gated chase pieces — e.g. Majestic Goat: Bash / Bowling Bash <b>+28%</b> at +9. The server is intentionally high-damage; trophy spikes are meaningful, not timid.')}
+  ${card('🏛️','Services Hub (Eden HQ)','The Eden Group HQ doubles as the all-in-one hub: register for the Eden badge, take bounty missions, and find every service — forge, refine, enchant, instances, Monster Hunter, stylist, storage — in one map. <code>@go eden</code> warps there.')}
+  ${card('⚒️','Forge — risk &amp; reward','Forge any weapon with <b>5 random properties</b> and a chosen <b>element</b> baked in. ~70% success; failure consumes the materials. More ore, low coin.')}
+  ${card('🗡️','Eden weapons','A per-class weapon line bought with the <b>Eden badge</b>: each arrives <b>already enhanced</b> (5 options on purchase), is <b>refine-gated</b> (+3/+6/+9), and is re-rollable. Account-bound personal progression.')}
+  ${card('📅','Daily &amp; weekly loops','<b>Daily Tasks</b>: 3 rotating jobs reset at server midnight, with an escalating <b>login streak</b> day-7 jackpot. <b>Weekly Hunt</b>: a rotating featured MVP with a cross-player leaderboard and tiered rewards. The retention spine.')}
+  ${card('🛍️','Cash shop — cosmetics + pay-to-fast','The <b>Rune Zero Boutique</b> sells <b>weekly-rotating cosmetic sets</b> (zero stats) plus pay-to-fast bundles (EXP/common-drop boosts, convenience, VIP). <b>No power, no cards, no card/drop-on-card boosts ever sold</b>.')}
+  ${card('⚖️','Class &amp; monster balance','High-damage, multi-build philosophy: <b>52 underused skills</b> made spammable/affordable and <b>15 given real damage</b> so every class has 2–3 viable builds. To match, <b>26 MVPs were toughened ~2.5–3× HP</b> and elites bumped — bosses bite back. See the <b>Skill Changes</b> tab for every before→after.')}
+  ${card('🔭','Planned','An in-game <b>economy pass</b> (rationalising the coin/currency set) and a full <b>balance tuning</b> sweep once class damage is tested in-game.')}
+  ${card('🧩','Custom items',`${(META.customItems||0)} Rune Zero items are flagged <span class="badge custom">RZ</span> in the Items tab (use the <b>Custom</b> filter). The DB has ${(META.items||0).toLocaleString()} items and ${(META.mobs||0).toLocaleString()} monsters; built ${META.built||''}.`)}
+  </div>`;
 }
 
 const row=(k,v)=> v!=null&&v!==''?`<dt>${k}</dt><dd>${v}</dd>`:'';
