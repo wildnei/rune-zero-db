@@ -176,6 +176,23 @@
   .statbox{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:9px 14px;text-align:center;min-width:84px;box-shadow:var(--shadow)}
   .statbox b{display:block;font-size:20px;color:var(--rune-deep);font-family:'Cinzel',serif;line-height:1.1}
   .statbox small{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.08em}
+  /* home / landing */
+  .homewrap{max-width:980px;margin:0 auto;padding:10px 4px 60px}
+  .homehero{background:
+      radial-gradient(900px 300px at 90% -60px,rgba(13,148,136,.12),transparent 70%),
+      linear-gradient(120deg,#fff,var(--panel-2));display:block;padding:26px 28px}
+  .homehero .kicker{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.22em;color:var(--rune-deep);font-weight:700;margin-bottom:8px}
+  .homehero h1{font-family:'Cinzel',serif;font-size:40px;margin:0 0 8px;color:var(--gold-deep);letter-spacing:.04em;line-height:1}
+  .homehero p{font-size:14.5px;color:var(--text);max-width:680px;margin:0}
+  .homeh{font-family:'Cinzel',serif;color:var(--gold-deep);font-size:20px;margin:28px 0 12px}
+  .hlinks{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:700px){.hlinks{grid-template-columns:1fr 1fr}}
+  .hlink{display:flex;align-items:center;gap:11px;text-align:left;background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:13px 15px;cursor:pointer;box-shadow:var(--shadow);transition:.12s;font:inherit;color:inherit}
+  .hlink:hover{border-color:var(--rune);transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+  .hlink .si{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;font-size:18px;background:var(--panel-2);border:1px solid var(--border);flex:none}
+  .hlink b{display:block;font-size:14px;color:var(--ink)}
+  .hlink small{color:var(--muted);font-size:11.5px}
+  .homefoot{margin-top:26px;color:var(--muted);font-size:12.5px;text-align:center}
 </style>
 </head>
 <body>
@@ -184,7 +201,8 @@
   <div class="top-inner">
     <div class="brand"><span class="mark">✦</span><span>Rune&nbsp;Zero<small>GAME DATABASE</small></span></div>
     <nav class="tabs">
-      <button data-view="items" class="active">Items</button>
+      <button data-view="home" class="active">Home</button>
+      <button data-view="items">Items</button>
       <button data-view="mobs">Monsters</button>
       <button data-view="skills">Skill Items</button>
       <button data-view="enchants">Enchants</button>
@@ -416,23 +434,26 @@ function initUI(){
     +'<thead id="thead"></thead><tbody id="rows"></tbody></table></div></div></div>'
     +'<div class="col"><h3>Detail</h3><div class="detail" id="detail"><div class="empty">Select an entry to view details.</div></div></div></div>'
     +'<div class="systems hide" id="systems"></div>'
-    +'<div class="systems hide" id="balance"></div>';
-  renderSystems();
+    +'<div class="systems hide" id="balance"></div>'
+    +'<div class="hide" id="home"></div>';
+  renderSystems(); renderHome();
   document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>setView(b.dataset.view));
   $('#search').addEventListener('input', debounce(render, 160));
   $('#filterType').addEventListener('change', render);
   window.addEventListener('hashchange', routeHash);
-  setView('items'); routeHash();
+  setView('home'); routeHash();
 }
 
 function setView(v){
   view=v;
   document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
-  const isPanel = (v==='systems'||v==='balance');
+  const isPanel = (v==='systems'||v==='balance'||v==='home');
   $('#searchWrap').style.visibility = isPanel?'hidden':'visible';
   $('#browse').classList.toggle('hide', isPanel);
   $('#systems').classList.toggle('hide', v!=='systems');
   $('#balance').classList.toggle('hide', v!=='balance');
+  $('#home').classList.toggle('hide', v!=='home');
+  if(v==='home') return;
   if(v==='balance'){ renderBalance(); return; }
   if(v==='systems') return;
   // type filter options
@@ -495,7 +516,7 @@ function render(){
   rows.querySelectorAll('tr[data-id]').forEach(tr=>tr.onclick=()=>{ location.hash = pre+tr.dataset.id; });
 }
 
-const VIEWS=['items','mobs','skills','enchants','systems','balance'];
+const VIEWS=['home','items','mobs','skills','enchants','systems','balance'];
 function routeHash(){
   const h=location.hash.slice(1);
   if(h.startsWith('item/')){ if(view==='systems')setView('items'); showItem(+h.slice(5)); }
@@ -671,6 +692,36 @@ async function renderBalance(){
   });
   h+='</div>';
   el.innerHTML=h;
+}
+function renderHome(){
+  const stat=(n,l)=>`<div class="statbox"><b>${n}</b><small>${l}</small></div>`;
+  const card=(ic,t,b,cls)=>`<div class="card${cls?' '+cls:''}"><h4><span class="si">${ic}</span>${t}</h4><p>${b}</p></div>`;
+  const link=(v,ic,t,d)=>`<button class="hlink" onclick="setView('${v}');location.hash='${v}'"><span class="si">${ic}</span><span><b>${t}</b><small>${d}</small></span></button>`;
+  $('#home').innerHTML=`<div class="homewrap">
+    <div class="hero homehero">
+      <div class="kicker">LOW-RATE · EPISODE 13 · TRANSCENDENT 2ND</div>
+      <h1>Rune Zero</h1>
+      <p>A slow, meaningful Ragnarok Online server where rare drops feel rare — episode-13 / transcendent-2nd content with modern quality-of-life and a high-damage, multi-build combat rework. <b>Pay-to-fast, never pay-to-win</b>: card &amp; MVP rates stay 1×.</p>
+      <div class="statline">${stat((META.items||0).toLocaleString(),'Items')}${stat((META.mobs||0).toLocaleString(),'Monsters')}${stat(META.customItems||0,'Custom items')}${stat('96','Skills rebalanced')}${stat(META.optionGroups||'—','Enchant pools')}</div>
+    </div>
+    <h3 class="homeh">What makes Rune Zero different</h3>
+    <div class="syscards">
+      ${card('🐢','Low-rate identity','Slow, deliberate progression — rare loot stays rare. QoL is for convenience, never for inflating rewards. <b>Card &amp; MVP-card rates are a hard 1×.</b>')}
+      ${card('⚔️','High-damage, multi-build','52 underused skills made spammable/affordable and 15 given real damage, so every class has 2–3 viable builds. To match, 26 MVPs were toughened ~2.5–3× HP. See the <b>Skill Changes</b> tab.','g')}
+      ${card('✨','QoL without inflation','Loot-rarity beams, safe refines, account storage, stylist, daily/weekly loops, variable EXP rate — convenience &amp; UX wins, with the rate inflation stripped out.')}
+      ${card('🔦','Spot-the-rare beams','Notable drops pillar on the ground — cards (blue/purple) and rare gear (green/red) — so you never walk past a rare. Purely visual; zero rate impact.','g')}
+    </div>
+    <h3 class="homeh">Explore the database</h3>
+    <div class="hlinks">
+      ${link('items','🎒','Items','29k items, stats, drops, enchants')}
+      ${link('mobs','👹','Monsters','HP, element matchup, drops, spawns')}
+      ${link('balance','⚔️','Skill Changes','Every skill rebalance, before → after')}
+      ${link('enchants','🎲','Enchants','Every random-option pool, in plain English')}
+      ${link('skills','📜','Skill Items','Gear that boosts a class skill')}
+      ${link('systems','🏛️','Systems','Every custom server system explained')}
+    </div>
+    <p class="homefoot">Database built ${META.built||''} from the live server DBs · for the full design wiki see the <a href="../index.html">Server Codex</a>.</p>
+  </div>`;
 }
 function renderSystems(){
   const card=(ic,title,body,cls)=>`<div class="card${cls?' '+cls:''}"><h4><span class="si">${ic}</span>${title}</h4><p>${body}</p></div>`;
