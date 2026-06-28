@@ -234,7 +234,8 @@ for (const lvl of load(path.join(RE,'attr_fix.yml'))) {
 // Mirrors custom/db-import/quest_db.yml so the wiki can show every milestone.
 // Reward text is parsed from the quest Title's "(...)" suffix.
 const mobByAegis = new Map();
-for (const m of mobs.values()) if (m.aegis) mobByAegis.set(m.aegis, { name: m.name, id: m.id });
+// "true MVP" = has an MVP reward drop (excludes Boss-protocol mini-bosses like Kasa)
+for (const m of mobs.values()) if (m.aegis) mobByAegis.set(m.aegis, { name: m.name, id: m.id, mvp: !!(m.mvpDrops && m.mvpDrops.length) });
 const hunting = { monster: [], region: [] };
 for (const q of load(path.join(CUSTOM, 'quest_db.yml'))) {
   if (q.Id == null || q.Id < 710000 || q.Id > 719999) continue;
@@ -243,10 +244,10 @@ for (const q of load(path.join(CUSTOM, 'quest_db.yml'))) {
   const reward = mt ? mt[2].trim() : '';
   const targets = (q.Targets || []).map(t => {
     const mob = t.Mob ? mobByAegis.get(t.Mob) : null;
-    return { mob: mob ? mob.name : (t.Mob || null), mobId: mob ? mob.id : null,
+    return { mob: mob ? mob.name : (t.Mob || null), mobId: mob ? mob.id : null, mvp: mob ? mob.mvp : false,
              count: t.Count || 0, map: t.Location || null, mapName: t.MapName || t.Location || null };
   });
-  const rec = { id: q.Id, title, reward, targets };
+  const rec = { id: q.Id, title, reward, targets, mvp: targets.some(t => t.mvp) };
   (targets.some(t => t.map) ? hunting.region : hunting.monster).push(rec);
 }
 

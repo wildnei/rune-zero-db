@@ -199,6 +199,8 @@
   .huntcard{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:14px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
   .huntcard:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#e7a93a,#d6891b)}
   .huntcard.reg:before{background:linear-gradient(180deg,var(--rune),#37c0b2)}
+  .huntcard.mvp:before{background:linear-gradient(180deg,#e0655a,#c23b30)}
+  .huntcard.mvp .htbadge{color:#fff;background:linear-gradient(135deg,#e0655a,#c23b30)}
   .huntcard .ht{display:flex;align-items:center;gap:9px;margin-bottom:7px}
   .huntcard .hticon{font-size:18px}
   .huntcard .htn{font-family:'Cinzel',serif;font-size:16px;color:var(--ink);font-weight:700}
@@ -748,7 +750,7 @@ function renderHunting(){
   if(!HUNT||(!HUNT.monster.length&&!HUNT.region.length)){ el.innerHTML='<div class="homewrap"><h2 class="homeh">Hunting Log</h2><p style="color:var(--muted)">No milestones loaded.</p></div>'; return; }
   const chips=r=>(r||'').split(',').map(s=>s.trim()).filter(Boolean).map(s=>`<span class="rwd">${esc(s)}</span>`).join('');
   const mcard=q=>{ const t=q.targets[0]||{};
-    return `<div class="huntcard"><div class="ht"><span class="hticon">⚔️</span><span class="htn">${esc(q.title)}</span><span class="htbadge">TITLE</span></div>`
+    return `<div class="huntcard${q.mvp?' mvp':''}"><div class="ht"><span class="hticon">${q.mvp?'👑':'⚔️'}</span><span class="htn">${esc(q.title)}</span><span class="htbadge">${q.mvp?'★ MVP':'TITLE'}</span></div>`
       +`<div class="hobj">Slay <b>${(t.count||0).toLocaleString()}</b> × ${t.mobId?`<a onclick="location.hash='mob/${t.mobId}'">${esc(t.mob||'?')}</a>`:esc(t.mob||'?')}</div>`
       +`<div class="hrwd">${chips(q.reward)}</div></div>`; };
   const rcard=q=>{ const floors=q.targets.map(t=>`${esc(t.mapName||t.map)} <span class="hmono">×${(t.count||0).toLocaleString()}</span>`).join(' &nbsp;·&nbsp; ');
@@ -759,7 +761,9 @@ function renderHunting(){
     <div class="hero homehero"><div class="kicker">LONG-TERM PROGRESSION</div><h1 style="font-size:30px">Hunting Log</h1>
       <p>Permanent kill milestones. Each grants a <b>permanent stat</b> and a <b>wearable title</b> shown above your name. Progress tracks live in your in-game <b>Quest Window</b>; swap titles with <code>@hunting</code>. Rewards survive death &amp; relog, and cards stay 1× — this is play-earned, long-haul progression.</p></div>
     <h3 class="homeh">⚔️ Monster milestones</h3>
-    <div class="huntgrid">${HUNT.monster.map(mcard).join('')}</div>
+    <div class="huntgrid">${HUNT.monster.filter(q=>!q.mvp).map(mcard).join('')}</div>
+    <h3 class="homeh">👑 MVP milestones <span style="font-size:12px;color:var(--muted);font-family:Inter">— the ultimate grind, the biggest rewards</span></h3>
+    <div class="huntgrid">${HUNT.monster.filter(q=>q.mvp).map(mcard).join('')}</div>
     <h3 class="homeh">🗺️ Region milestones</h3>
     <div class="huntgrid">${HUNT.region.map(rcard).join('')}</div>
     <p class="homefoot">Generated from the live quest database · ${HUNT.monster.length+HUNT.region.length} milestones (more on the way).</p>
@@ -778,10 +782,31 @@ function renderSystems(){
         <span class="beamleg" style="color:${BEAM.red}"><span class="beampill"></span>Very rare / MVP prize</span></div>
     </div>
     <p style="margin-top:10px;font-size:12.5px;color:var(--muted)">You'll see these same dots beside every drop in the Monsters &amp; Items tabs.</p></div>`;
+  const gemColor={STR:'#e0655a',AGI:'#37b06a',VIT:'#e0a93b',INT:'#4f8fe0',DEX:'#c9853a',LUK:'#b07ad6'};
+  const gemRow=(nm,gem,stat)=>`<span class="beamleg" style="color:${gemColor[stat]};font-weight:600"><span class="beampill" style="height:18px;width:14px;border-radius:50%"></span>${gem} <span style="color:var(--muted);font-weight:500">→ ${stat}</span></span>`;
+  const gemPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">💎</span>Gemstone Socketing — farm crystals, cut gems, socket stats</h4>
+    <p style="margin-bottom:12px">A play-earned power loop in three steps. Modest by design (a few stat points), gated behind farming + crafting + a zeny sink — never sold for cash, and it never touches card rates.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
+      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
+        <div style="font-family:Cinzel,serif;color:var(--gold-deep);font-size:14px;margin-bottom:4px">① Farm crystals</div>
+        <p style="font-size:12.5px;margin:0">Break <b>Crystal nodes</b> in the dungeons — <b>Mana Crystal</b> (mid) and <b>Prismatic Crystal</b> (deep) — for <b>Crystal Shards</b> and the rare <b>Radiant Crystal</b>. Immobile, 0 EXP — a pure material node.</p></div>
+      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
+        <div style="font-family:Cinzel,serif;color:var(--gold-deep);font-size:14px;margin-bottom:4px">② Cut a gem</div>
+        <p style="font-size:12.5px;margin:0"><b>Gem Artisan</b> (Prontera): shards + zeny → a <b style="color:#13a99a">Normal gem (+2)</b>; or shards + <b>Radiant Crystals</b> + zeny → a <b style="color:#b27c1b">Greater gem (+3)</b>.</p></div>
+      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
+        <div style="font-family:Cinzel,serif;color:var(--gold-deep);font-size:14px;margin-bottom:4px">③ Socket it</div>
+        <p style="font-size:12.5px;margin:0"><b>Gem Socketer</b>: fuse a gem into a <b>free option slot</b> of equipped gear. Up to <b>3 gems/item</b>, ~70% success (a failed gem shatters, gear safe). A <b>Radiant Crystal</b> = guaranteed.</p></div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:JetBrains Mono">The six attribute gems</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px 16px">
+      ${gemRow('','Ruby','STR')}${gemRow('','Zircon','AGI')}${gemRow('','Emerald','VIT')}${gemRow('','Sapphire','INT')}${gemRow('','Topaz','DEX')}${gemRow('','Garnet','LUK')}
+    </div></div>`;
   $('#systems').innerHTML=`<h2>Rune Zero — Server Systems</h2>
   <p style="color:var(--muted);margin-bottom:18px">This database reflects the live server, including Rune Zero's customizations. For the full design wiki, see the <a href="../index.html">Server Codex</a>.</p>
   <div class="syscards">
   ${beamLeg}
+  ${gemPage}
+  ${card('🏆','Hunting Log — permanent milestones','Kill marquee monsters or clear whole dungeons for a <b>permanent stat</b> + a <b>wearable title</b>, tracked live in your Quest Window. MVP milestones are the ultimate grind. See the <b>Hunting Log</b> tab.','g')}
   ${card('🎲','Random Options on every drop','Dropped weapons, armor, garments, shoes, accessories and headgear roll <b>random options</b> by slot (Zero-native). A second floor beam shows the <b>option count</b>: more options = rarer roll. Weapon %-damage rolls are 5–20%.')}
   ${card('🔨','Refinement — never breaks','Enriched ore refines safely +1→+7; HD ore pushes +8→+10 and only <b>downgrades</b> on fail. Ores are crafted from bulk ore + Valor Coin. Card removal is 100% safe.')}
   ${card('🪙','Valor &amp; Hunter Coins','Valor Coin drops from almost every monster (the universal crafting/economy currency); Hunter Coin comes only from Hunter\'s Guild contracts. Both are play-only.')}
