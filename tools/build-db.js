@@ -141,28 +141,71 @@ for (const f of walkTxt(path.join(ROOT,'server','rathena','npc','re','mobs'))) {
 }
 for (const m of mobs.values()){ const s=spawnByMob.get(m.id); m.spawns = s?[...s.entries()].map(([map,amt])=>({map,amt})).sort((a,b)=>b.amt-a.amt):[]; }
 
+// ---- skill names (aegis -> English, from skill_db Description) — load early
+//      so random-option skill-damage descriptions can resolve real skill names.
+const skillNames = {};
+for (const e of load(path.join(RE,'skill_db.yml'))) if(e.Name && e.Description) skillNames[e.Name]=e.Description;
+
 // ---- random options / enchants ---------------------------------------------
-const SIZE={SMALL:'Small',MIDIUM:'Medium',LARGE:'Large'};
+// Describe an option by what its SCRIPT actually does (reliable + reads in plain
+// English) rather than guessing from the aegis name. Value placeholder -> "N",
+// which the site replaces with the option's min–max range.
+const RC={RC_Formless:'Formless',RC_Undead:'Undead',RC_Brute:'Brute',RC_Plant:'Plant',RC_Insect:'Insect',RC_Fish:'Fish',RC_Demon:'Demon',RC_DemiHuman:'Demi-Human',RC_Angel:'Angel',RC_Dragon:'Dragon',RC_Player_Human:'players',RC_Player_Doram:'Doram players',RC_All:'all races',RC_NonBoss:'non-Boss',RC_NonPlayer:'monsters'};
+const EL={Ele_Neutral:'Neutral',Ele_Water:'Water',Ele_Earth:'Earth',Ele_Fire:'Fire',Ele_Wind:'Wind',Ele_Poison:'Poison',Ele_Holy:'Holy',Ele_Dark:'Shadow',Ele_Ghost:'Ghost',Ele_Undead:'Undead',Ele_All:'all elements'};
+const SZ={Size_Small:'Small',Size_Medium:'Medium',Size_Large:'Large',Size_All:'all'};
+const CL={Class_Normal:'Normal monsters',Class_Boss:'Boss monsters',Class_All:'all monsters'};
+const EF={Eff_Stun:'Stun',Eff_Freeze:'Freeze',Eff_Stone:'Stone Curse',Eff_Sleep:'Sleep',Eff_Silence:'Silence',Eff_Curse:'Curse',Eff_Poison:'Poison',Eff_Blind:'Blind',Eff_Bleeding:'Bleeding',Eff_Confusion:'Confusion'};
+const prettySkill=s=>(skillNames[s]||s.replace(/^[A-Z]{1,3}_/,'').replace(/_/g,' ').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase()));
+const STAT={bStr:'STR',bAgi:'AGI',bVit:'VIT',bInt:'INT',bDex:'DEX',bLuk:'LUK',bMaxHP:'Max HP',bMaxSP:'Max SP',bAtk:'ATK',bBaseAtk:'ATK',bMatk:'MATK',bDef:'DEF',bMdef:'MDEF',bHit:'Hit',bFlee:'Flee',bFlee2:'Perfect Dodge',bCritical:'Critical',bAspd:'ASPD',bPow:'POW',bSpl:'SPL',bSta:'STA',bWis:'WIS',bCon:'CON',bCrt:'CRT',bPAtk:'P.Atk',bSMatk:'S.Matk',bRes:'Res',bMRes:'M.Res',bHPlus:'H.Plus',bCRate:'C.Rate'};
+const PCT={bMaxHPrate:'Max HP',bMaxSPrate:'Max SP',bHPrecovRate:'HP Recovery',bSPrecovRate:'SP Recovery',bAtkRate:'ATK',bMatkRate:'MATK',bAspdRate:'ASPD',bCritAtkRate:'Critical Damage',bShortAtkRate:'Melee Damage',bLongAtkRate:'Ranged Damage',bHealPower:'Heal Power',bHealPower2:'Healing Received'};
+const PCT_TAKEN={bNearAtkDef:'Melee Damage Taken',bLongAtkDef:'Ranged Damage Taken',bMagicAtkDef:'Magic Damage Taken',bCritDefRate:'Critical Damage Taken',bReduceDamageReturn:'Reflected Damage Taken'};
+const FLAG={bUnbreakableWeapon:'Weapon is indestructible',bUnbreakableArmor:'Armor is indestructible',bUnbreakableHelm:'Headgear is indestructible',bUnbreakableShield:'Shield is indestructible',bUnbreakableGarment:'Garment is indestructible',bUnbreakableShoes:'Footgear is indestructible',bNoSizeFix:'Ignores the size damage penalty',bNoKnockback:'Immune to knockback',bNoWalkDelay:'No movement delay when hit'};
+function transOpt(s){
+  let m;
+  if(/^for\b/.test(s)||/bSubEle,\.@/.test(s)) return 'All-element Resistance +N%';
+  if(m=/bSkillAtk,"([A-Z_0-9]+)"/.exec(s)) return prettySkill(m[1])+' Damage +N%';
+  if(m=/bSubEle,(Ele_\w+)/.exec(s)) return (EL[m[1]]||m[1])+' Resistance +N%';
+  if(m=/b(Magic)?(?:Add|SubDef)Ele,(Ele_\w+)/.exec(s)) return (m[1]?'Magic damage':'Damage')+' to '+(EL[m[2]]||m[2])+'-property enemies +N%';
+  if(m=/bMagicAtkEle,(Ele_\w+)/.exec(s)) return (EL[m[1]]||m[1])+'-property Magic Attack +N%';
+  if(m=/bDefEle,(Ele_\w+)/.exec(s)) return 'Armor element becomes '+(EL[m[1]]||m[1]);
+  if(m=/bAtkEle,(Ele_\w+)/.exec(s)) return 'Weapon element becomes '+(EL[m[1]]||m[1]);
+  if(m=/bExpAddRace,(RC_\w+)/.exec(s)) return 'EXP from '+(RC[m[1]]||m[1])+' +N%';
+  if(m=/bMagicAddRace,(RC_\w+)/.exec(s)) return 'Magic damage to '+(RC[m[1]]||m[1])+' +N%';
+  if(m=/bAddRace,(RC_\w+)/.exec(s)) return 'Damage to '+(RC[m[1]]||m[1])+' +N%';
+  if(m=/bSubRace,(RC_\w+)/.exec(s)) return 'Damage taken from '+(RC[m[1]]||m[1])+' -N%';
+  if(m=/bCriticalAddRace,(RC_\w+)/.exec(s)) return 'Critical vs '+(RC[m[1]]||m[1])+' +N';
+  if(m=/bIgnoreDefRaceRate,(RC_\w+)/.exec(s)) return 'Ignore '+(RC[m[1]]||m[1])+' DEF +N%';
+  if(m=/bIgnoreMdefRaceRate,(RC_\w+)/.exec(s)) return 'Ignore '+(RC[m[1]]||m[1])+' MDEF +N%';
+  if(m=/bMagicAddSize,(Size_\w+)/.exec(s)) return 'Magic damage to '+(SZ[m[1]]||m[1])+' size +N%';
+  if(m=/bMagicSubSize,(Size_\w+)/.exec(s)) return 'Magic damage taken from '+(SZ[m[1]]||m[1])+' size -N%';
+  if(m=/bAddSize,(Size_\w+)/.exec(s)) return 'Damage to '+(SZ[m[1]]||m[1])+' size +N%';
+  if(m=/bSubSize,(Size_\w+)/.exec(s)) return 'Damage taken from '+(SZ[m[1]]||m[1])+' size -N%';
+  if(m=/bMagicAddClass,(Class_\w+)/.exec(s)) return 'Magic damage to '+(CL[m[1]]||m[1])+' +N%';
+  if(m=/bAddClass,(Class_\w+)/.exec(s)) return 'Damage to '+(CL[m[1]]||m[1])+' +N%';
+  if(m=/bSubClass,(Class_\w+)/.exec(s)) return 'Damage taken from '+(CL[m[1]]||m[1])+' -N%';
+  if(m=/bIgnoreDefClassRate,(Class_\w+)/.exec(s)) return 'Ignore '+(CL[m[1]]||m[1])+' DEF +N%';
+  if(m=/bIgnoreMdefClassRate,(Class_\w+)/.exec(s)) return 'Ignore '+(CL[m[1]]||m[1])+' MDEF +N%';
+  if(m=/bResEff,(Eff_\w+)/.exec(s)) return (EF[m[1]]||m[1])+' Resistance +N%';
+  if(m=/bVariableCastrate/.test(s)) return 'Variable Cast -N%';
+  if(m=/bFixedCastrate/.test(s)) return 'Fixed Cast -N%';
+  if(/bDelayrate/.test(s)) return 'After-cast Delay -N%';
+  if(/bUseSPrate/.test(s)) return 'SP Cost -N%';
+  // single-token bonus  bX,N  /  bX,1 (flag)
+  if(m=/bonus (b\w+)\b/.exec(s)){
+    const k=m[1];
+    if(FLAG[k]) return FLAG[k];
+    if(STAT[k]) return STAT[k]+' +N';
+    if(PCT[k]) return PCT[k]+' +N%';
+    if(PCT_TAKEN[k]) return PCT_TAKEN[k]+' -N%';
+  }
+  return null;
+}
 function humanizeOpt(name,script){
-  const n=name||''; script=script||'';
-  const sk=/bSkillAtk,"([A-Z_0-9]+)"/.exec(script);
-  if(sk) return 'Skill Damage: '+sk[1]+' +N%';
-  if(n.startsWith('RZ_RDMOPT_RES_')) return n.replace('RZ_RDMOPT_RES_','')[0]+n.replace('RZ_RDMOPT_RES_','').slice(1).toLowerCase()+' Resist';
-  if(n==='RZ_RDMOPT_NORESIST_MOVE') return 'Resist Movement Slow';
-  const map={VAR_MAXHPAMOUNT:'Max HP +N',VAR_MAXSPAMOUNT:'Max SP +N',VAR_ATTPOWER:'ATK +N',VAR_ATTMPOWER:'MATK +N',
-    VAR_PLUSASPD:'ASPD +N',VAR_CRITICALSUCCESSVALUE:'Crit +N',DAMAGE_CRI_TARGET:'Crit Damage +N%',VAR_ITEMDEFPOWER:'DEF +N',
-    DEC_SPELL_CAST_TIME:'Variable Cast -N%',DEC_SPELL_DELAY_TIME:'After-cast Delay -N%',DEC_SP_CONSUMPTION:'SP Cost -N%',
-    RANGE_ATTACK_DAMAGE_USER:'Ranged Damage +N%',RANGE_ATTACK_DAMAGE_TARGET:'Ranged Damage Taken -N%',
-    CLASS_DAMAGE_BOSS_USER:'Boss Damage Taken -N%',HEAL_MODIFY_PERCENT:'Heal Power +N%',MELEE_ATTACK_DAMAGE_USER:'Melee Damage +N%',
-    ADDEXPPERCENT_KILLRACE_ALL:'EXP +N%',BODY_INDESTRUCTIBLE:'Indestructible',
-    VAR_STRAMOUNT:'STR +N',VAR_AGIAMOUNT:'AGI +N',VAR_VITAMOUNT:'VIT +N',VAR_INTAMOUNT:'INT +N',VAR_DEXAMOUNT:'DEX +N',VAR_LUKAMOUNT:'LUK +N'};
-  if(map[n]) return map[n];
-  let mm=/^DAMAGE_SIZE_([A-Z]+)_TARGET$/.exec(n); if(mm) return 'Damage vs '+(SIZE[mm[1]]||mm[1])+' +N%';
-  mm=/^DAMAGE_PROPERTY_([A-Z]+)_TARGET$/.exec(n); if(mm) return 'Damage vs '+mm[1][0]+mm[1].slice(1).toLowerCase()+' property +N%';
-  mm=/^RACE_DAMAGE_([A-Z]+)$/.exec(n); if(mm) return 'Damage vs '+mm[1][0]+mm[1].slice(1).toLowerCase()+' race +N%';
-  mm=/^ATTR_TOLERACE_([A-Z]+)$/.exec(n); if(mm) return mm[1][0]+mm[1].slice(1).toLowerCase()+' Resist +N%';
-  mm=/^RACE_TOLERACE_([A-Z]+)$/.exec(n); if(mm) return mm[1][0]+mm[1].slice(1).toLowerCase()+' race Resist +N%';
-  return n;   // fallback: raw option name
+  let s=(script||'').trim();
+  if(s){ s=s.replace(/getrandomoptinfo\([A-Z_0-9]+\)/g,'N');
+    for(const part of s.split(/;\s*/)){ const t=transOpt(part.trim()); if(t) return t; } }
+  // fallback: prettify the raw aegis so it's at least readable
+  return (name||'').replace(/^RZ_RDMOPT_/,'').replace(/_/g,' ').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
 }
 const optTypes = {};
 for (const f of [path.join(RE,'item_randomopt_db.yml'), path.join(CUSTOM,'item_randomopt_db.yml')])
@@ -175,10 +218,6 @@ for (const f of [path.join(RE,'item_randomopt_group.yml'), path.join(CUSTOM,'ite
     for (const o of (g.Random||[])) opts.push({name:o.Option,min:o.MinValue||0,max:o.MaxValue||0,chance:o.Chance||0,fixed:false});
     optGroups.push({ id:g.Id, name:g.Group, maxRandom:g.MaxRandom||0, custom:f.includes('db-import'), options:opts });
   }
-
-// ---- skill names (aegis -> English, from skill_db Description) --------------
-const skillNames = {};
-for (const e of load(path.join(RE,'skill_db.yml'))) if(e.Name && e.Description) skillNames[e.Name]=e.Description;
 
 // ---- write -----------------------------------------------------------------
 if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
