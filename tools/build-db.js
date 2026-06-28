@@ -236,7 +236,7 @@ for (const lvl of load(path.join(RE,'attr_fix.yml'))) {
 const mobByAegis = new Map();
 // "true MVP" = has an MVP reward drop (excludes Boss-protocol mini-bosses like Kasa)
 for (const m of mobs.values()) if (m.aegis) mobByAegis.set(m.aegis, { name: m.name, id: m.id, mvp: !!(m.mvpDrops && m.mvpDrops.length) });
-const hunting = { monster: [], region: [] };
+const hunting = { monster: [], region: [], dedication: [] };
 for (const q of load(path.join(CUSTOM, 'quest_db.yml'))) {
   if (q.Id == null || q.Id < 710000 || q.Id > 719999) continue;
   const mt = /(?:Hunting Log:|Region:)\s*(.+?)\s*\(([^)]+)\)\s*$/.exec(q.Title || '');
@@ -248,7 +248,9 @@ for (const q of load(path.join(CUSTOM, 'quest_db.yml'))) {
              count: t.Count || 0, map: t.Location || null, mapName: t.MapName || t.Location || null };
   });
   const rec = { id: q.Id, title, reward, targets, mvp: targets.some(t => t.mvp) };
-  (targets.some(t => t.map) ? hunting.region : hunting.monster).push(rec);
+  const isRegion = targets.some(t => t.map);
+  const isTotal = !isRegion && targets.every(t => !t.mob);   // no mob + no map = any monster
+  (isRegion ? hunting.region : isTotal ? hunting.dedication : hunting.monster).push(rec);
 }
 
 // ---- write -----------------------------------------------------------------

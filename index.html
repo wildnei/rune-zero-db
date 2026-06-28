@@ -201,6 +201,8 @@
   .huntcard.reg:before{background:linear-gradient(180deg,var(--rune),#37c0b2)}
   .huntcard.mvp:before{background:linear-gradient(180deg,#e0655a,#c23b30)}
   .huntcard.mvp .htbadge{color:#fff;background:linear-gradient(135deg,#e0655a,#c23b30)}
+  .huntcard.ded:before{background:linear-gradient(180deg,#8b5cf6,#6d3fd0)}
+  .huntcard.ded .htbadge{color:#fff;background:linear-gradient(135deg,#8b5cf6,#6d3fd0)}
   .huntcard .ht{display:flex;align-items:center;gap:9px;margin-bottom:7px}
   .huntcard .hticon{font-size:18px}
   .huntcard .htn{font-family:'Cinzel',serif;font-size:16px;color:var(--ink);font-weight:700}
@@ -757,16 +759,26 @@ function renderHunting(){
     return `<div class="huntcard reg"><div class="ht"><span class="hticon">🗺️</span><span class="htn">${esc(q.title)}</span><span class="htbadge">REGION</span></div>`
       +`<div class="hobj">Clear: ${floors}</div>`
       +`<div class="hrwd">${chips(q.reward)}</div></div>`; };
+  const dcard=q=>{ const t=q.targets[0]||{};
+    return `<div class="huntcard ded"><div class="ht"><span class="hticon">🌟</span><span class="htn">${esc(q.title)}</span><span class="htbadge">DEDICATION</span></div>`
+      +`<div class="hobj">Slay <b>${(t.count||0).toLocaleString()}</b> monsters <span class="hmono">(any)</span></div>`
+      +`<div class="hrwd">${chips(q.reward)}</div></div>`; };
+  const ded=(HUNT.dedication||[]);
+  const total=HUNT.monster.length+HUNT.region.length+ded.length;
   el.innerHTML=`<div class="homewrap">
     <div class="hero homehero"><div class="kicker">LONG-TERM PROGRESSION</div><h1 style="font-size:30px">Hunting Log</h1>
-      <p>Permanent kill milestones. Each grants a <b>permanent stat</b> and a <b>wearable title</b> shown above your name. Progress tracks live in your in-game <b>Quest Window</b>; swap titles with <code>@hunting</code>. Rewards survive death &amp; relog, and cards stay 1× — this is play-earned, long-haul progression.</p></div>
+      <p>Permanent kill milestones. Each grants a <b>permanent stat</b> and a <b>wearable title</b> shown above your name. Progress tracks live in your in-game <b>Quest Window</b>; manage titles at the <b>Hall of Titles</b> NPC (Prontera) or with <code>@hunting</code>. Rewards survive death &amp; relog, and cards stay 1× — play-earned, long-haul progression.</p></div>
     <h3 class="homeh">⚔️ Monster milestones</h3>
     <div class="huntgrid">${HUNT.monster.filter(q=>!q.mvp).map(mcard).join('')}</div>
     <h3 class="homeh">👑 MVP milestones <span style="font-size:12px;color:var(--muted);font-family:Inter">— the ultimate grind, the biggest rewards</span></h3>
     <div class="huntgrid">${HUNT.monster.filter(q=>q.mvp).map(mcard).join('')}</div>
     <h3 class="homeh">🗺️ Region milestones</h3>
     <div class="huntgrid">${HUNT.region.map(rcard).join('')}</div>
-    <p class="homefoot">Generated from the live quest database · ${HUNT.monster.length+HUNT.region.length} milestones (more on the way).</p>
+    <h3 class="homeh">🌟 Dedication <span style="font-size:12px;color:var(--muted);font-family:Inter">— total kills across your whole career</span></h3>
+    <div class="huntgrid">${ded.map(dcard).join('')}</div>
+    <div class="card g" style="grid-column:1/-1;margin-top:16px"><h4><span class="si">🏅</span>Grandmaster Hunter — the capstone</h4>
+      <p>Complete <b>every</b> monster, MVP and region milestone to claim the prestige title <b>&lt;Grandmaster Hunter&gt;</b> and a <span class="rwd" style="display:inline-block">+3 All Stats</span> reward. The ultimate badge of a Rune Zero veteran.</p></div>
+    <p class="homefoot">Generated from the live quest database · ${total} milestones (more on the way).</p>
   </div>`;
 }
 function renderSystems(){
