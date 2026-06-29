@@ -813,11 +813,22 @@ function renderSystems(){
     <div style="display:flex;flex-wrap:wrap;gap:6px 16px">
       ${gemRow('','Ruby','STR')}${gemRow('','Zircon','AGI')}${gemRow('','Emerald','VIT')}${gemRow('','Sapphire','INT')}${gemRow('','Topaz','DEX')}${gemRow('','Garnet','LUK')}
     </div></div>`;
+  const profBox=(ic,nm,node,where,mats,col)=>`<div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
+      <div style="font-family:Cinzel,serif;color:${col};font-size:14px;margin-bottom:4px">${ic} ${nm}</div>
+      <p style="font-size:12.5px;margin:0">Break <b>${node}</b> in ${where}. Yields ${mats}.</p></div>`;
+  const profPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">⛏️</span>Professions — gather as you explore</h4>
+    <p style="margin-bottom:12px">Three gathering trades that level <b>1 → 100</b> per character as you work them. Break <b>gathering nodes</b> out in the world for materials, profession XP, and a <b>level-scaled bonus yield</b>. Mats are stock items that feed refining, forging &amp; alchemy. <code>@prof</code> shows your levels.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      ${profBox('⛏️','Mining','Ore Veins','mines &amp; caves (Mjolnir, Einbroch, Payon, Ant Hell)','Iron Ore, Coal, Steel, rare Oridecon/Elunium','#b27c1b')}
+      ${profBox('🌿','Herbalism','Herb Clusters','fields (Prontera, Geffen, Payon, Morocc)','Yellow/Green/White/Blue/Red Herbs','#1f9d57')}
+      ${profBox('🎣','Fishing','Fishing Spots','ports &amp; beaches (Izlude, Alberta, Comodo)','Sharp Scale, Gill, Fish, Tendon','#2f7fd6')}
+    </div></div>`;
   $('#systems').innerHTML=`<h2>Rune Zero — Server Systems</h2>
   <p style="color:var(--muted);margin-bottom:18px">This database reflects the live server, including Rune Zero's customizations. For the full design wiki, see the <a href="../index.html">Server Codex</a>.</p>
   <div class="syscards">
   ${beamLeg}
   ${gemPage}
+  ${profPage}
   ${card('🏆','Hunting Log — permanent milestones','Kill marquee monsters or clear whole dungeons for a <b>permanent stat</b> + a <b>wearable title</b>, tracked live in your Quest Window. MVP milestones are the ultimate grind. See the <b>Hunting Log</b> tab.','g')}
   ${card('🎲','Random Options on every drop','Dropped weapons, armor, garments, shoes, accessories and headgear roll <b>random options</b> by slot (Zero-native). A second floor beam shows the <b>option count</b>: more options = rarer roll. Weapon %-damage rolls are 5–20%.')}
   ${card('🔨','Refinement — never breaks','Enriched ore refines safely +1→+7; HD ore pushes +8→+10 and only <b>downgrades</b> on fail. Ores are crafted from bulk ore + Valor Coin. Card removal is 100% safe.')}
