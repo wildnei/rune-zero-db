@@ -269,12 +269,25 @@ function humanizeOpt(name,script){
 const optTypes = {};
 for (const f of [path.join(CUSTOM,'item_randomopt_db.yml')])
   for (const e of load(f)) if(e.Option) optTypes[e.Option] = { name:e.Option, desc:humanizeOpt(e.Option,e.Script), script:(e.Script||'').trim() };
+// bResEff (status-resist %, e.g. RZ_RDMOPT_RES_FREEZE) stores its value at 1/100 of a
+// percent (10000 = 100%, so a "real" 10-50% roll is stored as 1000-5000) — same raw-unit
+// convention getrandomoptinfo(ROA_VALUE) uses everywhere else, but bResEff is the ONLY
+// bonus in our option pools with that /100 relationship to the displayed percent (verified
+// by a server-side units audit 2026-07-10: every other bonus2/bonus in item_randomopt_db.yml
+// displays its raw value as-is). Divide by 100 here so the wiki shows the real percent
+// ("Freeze Resistance +10-50%") instead of the raw script units ("+1000-5000%").
+const RESEFF_RE = /bResEff,/;
+function displayVal(optName, raw) {
+  const t = optTypes[optName];
+  if (t && RESEFF_RE.test(t.script)) return raw / 100;
+  return raw;
+}
 const optGroups = [];
 for (const f of [path.join(CUSTOM,'item_randomopt_group.yml')])
   for (const g of load(f)) {
     const opts=[];
-    for (const slot of (g.Slots||[])) for(const o of (slot.Options||[])) opts.push({name:o.Option,min:o.MinValue||0,max:o.MaxValue||0,chance:o.Chance||0,fixed:true});
-    for (const o of (g.Random||[])) opts.push({name:o.Option,min:o.MinValue||0,max:o.MaxValue||0,chance:o.Chance||0,fixed:false});
+    for (const slot of (g.Slots||[])) for(const o of (slot.Options||[])) opts.push({name:o.Option,min:displayVal(o.Option,o.MinValue||0),max:displayVal(o.Option,o.MaxValue||0),chance:o.Chance||0,fixed:true});
+    for (const o of (g.Random||[])) opts.push({name:o.Option,min:displayVal(o.Option,o.MinValue||0),max:displayVal(o.Option,o.MaxValue||0),chance:o.Chance||0,fixed:false});
     optGroups.push({ id:g.Id, name:g.Group, maxRandom:g.MaxRandom||0, custom:f.includes('db-import'), options:opts });
   }
 
@@ -382,6 +395,44 @@ const FUNMOD_FAMILY = {
   Huuma_Giant_Wheel:    { group: 'Ninja',                              fantasy: 'Ninja Shuriken Thrower' },
   Zweihander:          { group: 'Swordsman / Knight',                  fantasy: 'Two-Handed Berserker' },
   Staff_Of_Soul:        { group: 'Mage / Wizard / Sage',                fantasy: 'Stave Crasher' },
+  // --- weapons wave 3 (2026-07-10, item_db_funmods_weapons.yml "ROUND 3" additions) ---
+  // Owner-locked additions: Hunter Bow (Double Strafe override) + Two-Handed Axe x3
+  // (Hammer Fall, patch 0020). Two_Handed_Axe's 3rd stock form (Two_Handed_Axe__) strips
+  // to famKey "Two_Handed_Axe_" (famKey only strips ONE trailing "_"), same as every other
+  // 3-slot-tier family below — needs its own map entry alongside the base key.
+  Hunter_Bow:          { group: 'Archer / Hunter / Bard-Dancer',      fantasy: 'Double Strafe Hunter' },
+  Two_Handed_Axe:      { group: 'Merchant',                            fantasy: 'Hammerfall Berserker' },
+  Two_Handed_Axe_:      { group: 'Merchant',                            fantasy: 'Hammerfall Berserker' },
+  // Round-3 sweep (19 previously-uncovered weapon families, incl. first-ever Rifle/
+  // Shotgun/Gatling/Grenade/2hSpear coverage). Several stock lines have THREE AegisName
+  // forms (fewest-slot form flat, others double per the file's convention) whose
+  // famKey() strips only ONE trailing "_" — those need two map entries (base + "_").
+  Arbalest:            { group: 'Archer / Hunter / Bard-Dancer',      fantasy: 'Beast-Strafing Marksman' },
+  Gladius:              { group: 'Thief / Assassin / Rogue',            fantasy: 'Back-Stabbing Poniard' },
+  Gladius_:            { group: 'Thief / Assassin / Rogue',            fantasy: 'Back-Stabbing Poniard' },
+  Haedonggum:          { group: 'Swordsman / Knight',                  fantasy: 'Double-Attack Katana' },
+  Hae_Dong_Gum:        { group: 'Swordsman / Knight',                  fantasy: 'Double-Attack Katana' },
+  Tsurugi:              { group: 'Swordsman / Knight',                  fantasy: 'Razor-Edge Katana' },
+  Tsurugi_:            { group: 'Swordsman / Knight',                  fantasy: 'Razor-Edge Katana' },
+  Partizan:            { group: 'Spear Knight (Knight/Crusader)',      fantasy: 'Spear-Stabbing Pikeman' },
+  Partizan_:            { group: 'Spear Knight (Knight/Crusader)',      fantasy: 'Spear-Stabbing Pikeman' },
+  Hammer:              { group: 'Merchant',                            fantasy: 'Skull-Crushing Maul' },
+  Hammer_:              { group: 'Merchant',                            fantasy: 'Skull-Crushing Maul' },
+  Chain:                { group: 'Crusader / Monk (Shield)',            fantasy: 'Holy Cross Crusader' },
+  Chain_:              { group: 'Crusader / Monk (Shield)',            fantasy: 'Holy Cross Crusader' },
+  Stunner:              { group: 'Crusader / Monk (Shield)',            fantasy: 'Shield-Smiting Stunner' },
+  Flail:                { group: 'Crusader / Monk (Shield)',            fantasy: 'Shield-Slinging Crusader' },
+  Flail_:              { group: 'Crusader / Monk (Shield)',            fantasy: 'Shield-Slinging Crusader' },
+  Lute:                  { group: 'Archer / Hunter / Bard-Dancer',      fantasy: 'Quick-Tempo Bard' },
+  Rope:                  { group: 'Archer / Hunter / Bard-Dancer',      fantasy: "Entangling Dancer's Rope" },
+  Katar:                { group: 'Thief / Assassin / Rogue',            fantasy: 'Counter-Slash Assassin' },
+  Fist:                  { group: 'Acolyte / Priest / Monk',             fantasy: 'Spirit-Sphere Slinger' },
+  Claymore:            { group: 'Swordsman / Knight',                  fantasy: 'Charging Greatsword' },
+  Rolling_Stone:        { group: 'Gunslinger',                          fantasy: 'Shotgun Duster' },
+  Gate_Keeper:          { group: 'Gunslinger',                          fantasy: 'Shotgun Spread Gunner' },
+  Destroyer:            { group: 'Gunslinger',                          fantasy: 'Grenade-Drift Demolisher' },
+  Drifter:              { group: 'Gunslinger',                          fantasy: 'Rapid-Fire Gatling' },
+  The_Cyclone:          { group: 'Gunslinger',                          fantasy: 'Precision Rifle' },
   // --- batch 3: elemental garment/shield + headgear wave 2 (item_db_funmods2.yml) ---
   // Muffler/Hood/Manteau/Guard/Buckler got a bSubEle resist appended in-place to their
   // existing item_db_funmods.yml entries (2026-07-10 addendum) — no new family keys
