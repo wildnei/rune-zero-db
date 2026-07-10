@@ -109,6 +109,7 @@ for (const it of items.values()) if (it.aegis) byAegis.set(it.aegis, it);
 // each participating item via byAegis (built just above) the same way drops are.
 for (const it of items.values()) it.combos = [];
 let comboCount = 0;
+const combosRaw = []; // captured for builds.json (Fun Builds tab) — script resolved to human text later, once skillNames is loaded
 for (const e of load(path.join(CUSTOM, 'item_combos.yml'))) {
   const script = (e.Script || '').trim();
   for (const c of (e.Combos || [])) {
@@ -118,6 +119,7 @@ for (const e of load(path.join(CUSTOM, 'item_combos.yml'))) {
     for (const m of members) {
       m.combos.push({ script, with: members.filter(x => x.id !== m.id).map(x => ({ id: x.id, name: x.name })) });
     }
+    combosRaw.push({ script, members: members.map(m => ({ id: m.id, name: m.name, aegis: m.aegis })) });
   }
 }
 
@@ -307,6 +309,116 @@ for (const q of load(path.join(CUSTOM, 'quest_db.yml'))) {
   (isRegion ? hunting.region : isTotal ? hunting.dedication : hunting.monster).push(rec);
 }
 
+// ---- Fun Pass builds (builds.json) ------------------------------------------
+// The fun-mod files (item_db_funmods.yml + item_db_funmods_weapons.yml) restate
+// { Id, AegisName, Script } on existing stock items in "families": an unslotted
+// item + its "_"-suffixed slotted twin (whose amp is ~2x), or a single item that's
+// already-slotted in stock db (flat amp, no pair). The family's build-fantasy name
+// and its class-group bucket only exist as prose (YAML comments in those files /
+// docs/FUN_PASS_BUILDS.md) — not machine-readable — so that mapping is hardcoded
+// here from docs/FUN_PASS_BUILDS.md's own section structure. If a fun-mod item
+// shows up whose AegisName isn't in this table, it's logged as a warning below
+// (rather than silently dropped) so a future fun-mod batch doesn't go missing.
+const FUNMOD_FAMILY = {
+  // --- accessories/armor (item_db_funmods.yml) ---
+  Earring:            { group: 'Mage / Wizard / Sage',                fantasy: 'Fireball Mage' },
+  Ring:                { group: 'Spear Knight (Knight/Crusader)',      fantasy: 'Spear Knight' },
+  Necklace:            { group: 'Crusader / Monk (Shield)',            fantasy: 'Paladin Zealot' },
+  Glove:                { group: 'Archer / Hunter / Bard-Dancer',      fantasy: 'Bard/Dancer Skirmisher' },
+  Brooch:              { group: 'Thief / Assassin / Rogue',            fantasy: 'Assassin Bomber' },
+  Rosary:              { group: 'Acolyte / Priest / Monk',             fantasy: 'Priest Zealot Support' },
+  Belt:                { group: 'Merchant',                            fantasy: 'Merchant Brawler' },
+  Clip:                { group: 'Mage / Wizard / Sage',                fantasy: 'Wizard Bolt-Slinger' },
+  Silk_Robe:            { group: 'Novice / Any Class',                  fantasy: 'Caster Sustain Robe' },
+  Padded_Armor:        { group: 'Novice / Any Class',                  fantasy: 'Tank Padding' },
+  Shoes:                { group: 'Novice / Any Class',                  fantasy: "Traveler's Endurance" },
+  Boots:                { group: 'Novice / Any Class',                  fantasy: "Caster's Stride" },
+  Sandals:              { group: 'Novice / Any Class',                  fantasy: 'Novice All-Rounder' },
+  Guard:                { group: 'Swordsman / Knight',                  fantasy: 'Novice Swordsman Tank' },
+  Buckler:              { group: 'Crusader / Monk (Shield)',            fantasy: 'Battle-Monk Shieldbearer' },
+  Sunglasses:          { group: 'Thief / Assassin / Rogue',            fantasy: 'Shades Rogue Ambusher' },
+  Ribbon:              { group: 'Mage / Wizard / Sage',                fantasy: 'Battle Mage Grimoire' },
+  Bandana:              { group: 'Gunslinger',                          fantasy: 'Wild West Gunslinger' },
+  Cap:                  { group: 'Archer / Hunter / Bard-Dancer',      fantasy: 'Ranger Scout' },
+  Flower_Ring:          { group: 'Novice / Any Class',                  fantasy: 'Elemental Apprentice' },
+  Skul_Ring:            { group: 'Ninja',                              fantasy: 'Ninja Skirmisher' },
+  Thimble_Of_Archer:    { group: 'Archer / Hunter / Bard-Dancer',      fantasy: 'Falconer' },
+  Ring_Of_Rogue:        { group: 'Thief / Assassin / Rogue',            fantasy: "Shadow Skirmisher's Toolkit" },
+  Cotton_Shirt:        { group: 'Novice / Any Class',                  fantasy: "Novice Survivor's Shirt" },
+  Leather_Jacket:      { group: 'Novice / Any Class',                  fantasy: 'Early Adventurer' },
+  Chain_Mail:          { group: 'Swordsman / Knight',                  fantasy: 'Armored Bruiser' },
+  Hood:                { group: 'Novice / Any Class',                  fantasy: "Novice Caster's Hood" },
+  Muffler:              { group: 'Novice / Any Class',                  fantasy: 'All-Class Traveler' },
+  Manteau:              { group: 'Novice / Any Class',                  fantasy: "Rogue's Stamina Cloak" },
+  Novice_Armlet:        { group: 'Novice / Any Class',                  fantasy: 'SuperNovice Jack-of-All-Trades' },
+  // --- weapons (item_db_funmods_weapons.yml) ---
+  Main_Gauche:          { group: 'Thief / Assassin / Rogue',            fantasy: 'Poison Dagger' },
+  Blade:                { group: 'Swordsman / Knight',                  fantasy: 'Swordsman Basher' },
+  Falchion:            { group: 'Swordsman / Knight',                  fantasy: 'Magnum Berserker' },
+  Pike:                { group: 'Swordsman / Knight',                  fantasy: 'Spear Piercer' },
+  Javelin:              { group: 'Swordsman / Knight',                  fantasy: 'Javelin Thrower' },
+  Mace:                { group: 'Acolyte / Priest / Monk',             fantasy: 'Battle Priest' },
+  Waghnakh:            { group: 'Acolyte / Priest / Monk',             fantasy: 'Monk Combo Fists' },
+  Arc_Wand:            { group: 'Mage / Wizard / Sage',                fantasy: 'Frost Bolter' },
+  Wand:                { group: 'Mage / Wizard / Sage',                fantasy: 'Fireball Slinger' },
+  Rod:                  { group: 'Mage / Wizard / Sage',                fantasy: 'Napalm & Soul Nuker' },
+  CrossBow:            { group: 'Archer / Hunter / Bard-Dancer',      fantasy: 'Volley Archer' },
+  Kakkung:              { group: 'Archer / Hunter / Bard-Dancer',      fantasy: 'Charge Archer' },
+  Book:                { group: 'Mage / Wizard / Sage',                fantasy: "Heaven's Drive Preacher" },
+  Axe:                  { group: 'Merchant',                            fantasy: 'Mammonite Merchant' },
+  Jamadhar:            { group: 'Thief / Assassin / Rogue',            fantasy: 'Venom Splasher Assassin' },
+  Knuckle_Duster:      { group: 'Acolyte / Priest / Monk',             fantasy: 'Monk Combo Chainer' },
+  Mandolin:            { group: 'Archer / Hunter / Bard-Dancer',      fantasy: 'Bard Melody Striker' },
+  Whip:                { group: 'Archer / Hunter / Bard-Dancer',      fantasy: 'Dancer Melody Striker' },
+  Six_Shooter:          { group: 'Gunslinger',                          fantasy: 'Wild West Gunslinger' },
+  Huuma_Giant_Wheel:    { group: 'Ninja',                              fantasy: 'Ninja Shuriken Thrower' },
+  Zweihander:          { group: 'Swordsman / Knight',                  fantasy: 'Two-Handed Berserker' },
+  Staff_Of_Soul:        { group: 'Mage / Wizard / Sage',                fantasy: 'Stave Crasher' },
+};
+// display order of class-group buckets on the wiki page (matches docs/FUN_PASS_BUILDS.md order)
+const FUNMOD_GROUP_ORDER = [
+  'Novice / Any Class', 'Swordsman / Knight', 'Crusader / Monk (Shield)', 'Mage / Wizard / Sage',
+  'Acolyte / Priest / Monk', 'Merchant', 'Archer / Hunter / Bard-Dancer', 'Thief / Assassin / Rogue',
+  'Ninja', 'Gunslinger', 'Spear Knight (Knight/Crusader)',
+];
+function famKey(aegis) { return aegis.replace(/_$/, ''); } // strip the "_" slotted suffix -> family key
+// Every fun-mod file only ever appends 3 kinds of bonus lines: skill-damage amps
+// (accessories/weapons) and HP/SP recovery-rate boosts (armor/footgear/garment,
+// e.g. Cotton Shirt, Muffler — no bSkillAtk at all). Capture all 3 so no family
+// silently renders an empty amp list.
+function skillAmps(script) {
+  const out = []; if (!script) return out;
+  let m;
+  const reSkill = /bonus2 bSkillAtk,"([A-Z_0-9]+)",(-?\d+)/g;
+  while ((m = reSkill.exec(script))) out.push({ kind: 'skill', skill: m[1], name: prettySkill(m[1]), pct: +m[2] });
+  const reHP = /bonus bHPrecovRate,(-?\d+)/g;
+  while ((m = reHP.exec(script))) out.push({ kind: 'recov', name: 'HP Recovery', pct: +m[1] });
+  const reSP = /bonus bSPrecovRate,(-?\d+)/g;
+  while ((m = reSP.exec(script))) out.push({ kind: 'recov', name: 'SP Recovery', pct: +m[1] });
+  return out;
+}
+const families = new Map(); // family key -> { fantasy, group, items:[] }
+for (const it of items.values()) {
+  if (!it.funmod || !it.aegis) continue;
+  const key = famKey(it.aegis);
+  const meta = FUNMOD_FAMILY[key];
+  if (!meta) { console.warn('builds.json: fun-mod item with no family mapping —', key, it.id); continue; }
+  if (!families.has(key)) families.set(key, { key, fantasy: meta.fantasy, group: meta.group, items: [] });
+  families.get(key).items.push({
+    id: it.id, name: it.name, slots: it.slots || 0,
+    slotted: it.aegis.endsWith('_'), // the fun-mod "_"-suffixed (~2x amp) twin, NOT raw card-slot count (weapons have those regardless)
+    amps: skillAmps(it.script),
+  });
+}
+for (const f of families.values()) f.items.sort((a, b) => (a.slotted ? 1 : 0) - (b.slotted ? 1 : 0) || a.id - b.id);
+const buildsByGroup = {};
+for (const f of families.values()) (buildsByGroup[f.group] = buildsByGroup[f.group] || []).push(f);
+for (const g in buildsByGroup) buildsByGroup[g].sort((a, b) => a.fantasy.localeCompare(b.fantasy));
+const buildGroups = FUNMOD_GROUP_ORDER.filter(g => buildsByGroup[g]).map(g => ({ group: g, builds: buildsByGroup[g] }));
+const buildCombos = combosRaw.map(c => ({ members: c.members.map(m => ({ id: m.id, name: m.name })), amps: skillAmps(c.script) }));
+const funmodFamilyCount = families.size;
+const funmodItemCount = [...families.values()].reduce((n, f) => n + f.items.length, 0);
+
 // ---- write -----------------------------------------------------------------
 if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
 const itemArr = [...items.values()].filter(i => i.name).sort((a,b)=>a.id-b.id);
@@ -318,12 +430,14 @@ fs.writeFileSync(path.join(OUT,'options.json'), JSON.stringify({ types:optTypes,
 fs.writeFileSync(path.join(OUT,'skills.json'), JSON.stringify(skillNames));
 fs.writeFileSync(path.join(OUT,'elements.json'), JSON.stringify({ order:ELE_ORDER, matrix:elemMatrix }));
 fs.writeFileSync(path.join(OUT,'hunting.json'), JSON.stringify(hunting));
+fs.writeFileSync(path.join(OUT,'builds.json'), JSON.stringify({ groups: buildGroups, combos: buildCombos }));
 fs.writeFileSync(path.join(OUT,'meta.json'), JSON.stringify({
   built: new Date().toISOString().slice(0,10),
   items: itemArr.length, mobs: mobArr.length,
   customItems: itemArr.filter(i=>i.custom).length,
   funmodItems: itemArr.filter(i=>i.funmod).length,
   comboSets: comboCount,
+  funmodFamilies: funmodFamilyCount,
   spawnedMobs: mobArr.filter(m=>m.spawns&&m.spawns.length).length,
   optionGroups: optGroups.length, optionTypes: Object.keys(optTypes).length,
   skillItems: itemArr.filter(i=>i.boosts&&i.boosts.length).length,
@@ -333,6 +447,11 @@ console.log(`items: ${itemArr.length}  (custom: ${itemArr.filter(i=>i.custom).le
 console.log(`mobs:  ${mobArr.length}  (with spawns: ${mobArr.filter(m=>m.spawns&&m.spawns.length).length})`);
 console.log(`combos: ${comboCount} set(s)`);
 console.log(`options: ${Object.keys(optTypes).length} types, ${optGroups.length} groups`);
+console.log(`fun builds: ${funmodFamilyCount} families, ${funmodItemCount} items, ${buildCombos.length} combos`);
+if (funmodItemCount !== 96) {
+  console.error(`ASSERTION FAILED: expected 96 fun-mod item ids across both ymls, builds.json has ${funmodItemCount}`);
+  process.exitCode = 1;
+}
 console.log('sizes:',
   (fs.statSync(path.join(OUT,'items.json')).size/1048576).toFixed(2)+'MB items,',
   (fs.statSync(path.join(OUT,'mobs.json')).size/1048576).toFixed(2)+'MB mobs');

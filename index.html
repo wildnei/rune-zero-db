@@ -214,6 +214,31 @@
   .hmono{font-family:'JetBrains Mono';color:var(--muted);font-size:12px}
   .huntcard .hrwd{display:flex;flex-wrap:wrap;gap:6px}
   .rwd{font-size:12px;font-weight:600;color:var(--good);background:rgba(31,157,87,.1);border:1px solid rgba(31,157,87,.3);border-radius:999px;padding:2px 10px}
+  /* fun builds */
+  .buildgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:820px){.buildgrid{grid-template-columns:1fr}}
+  .buildcard{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:13px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .buildcard:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#d6891b,#b27c1b)}
+  .buildcard .bt{display:flex;align-items:center;gap:9px;margin-bottom:6px;flex-wrap:wrap}
+  .buildcard .btn{font-family:'Cinzel',serif;font-size:15.5px;color:var(--ink);font-weight:700}
+  .buildcard .bitems{font-size:12.5px;color:var(--muted);margin-bottom:8px}
+  .buildcard .bitems a{font-weight:600}
+  .amppill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--rune-deep);background:rgba(13,148,136,.09);border:1px solid rgba(13,148,136,.3);border-radius:999px;padding:2px 10px;margin:2px 4px 0 0}
+  .amppill b{font-family:'JetBrains Mono';color:var(--gold-deep)}
+  .buildgrouphead{display:flex;align-items:center;gap:10px;margin:26px 0 12px}
+  .buildgrouphead .gn{font-family:'Cinzel',serif;color:var(--gold-deep);font-size:19px}
+  .buildgrouphead .gl{flex:1;height:1px;background:linear-gradient(90deg,var(--border-2),transparent)}
+  .buildgrouphead .gc{font-size:11.5px;color:var(--muted);font-family:'JetBrains Mono'}
+  .combocard{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:13px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .combocard:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#8b5cf6,#6d3fd0)}
+  .combocard .cbwith{font-size:13.5px;margin-bottom:6px}
+  .combocard .cbwith a{font-weight:700}
+  .newbanner{display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,var(--gold-soft),#fff);border:1px solid var(--gold);border-radius:14px;padding:15px 20px;margin:0 0 22px;cursor:pointer;box-shadow:var(--shadow);transition:.12s}
+  .newbanner:hover{transform:translateY(-1px);box-shadow:var(--shadow-lg)}
+  .newbanner .nbtag{font-family:'JetBrains Mono';font-size:10px;font-weight:700;letter-spacing:.1em;color:#fff;background:linear-gradient(135deg,#e7a93a,#d6891b);border-radius:6px;padding:3px 8px;flex:none}
+  .newbanner .nbt{font-family:'Cinzel',serif;font-size:16px;color:var(--gold-deep);flex:1}
+  .newbanner .nbt small{display:block;font-family:'Inter';font-weight:500;font-size:12.5px;color:var(--text);margin-top:2px}
+  .newbanner .nbarrow{font-size:20px;color:var(--gold-deep);flex:none}
 </style>
 </head>
 <body>
@@ -224,6 +249,7 @@
     <nav class="tabs">
       <button data-view="home" class="active">Home</button>
       <button data-view="items">Items</button>
+      <button data-view="builds">Fun Builds</button>
       <button data-view="mobs">Monsters</button>
       <button data-view="skills">Skill Items</button>
       <button data-view="enchants">Enchants</button>
@@ -247,7 +273,7 @@
 
 <script>
 const $ = s => document.querySelector(s);
-let ITEMS=[], MOBS=[], META={}, OPT={types:{},groups:[]}, ELEM=null, HUNT=null, ITEM_BY_ID=new Map(), MOB_BY_ID=new Map(), GROUP_BY_ID=new Map(), GROUP_BY_NAME=new Map();
+let ITEMS=[], MOBS=[], META={}, OPT={types:{},groups:[]}, ELEM=null, HUNT=null, BUILDS=null, ITEM_BY_ID=new Map(), MOB_BY_ID=new Map(), GROUP_BY_ID=new Map(), GROUP_BY_NAME=new Map();
 function gearGroup(i){
   if(i.type==='Weapon') return 'RZ_DROP_WEAPON';
   if(i.type!=='Armor') return null;
@@ -428,7 +454,7 @@ function statBar(v,max){const p=Math.max(4,Math.min(100,Math.round(v/max*100)));
 
 async function boot(){
   try{
-    const [it,mo,me,op,sk,el,hu] = await Promise.all([
+    const [it,mo,me,op,sk,el,hu,bd] = await Promise.all([
       fetch('data/items.json').then(r=>{if(!r.ok)throw 0;return r.json()}),
       fetch('data/mobs.json').then(r=>r.json()),
       fetch('data/meta.json').then(r=>r.json()),
@@ -436,8 +462,9 @@ async function boot(){
       fetch('data/skills.json').then(r=>r.json()).catch(()=>({})),
       fetch('data/elements.json').then(r=>r.json()).catch(()=>null),
       fetch('data/hunting.json').then(r=>r.json()).catch(()=>null),
+      fetch('data/builds.json').then(r=>r.json()).catch(()=>null),
     ]);
-    ITEMS=it; MOBS=mo; META=me; OPT=op; SKILLS=sk; ELEM=el; HUNT=hu;
+    ITEMS=it; MOBS=mo; META=me; OPT=op; SKILLS=sk; ELEM=el; HUNT=hu; BUILDS=bd;
     ITEMS.forEach(i=>{i._s=(i.name+' '+(i.aegis||'')+' '+i.id+' '+(i.boosts||[]).map(b=>b.skill).join(' ')).toLowerCase(); ITEM_BY_ID.set(i.id,i);});
     MOBS.forEach(m=>{m._s=(m.name+' '+(m.aegis||'')+' '+m.id+' '+ELE[eleIdx(m.element)]+' '+(m.element||'')+' '+RACE[raceIdx(m.race)]+' '+(m.size||'')+(m.mvp?' mvp':'')).toLowerCase(); MOB_BY_ID.set(m.id,m);});
     OPT.groups.forEach(g=>{g._s=(g.name).toLowerCase(); GROUP_BY_ID.set(g.id,g); GROUP_BY_NAME.set(g.name,g);});
@@ -459,8 +486,9 @@ function initUI(){
     +'<div class="systems hide" id="systems"></div>'
     +'<div class="systems hide" id="balance"></div>'
     +'<div class="hide" id="hunting"></div>'
+    +'<div class="hide" id="builds"></div>'
     +'<div class="hide" id="home"></div>';
-  renderSystems(); renderHome(); renderHunting();
+  renderSystems(); renderHome(); renderHunting(); renderBuilds();
   document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>setView(b.dataset.view));
   $('#search').addEventListener('input', debounce(render, 160));
   $('#filterType').addEventListener('change', render);
@@ -471,14 +499,15 @@ function initUI(){
 function setView(v){
   view=v;
   document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
-  const isPanel = (v==='systems'||v==='balance'||v==='home'||v==='hunting');
+  const isPanel = (v==='systems'||v==='balance'||v==='home'||v==='hunting'||v==='builds');
   $('#searchWrap').style.visibility = isPanel?'hidden':'visible';
   $('#browse').classList.toggle('hide', isPanel);
   $('#systems').classList.toggle('hide', v!=='systems');
   $('#balance').classList.toggle('hide', v!=='balance');
   $('#home').classList.toggle('hide', v!=='home');
   $('#hunting').classList.toggle('hide', v!=='hunting');
-  if(v==='home'||v==='hunting') return;
+  $('#builds').classList.toggle('hide', v!=='builds');
+  if(v==='home'||v==='hunting'||v==='builds') return;
   if(v==='balance'){ renderBalance(); return; }
   if(v==='systems') return;
   // type filter options
@@ -542,7 +571,7 @@ function render(){
   rows.querySelectorAll('tr[data-id]').forEach(tr=>tr.onclick=()=>{ location.hash = pre+tr.dataset.id; });
 }
 
-const VIEWS=['home','items','mobs','skills','enchants','hunting','systems','balance'];
+const VIEWS=['home','items','builds','mobs','skills','enchants','hunting','systems','balance'];
 function routeHash(){
   const h=location.hash.slice(1);
   if(h.startsWith('item/')){ if(view==='systems')setView('items'); showItem(+h.slice(5)); }
@@ -741,6 +770,7 @@ function renderHome(){
       <p>A slow, meaningful Ragnarok Online server where rare drops feel rare — episode-13 / transcendent-2nd content with modern quality-of-life and a high-damage, multi-build combat rework. <b>Pay-to-fast, never pay-to-win</b>: card &amp; MVP rates stay 1×.</p>
       <div class="statline">${stat((META.items||0).toLocaleString(),'Items')}${stat((META.mobs||0).toLocaleString(),'Monsters')}${stat(META.customItems||0,'Custom items')}${stat('96','Skills rebalanced')}${stat(META.optionGroups||'—','Enchant pools')}</div>
     </div>
+    <div class="newbanner" onclick="setView('builds');location.hash='builds'"><span class="nbtag">NEW</span><span class="nbt">Fun-Pass Builds<small>${META.funmodItems||0} classic items now amp off-meta skills — ${META.funmodFamilies||0} fun builds across every class, plus ${META.comboSets||0} set combos.</small></span><span class="nbarrow">→</span></div>
     <h3 class="homeh">What makes Rune Zero different</h3>
     <div class="syscards">
       ${card('🐢','Low-rate identity','Slow, deliberate progression — rare loot stays rare. QoL is for convenience, never for inflating rewards. <b>Card &amp; MVP-card rates are a hard 1×.</b>')}
@@ -751,6 +781,7 @@ function renderHome(){
     <h3 class="homeh">Explore the database</h3>
     <div class="hlinks">
       ${link('items','🎒','Items',`${((META.items||0)/1000).toFixed(1)}k items, stats, drops, enchants`)}
+      ${link('builds','🎉','Fun Builds','Off-meta skill-amp builds on classic gear')}
       ${link('mobs','👹','Monsters','HP, element matchup, drops, spawns')}
       ${link('balance','⚔️','Skill Changes','Every skill rebalance, before → after')}
       ${link('enchants','🎲','Enchants','Every random-option pool, in plain English')}
@@ -793,6 +824,44 @@ function renderHunting(){
       <p>Complete <b>every</b> monster, MVP and region milestone to claim the prestige title <b>&lt;Grandmaster Hunter&gt;</b> and a <span class="rwd" style="display:inline-block">+3 All Stats</span> reward. The ultimate badge of a Rune Zero veteran.</p></div>
     <p class="homefoot">Generated from the live quest database · ${total} milestones (more on the way).</p>
   </div>`;
+}
+function buildAmpPills(items){
+  if(items.length===2){
+    const [a,b]=items;
+    if(a.amps.length && a.amps.length===b.amps.length && a.amps.every((x,i)=>x.name===b.amps[i].name))
+      return a.amps.map((x,i)=>`<span class="amppill">${esc(x.name)} <b>+${x.pct}%</b> / <b>+${b.amps[i].pct}%</b></span>`).join('');
+  }
+  return items.map(it=>it.amps.map(a=>`<span class="amppill">${esc(a.name)} <b>+${a.pct}%</b></span>`).join('')).join('');
+}
+function buildCard(f){
+  const itemLine=f.items.map(it=>`<a onclick="location.hash='item/${it.id}'">${esc(it.name)}${it.slots?` [${it.slots}]`:''}</a>`).join(' / ');
+  return `<div class="buildcard"><div class="bt"><span class="btn">${esc(f.fantasy)}</span></div>`
+    +`<div class="bitems">${itemLine}</div>`
+    +`<div>${buildAmpPills(f.items)}</div></div>`;
+}
+function comboCard(c){
+  const withnames=c.members.map(m=>`<a onclick="location.hash='item/${m.id}'">${esc(m.name)}</a>`).join(' + ');
+  const amps=c.amps.map(a=>`<span class="amppill">${esc(a.name)} <b>+${a.pct}%</b></span>`).join('');
+  return `<div class="combocard"><div class="cbwith">Wear both: ${withnames}</div><div>${amps}</div></div>`;
+}
+function renderBuilds(){
+  const el=$('#builds'); if(!el) return;
+  if(!BUILDS||!BUILDS.groups||!BUILDS.groups.length){ el.innerHTML='<div class="homewrap"><h2 class="homeh">Fun Builds</h2><p style="color:var(--muted)">No fun-mod builds loaded.</p></div>'; return; }
+  const totalBuilds=BUILDS.groups.reduce((n,g)=>n+g.builds.length,0);
+  const totalItems=BUILDS.groups.reduce((n,g)=>n+g.builds.reduce((m,f)=>m+f.items.length,0),0);
+  let h=`<div class="homewrap">
+    <div class="hero homehero"><div class="kicker">FUN PASS · OFF-META BUILDS</div><h1 style="font-size:30px">Fun Builds</h1>
+      <p>Classic, cheap gear now carries bonus skill-amp mods for off-meta skills — a Buy-10 item can unlock a whole fun build alongside your main gear. The base item and its <b>[1]</b> slotted twin both work; the slotted version's amp is roughly <b>double</b>. Buy everything at the <b>Fun Gear</b> shops next to the <b>Build Librarian</b> in Prontera (172-178, y=180).</p>
+      <div class="statline"><div class="statbox"><b>${totalBuilds}</b><small>Builds</small></div><div class="statbox"><b>${totalItems}</b><small>Items</small></div><div class="statbox"><b>${(BUILDS.combos||[]).length}</b><small>Set combos</small></div></div></div>`;
+  BUILDS.groups.forEach(g=>{
+    h+=`<div class="buildgrouphead"><span class="gn">${esc(g.group)}</span><span class="gl"></span><span class="gc">${g.builds.length} build${g.builds.length!==1?'s':''}</span></div>`;
+    h+=`<div class="buildgrid">${g.builds.map(buildCard).join('')}</div>`;
+  });
+  h+=`<h3 class="homeh">🎯 Set Combos <span style="font-size:12px;color:var(--muted);font-family:Inter">— wear both pieces for a bonus amp stacked on top</span></h3>`;
+  h+=`<div class="buildgrid">${(BUILDS.combos||[]).map(comboCard).join('')}</div>`;
+  h+=`<p class="homefoot">${totalItems} fun-mod items across ${totalBuilds} builds · generated from the live item database.</p>
+  </div>`;
+  el.innerHTML=h;
 }
 function renderSystems(){
   const card=(ic,title,body,cls)=>`<div class="card${cls?' '+cls:''}"><h4><span class="si">${ic}</span>${title}</h4><p>${body}</p></div>`;
@@ -861,7 +930,7 @@ function renderSystems(){
   ${card('⚖️','Class &amp; monster balance','High-damage, multi-build philosophy: <b>52 underused skills</b> made spammable/affordable and <b>15 given real damage</b> so every class has 2–3 viable builds. To match, <b>26 MVPs were toughened ~2.5–3× HP</b> and elites bumped — bosses bite back. See the <b>Skill Changes</b> tab for every before→after.')}
   ${card('🔭','Planned','An in-game <b>economy pass</b> (rationalising the coin/currency set) and a full <b>balance tuning</b> sweep once class damage is tested in-game.')}
   ${card('🧩','Custom items',`${(META.customItems||0)} Rune Zero items are flagged <span class="badge custom">RZ</span> in the Items tab (use the <b>Custom</b> filter). The DB has ${(META.items||0).toLocaleString()} items and ${(META.mobs||0).toLocaleString()} monsters; built ${META.built||''}.`)}
-  ${card('🎉','Fun Mods','Classic/cheap gear (Earring, Main Gauche, Blade…) gets off-meta <b>bonus2 bSkillAtk</b> amps — fun, low-cost builds, not new power creep. '+(META.funmodItems||0)+' items are flagged <span class="badge funmod">FUN</span> in the Items tab (use the <b>Fun Mods</b> filter), plus '+(META.comboSets||0)+' small set combos that add a bonus amp for wearing two fun-mod pieces together.')}
+  ${card('🎉','Fun Mods','Classic/cheap gear (Earring, Main Gauche, Blade…) gets off-meta <b>bonus2 bSkillAtk</b> amps — fun, low-cost builds, not new power creep. '+(META.funmodItems||0)+' items are flagged <span class="badge funmod">FUN</span> in the Items tab (use the <b>Fun Mods</b> filter), plus '+(META.comboSets||0)+' small set combos that add a bonus amp for wearing two fun-mod pieces together. See the <b>Fun Builds</b> tab for the full cheat sheet by class.')}
   </div>`;
 }
 
