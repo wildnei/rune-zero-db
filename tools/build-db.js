@@ -43,8 +43,11 @@ const itemFiles = [
   path.join(CUSTOM, 'item_db_memorial.yml'),     // memorial dungeon gear
   path.join(CUSTOM, 'item_db_prestige.yml'),     // prestige costumes
   path.join(CUSTOM, 'item_db_cash.yml'),         // cash-shop cosmetics + bundles (merged last)
+  path.join(CUSTOM, 'item_db_featured.yml'),     // Featured Build Feast — NEW item 40960 (regular custom, not funmod)
   path.join(CUSTOM, 'item_db_funmods.yml'),         // fun-mod skill-amp overrides (accessories/armor)
   path.join(CUSTOM, 'item_db_funmods_weapons.yml'), // fun-mod skill-amp overrides (weapons, batch 2)
+  path.join(CUSTOM, 'item_db_funmods2.yml'),        // fun-mod skill-amp overrides, batch 3: elemental garments/shields + headgear wave 2
+  path.join(CUSTOM, 'item_db_funmods_cards.yml'),   // fun-mod skill-amp overrides, batch 3: low-tier card Script overrides (Type:Card stock items, same merge path)
   // NOT read: item_db_dropbeams.yml (flag-only DropEffect overrides, no displayable
   // fields — merging it is a no-op for existing items and can't create phantom ones,
   // since itemArr is filtered to i.name at write time).
@@ -374,12 +377,52 @@ const FUNMOD_FAMILY = {
   Huuma_Giant_Wheel:    { group: 'Ninja',                              fantasy: 'Ninja Shuriken Thrower' },
   Zweihander:          { group: 'Swordsman / Knight',                  fantasy: 'Two-Handed Berserker' },
   Staff_Of_Soul:        { group: 'Mage / Wizard / Sage',                fantasy: 'Stave Crasher' },
+  // --- batch 3: elemental garment/shield + headgear wave 2 (item_db_funmods2.yml) ---
+  // Muffler/Hood/Manteau/Guard/Buckler got a bSubEle resist appended in-place to their
+  // existing item_db_funmods.yml entries (2026-07-10 addendum) — no new family keys
+  // needed for those five, they already exist above.
+  Mirror_Shield:        { group: 'Crusader / Monk (Shield)',            fantasy: 'Radiant Aegis' },
+  Ragamuffin_Cape:      { group: 'Novice / Any Class',                  fantasy: "Vagrant's Ward" },
+  Glasses:              { group: 'Mage / Wizard / Sage',                fantasy: "Battle Scholar's Spectacles" },
+  "Diver's_Goggles":    { group: 'Archer / Hunter / Bard-Dancer',      fantasy: 'Deep-Sea Sharpshooter' },
+  Hair_Band:            { group: 'Ninja',                              fantasy: "Wandering Ninja's Talisman" },
+  Eye_Bandage:          { group: 'Gunslinger',                          fantasy: 'One-Eyed Gunslinger' },
+  Biretta:              { group: 'Acolyte / Priest / Monk',             fantasy: 'Martial Cleric' },
+  Hat:                  { group: 'Thief / Assassin / Rogue',            fantasy: 'Sticky-Fingered Vagrant' },
+  Turban:                { group: 'Ninja',                              fantasy: 'Desert Wanderer' },
+  Goggle:                { group: 'Merchant',                            fantasy: 'Battle-Ready Adventurer' },
+  Gemmed_Sallet:        { group: 'Thief / Assassin / Rogue',            fantasy: 'Jeweled Duelist' },
+  Flu_Mask:            { group: 'Thief / Assassin / Rogue',            fantasy: "Plague Doctor's Mask" },
+  // --- batch 3: universally-skipped low-tier CARDS (item_db_funmods_cards.yml) ---
+  // Each card is its own single-item family (no unslotted/slotted pairing — cards
+  // don't come in a "_"-suffixed twin), grouped under a dedicated "Fun Cards" bucket
+  // rather than shoehorned into a class-fantasy group (a card's off-meta skill amp
+  // is a small flavor topper, not a build's centerpiece — see that file's header).
+  Poring_Card:          { group: 'Fun Cards', fantasy: "Novice's First Kill" },
+  Fabre_Card:            { group: 'Fun Cards', fantasy: "Fuzzy Worm's Headbutt" },
+  Pupa_Card:            { group: 'Fun Cards', fantasy: 'The Legendary Punching Bag' },
+  Lunatic_Card:          { group: 'Fun Cards', fantasy: "Lucky Rabbit's Foot" },
+  Pecopeco_Egg_Card:    { group: 'Fun Cards', fantasy: "Future Mount's Ambition" },
+  Andre_Egg_Card:        { group: 'Fun Cards', fantasy: 'Latent Ant Venom' },
+  Roda_Frog_Card:        { group: 'Fun Cards', fantasy: 'Mud-Slick Leap' },
+  Chonchon_Card:        { group: 'Fun Cards', fantasy: 'Tiny Aerial Ambusher' },
+  Thief_Bug_Card:        { group: 'Fun Cards', fantasy: "Ambush Bug's Pounce" },
+  Spore_Card:            { group: 'Fun Cards', fantasy: 'Regenerative Spores' },
+  Ambernite_Card:        { group: 'Fun Cards', fantasy: 'Armored Shell Brawler' },
+  Zombie_Card:          { group: 'Fun Cards', fantasy: 'Shambling Irony' },
+  Skeleton_Card:        { group: 'Fun Cards', fantasy: 'Brittle Bones' },
+  Kukre_Card:            { group: 'Fun Cards', fantasy: "Merchant's Classic Target" },
+  Muka_Card:            { group: 'Fun Cards', fantasy: 'Numbing Ooze' },
+  Vadon_Card:            { group: 'Fun Cards', fantasy: 'Ember Breath' },
+  Metaller_Card:        { group: 'Fun Cards', fantasy: 'Piercing Gaze' },
+  Drainliar_Card:        { group: 'Fun Cards', fantasy: 'Chilling Drain' },
+  Farmiliar_Card:        { group: 'Fun Cards', fantasy: 'Shadowy Presence' }, // AegisName is genuinely "Farmiliar_Card" (verified typo)
 };
 // display order of class-group buckets on the wiki page (matches docs/FUN_PASS_BUILDS.md order)
 const FUNMOD_GROUP_ORDER = [
   'Novice / Any Class', 'Swordsman / Knight', 'Crusader / Monk (Shield)', 'Mage / Wizard / Sage',
   'Acolyte / Priest / Monk', 'Merchant', 'Archer / Hunter / Bard-Dancer', 'Thief / Assassin / Rogue',
-  'Ninja', 'Gunslinger', 'Spear Knight (Knight/Crusader)',
+  'Ninja', 'Gunslinger', 'Spear Knight (Knight/Crusader)', 'Fun Cards',
 ];
 function famKey(aegis) { return aegis.replace(/_$/, ''); } // strip the "_" slotted suffix -> family key
 // Every fun-mod file only ever appends 3 kinds of bonus lines: skill-damage amps
@@ -395,6 +438,12 @@ function skillAmps(script) {
   while ((m = reHP.exec(script))) out.push({ kind: 'recov', name: 'HP Recovery', pct: +m[1] });
   const reSP = /bonus bSPrecovRate,(-?\d+)/g;
   while ((m = reSP.exec(script))) out.push({ kind: 'recov', name: 'SP Recovery', pct: +m[1] });
+  // Funmods batch 3 elemental-identity pass (item_db_funmods2.yml + the 2026-07-10
+  // addendum in item_db_funmods.yml) appends bonus2 bSubEle,<Ele>,N defensive resist
+  // lines — those aren't bSkillAtk so they'd otherwise vanish from the Fun Builds tab.
+  // Minimal "resist" pill, reuses the EL element-name table already defined above.
+  const reResist = /bonus2 bSubEle,(Ele_\w+),(-?\d+)/g;
+  while ((m = reResist.exec(script))) out.push({ kind: 'resist', name: (EL[m[1]] || m[1]) + ' Resistance', pct: +m[2] });
   return out;
 }
 const families = new Map(); // family key -> { fantasy, group, items:[] }
@@ -418,6 +467,16 @@ const buildGroups = FUNMOD_GROUP_ORDER.filter(g => buildsByGroup[g]).map(g => ({
 const buildCombos = combosRaw.map(c => ({ members: c.members.map(m => ({ id: m.id, name: m.name })), amps: skillAmps(c.script) }));
 const funmodFamilyCount = families.size;
 const funmodItemCount = [...families.values()].reduce((n, f) => n + f.items.length, 0);
+// Dynamic sanity check (was a hardcoded "expect 96" magic number that went stale the
+// moment a new funmod batch shipped) — count the DISTINCT Ids actually present across
+// every itemFiles entry that matches FUNMOD_RE, straight from disk, independent of the
+// families map above. If this ever diverges from funmodItemCount it means some
+// funmod-flagged item silently failed to resolve to a FUNMOD_FAMILY entry (see the
+// console.warn a few lines up) — a real bug, not a number to just bump.
+const funmodSourceIds = new Set();
+for (const f of itemFiles.filter(f => FUNMOD_RE.test(f)))
+  for (const e of load(f)) if (e.Id != null) funmodSourceIds.add(e.Id);
+const expectedFunmodCount = funmodSourceIds.size;
 
 // ---- write -----------------------------------------------------------------
 if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
@@ -448,8 +507,8 @@ console.log(`mobs:  ${mobArr.length}  (with spawns: ${mobArr.filter(m=>m.spawns&
 console.log(`combos: ${comboCount} set(s)`);
 console.log(`options: ${Object.keys(optTypes).length} types, ${optGroups.length} groups`);
 console.log(`fun builds: ${funmodFamilyCount} families, ${funmodItemCount} items, ${buildCombos.length} combos`);
-if (funmodItemCount !== 96) {
-  console.error(`ASSERTION FAILED: expected 96 fun-mod item ids across both ymls, builds.json has ${funmodItemCount}`);
+if (funmodItemCount !== expectedFunmodCount) {
+  console.error(`ASSERTION FAILED: expected ${expectedFunmodCount} fun-mod item ids (counted live from the ${itemFiles.filter(f=>FUNMOD_RE.test(f)).length} FUNMOD_RE source files), builds.json has ${funmodItemCount}`);
   process.exitCode = 1;
 }
 console.log('sizes:',
