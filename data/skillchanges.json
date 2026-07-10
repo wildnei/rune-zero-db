@@ -100,6 +100,11 @@
     "field": "SpCost",
     "before": "3",
     "after": "1"
+   },
+   {
+    "field": "Range",
+    "before": "per-lv 3/4/5/6/7",
+    "after": "9 (flat)"
    }
   ],
   "build": "Near-free Grimtooth harass under Hiding"
@@ -130,6 +135,11 @@
     "field": "SP",
     "before": "per-lv",
     "after": "12"
+   },
+   {
+    "field": "ItemCost",
+    "before": "Red_Gemstone x1 per cast",
+    "after": "removed"
    }
   ],
   "damage": {
@@ -322,6 +332,11 @@
     "field": "SpCost",
     "before": "40",
     "after": "20"
+   },
+   {
+    "field": "CastTime",
+    "before": "500",
+    "after": "0"
    }
   ],
   "build": "Mobile charge-burst gap-closer Knight"
@@ -599,6 +614,11 @@
     "field": "SpCost",
     "before": "per-lv 60..100",
     "after": "per-lv 30..50"
+   },
+   {
+    "field": "Duration1",
+    "before": "per-lv 40000..60000",
+    "after": "per-lv 80000..120000 (doubled)"
    }
   ],
   "build": "Keepable EDP uptime self-buff"
@@ -1211,6 +1231,16 @@
     "field": "SpCost",
     "before": "16",
     "after": "10"
+   },
+   {
+    "field": "Positioning",
+    "before": "must already be behind target",
+    "after": "auto-repositions behind target on cast"
+   },
+   {
+    "field": "Hiding",
+    "before": "usable from Hiding (auto-unhides)",
+    "after": "no longer usable while Hiding"
    }
   ],
   "damage": {
@@ -2298,5 +2328,330 @@
    "after": "150+90*lv (non-combo cast)"
   },
   "build": "Gap-closing Jump Kick TaeKwon"
+ },
+ {
+  "class": "Priest",
+  "classOrder": 2,
+  "skill": "Impositio Manus",
+  "aegis": "PR_IMPOSITIO",
+  "id": 66,
+  "usability": [
+   {
+    "field": "TargetType",
+    "before": "Target (single ally, clicked)",
+    "after": "Self (party-wide)"
+   }
+  ],
+  "build": "Party-wide self-cast ATK buff Priest"
+ },
+ {
+  "class": "Priest",
+  "classOrder": 2,
+  "skill": "Suffragium",
+  "aegis": "PR_SUFFRAGIUM",
+  "id": 67,
+  "usability": [
+   {
+    "field": "TargetType",
+    "before": "Target (single ally, clicked)",
+    "after": "Self (party-wide)"
+   }
+  ],
+  "build": "Party-wide self-cast cast-cut buff Priest"
+ },
+ {
+  "class": "Priest",
+  "classOrder": 2,
+  "skill": "Kyrie Eleison",
+  "aegis": "PR_KYRIE",
+  "id": 73,
+  "usability": [
+   {
+    "field": "Coexistence",
+    "before": "exclusive with Assumptio",
+    "after": "can stack with Assumptio (Kaite still exclusive)"
+   }
+  ],
+  "build": "Kyrie Eleison damage-shield stackable with Assumptio"
+ },
+ {
+  "class": "Sage",
+  "classOrder": 2,
+  "skill": "Fire Endow (Flame Launcher)",
+  "aegis": "SA_FLAMELAUNCHER",
+  "id": 280,
+  "usability": [
+   {
+    "field": "SuccessRate",
+    "before": "60+10*lv (70-100%)",
+    "after": "100 (flat)"
+   }
+  ],
+  "build": "Reliable Fire-endow support Sage/Professor"
+ },
+ {
+  "class": "Sage",
+  "classOrder": 2,
+  "skill": "Water Endow (Frost Weapon)",
+  "aegis": "SA_FROSTWEAPON",
+  "id": 281,
+  "usability": [
+   {
+    "field": "SuccessRate",
+    "before": "60+10*lv (70-100%)",
+    "after": "100 (flat)"
+   }
+  ],
+  "build": "Reliable Water-endow support Sage/Professor"
+ },
+ {
+  "class": "Sage",
+  "classOrder": 2,
+  "skill": "Wind Endow (Lightning Loader)",
+  "aegis": "SA_LIGHTNINGLOADER",
+  "id": 282,
+  "usability": [
+   {
+    "field": "SuccessRate",
+    "before": "60+10*lv (70-100%)",
+    "after": "100 (flat)"
+   }
+  ],
+  "build": "Reliable Wind-endow support Sage/Professor"
+ },
+ {
+  "class": "Sage",
+  "classOrder": 2,
+  "skill": "Earth Endow (Seismic Weapon)",
+  "aegis": "SA_SEISMICWEAPON",
+  "id": 283,
+  "usability": [
+   {
+    "field": "SuccessRate",
+    "before": "60+10*lv (70-100%)",
+    "after": "100 (flat)"
+   }
+  ],
+  "build": "Reliable Earth-endow support Sage/Professor"
+ },
+ {
+  "class": "Knight",
+  "classOrder": 2,
+  "skill": "Bowling Bash",
+  "aegis": "KN_BOWLINGBASH",
+  "id": 62,
+  "usability": [
+   {
+    "field": "Splash",
+    "before": "gutter-line recursive knockback chain",
+    "after": "flat 5x5 (Chebyshev 2)"
+   },
+   {
+    "field": "HitCount",
+    "before": "1",
+    "after": "2"
+   },
+   {
+    "field": "Cooldown",
+    "before": "none (stock)",
+    "after": "1000"
+   }
+  ],
+  "build": "Flat AoE Bowling Bash spam Knight/Lord Knight"
+ },
+ {
+  "class": "Assassin",
+  "classOrder": 2,
+  "skill": "Sonic Blow",
+  "aegis": "AS_SONICBLOW",
+  "id": 136,
+  "usability": [
+   {
+    "field": "AfterCastActDelay",
+    "before": "2000",
+    "after": "0"
+   },
+   {
+    "field": "Cooldown",
+    "before": "none (stock)",
+    "after": "1000"
+   }
+  ],
+  "build": "Sonic Blow spam without animation lock Assassin/Sin X"
+ },
+ {
+  "class": "Bard/Clown",
+  "classOrder": 2,
+  "skill": "Whistle",
+  "aegis": "BA_WHISTLE",
+  "id": 319,
+  "usability": [
+   {
+    "field": "Unit.Range",
+    "before": "0 (unset)",
+    "after": "15 (31x31 aura)"
+   }
+  ],
+  "build": "Wider Whistle Flee-buff aura Bard/Clown"
+ },
+ {
+  "class": "Bard/Clown",
+  "classOrder": 2,
+  "skill": "Assassin Cross (Enchanted skill unlock)",
+  "aegis": "BA_ASSASSINCROSS",
+  "id": 320,
+  "usability": [
+   {
+    "field": "Unit.Range",
+    "before": "0 (unset)",
+    "after": "15 (31x31 aura)"
+   }
+  ],
+  "build": "Wider ASPD song aura Bard/Clown"
+ },
+ {
+  "class": "Bard/Clown",
+  "classOrder": 2,
+  "skill": "Poem of Bragi",
+  "aegis": "BA_POEMBRAGI",
+  "id": 321,
+  "usability": [
+   {
+    "field": "Unit.Range",
+    "before": "0 (unset)",
+    "after": "15 (31x31 aura)"
+   }
+  ],
+  "build": "Wider Poem of Bragi cast-time aura Bard/Clown"
+ },
+ {
+  "class": "Bard/Clown",
+  "classOrder": 2,
+  "skill": "Apple of Idun",
+  "aegis": "BA_APPLEIDUN",
+  "id": 322,
+  "usability": [
+   {
+    "field": "Unit.Range",
+    "before": "0 (unset)",
+    "after": "15 (31x31 aura)"
+   }
+  ],
+  "build": "Wider Apple of Idun HP-regen aura Bard/Clown"
+ },
+ {
+  "class": "Dancer/Gypsy",
+  "classOrder": 2,
+  "skill": "Humming",
+  "aegis": "DC_HUMMING",
+  "id": 327,
+  "usability": [
+   {
+    "field": "Unit.Range",
+    "before": "0 (unset)",
+    "after": "15 (31x31 aura)"
+   }
+  ],
+  "build": "Wider Humming Flee-rate aura Dancer/Gypsy"
+ },
+ {
+  "class": "Dancer/Gypsy",
+  "classOrder": 2,
+  "skill": "Don't Forget Me",
+  "aegis": "DC_DONTFORGETME",
+  "id": 328,
+  "usability": [
+   {
+    "field": "Unit.Range",
+    "before": "0 (unset)",
+    "after": "15 (31x31 aura)"
+   }
+  ],
+  "build": "Wider Don't Forget Me slow aura Dancer/Gypsy"
+ },
+ {
+  "class": "Dancer/Gypsy",
+  "classOrder": 2,
+  "skill": "Fortune Kiss (Lady Luck)",
+  "aegis": "DC_FORTUNEKISS",
+  "id": 329,
+  "usability": [
+   {
+    "field": "Unit.Range",
+    "before": "0 (unset)",
+    "after": "15 (31x31 aura)"
+   }
+  ],
+  "build": "Wider Fortune Kiss crit aura Dancer/Gypsy"
+ },
+ {
+  "class": "Dancer/Gypsy",
+  "classOrder": 2,
+  "skill": "Service For You (Gypsy's Kiss)",
+  "aegis": "DC_SERVICEFORYOU",
+  "id": 330,
+  "usability": [
+   {
+    "field": "Unit.Range",
+    "before": "0 (unset)",
+    "after": "15 (31x31 aura)"
+   }
+  ],
+  "build": "Wider Service For You SP-cost aura Dancer/Gypsy"
+ },
+ {
+  "class": "Champion",
+  "classOrder": 3,
+  "skill": "Guillotine Fist (Asura Strike)",
+  "aegis": "MO_EXTREMITYFIST",
+  "id": 271,
+  "usability": [
+   {
+    "field": "SpiritSphereCost",
+    "before": "5",
+    "after": "1"
+   }
+  ],
+  "build": "Asura Strike as rotation finisher (1 sphere)"
+ },
+ {
+  "class": "High Priest",
+  "classOrder": 3,
+  "skill": "Assumptio",
+  "aegis": "HP_ASSUMPTIO",
+  "id": 361,
+  "usability": [
+   {
+    "field": "Coexistence",
+    "before": "exclusive with Kyrie Eleison",
+    "after": "can stack with Kyrie Eleison (Kaite still exclusive)"
+   }
+  ],
+  "build": "Assumptio DEF/MDEF buff stackable with Kyrie"
+ },
+ {
+  "class": "Gunslinger",
+  "classOrder": 4,
+  "skill": "Magical Bullet",
+  "aegis": "GS_MAGICALBULLET",
+  "id": 507,
+  "usability": [
+   {
+    "field": "TargetType",
+    "before": "Target (instant damage hit)",
+    "after": "Self (buff)"
+   },
+   {
+    "field": "Status",
+    "before": "none",
+    "after": "MagicalBullet"
+   },
+   {
+    "field": "Duration1",
+    "before": "none",
+    "after": "30000 (30s)"
+   }
+  ],
+  "build": "Magical Bullet self-buff enabling INT-scaled gunslinger damage"
  }
 ]
