@@ -43,11 +43,23 @@ const itemFiles = [
   path.join(CUSTOM, 'item_db_memorial.yml'),     // memorial dungeon gear
   path.join(CUSTOM, 'item_db_prestige.yml'),     // prestige costumes
   path.join(CUSTOM, 'item_db_cash.yml'),         // cash-shop cosmetics + bundles (merged last)
+  path.join(CUSTOM, 'item_db_funmods.yml'),         // fun-mod skill-amp overrides (accessories/armor)
+  path.join(CUSTOM, 'item_db_funmods_weapons.yml'), // fun-mod skill-amp overrides (weapons, batch 2)
   // NOT read: item_db_dropbeams.yml (flag-only DropEffect overrides, no displayable
   // fields — merging it is a no-op for existing items and can't create phantom ones,
   // since itemArr is filtered to i.name at write time).
   // NOT read: item_enchant.yml — different schema (ITEM_ENCHANT_DB, not ITEM_DB).
 ];
+// Fun-mod files only restate { Id, AegisName, Script } on existing STOCK items (see their
+// file headers) — they never introduce new Ids, so reading them above just merges the new
+// Script onto the item already created from db/pre-re (same per-Id deep-merge every other
+// custom/db-import override file relies on, e.g. item_db_equip.yml's trophy rebalances).
+// Both funmod files still set `custom:true` too (same as every other db-import override,
+// trophies included) — that flag just means "loaded from our db-import overrides", not
+// "brand-new Id". `funmod` is an additional, narrower flag so the wiki can badge
+// specifically "this classic item got a fun-mod skill amp" without a new filter category
+// colliding with the existing Custom/RZ badge semantics.
+const FUNMOD_RE = /item_db_funmods/;
 
 const items = new Map();   // id -> item
 function keys(obj) { return obj && typeof obj === 'object' ? Object.keys(obj).filter(k => obj[k]) : []; }
@@ -79,6 +91,7 @@ for (const f of itemFiles) {
       view: e.View ?? prev.view,
       script: e.Script != null ? e.Script.trim() : prev.script,
       custom: custom ? true : (prev.custom || false),
+      funmod: FUNMOD_RE.test(f) ? true : (prev.funmod || false),
       droppedBy: prev.droppedBy || [],
     });
     items.set(e.Id, it);
@@ -88,6 +101,25 @@ for (const f of itemFiles) {
 // quick lookup by aegis for drop cross-ref
 const byAegis = new Map();
 for (const it of items.values()) if (it.aegis) byAegis.set(it.aegis, it);
+
+// ---- item set combos (item_combos.yml) --------------------------------
+// Fun-mods batch 2: pairs of fun-mod items grant a bonus skill amp when worn together.
+// COMBO_DB has a different schema than ITEM_DB (Combos: [{ Combo: [AegisName,...] }],
+// Script shared across the entry) so it's parsed separately, then cross-referenced onto
+// each participating item via byAegis (built just above) the same way drops are.
+for (const it of items.values()) it.combos = [];
+let comboCount = 0;
+for (const e of load(path.join(CUSTOM, 'item_combos.yml'))) {
+  const script = (e.Script || '').trim();
+  for (const c of (e.Combos || [])) {
+    const members = (c.Combo || []).map(a => byAegis.get(a)).filter(Boolean);
+    if (members.length < 2) continue; // unresolved aegis name(s) — skip a broken/partial combo
+    comboCount++;
+    for (const m of members) {
+      m.combos.push({ script, with: members.filter(x => x.id !== m.id).map(x => ({ id: x.id, name: x.name })) });
+    }
+  }
+}
 
 // ---- mobs ------------------------------------------------------------------
 const mobFiles = [ path.join(PRE, 'mob_db.yml'), path.join(CUSTOM, 'mob_db.yml') ];
@@ -290,13 +322,16 @@ fs.writeFileSync(path.join(OUT,'meta.json'), JSON.stringify({
   built: new Date().toISOString().slice(0,10),
   items: itemArr.length, mobs: mobArr.length,
   customItems: itemArr.filter(i=>i.custom).length,
+  funmodItems: itemArr.filter(i=>i.funmod).length,
+  comboSets: comboCount,
   spawnedMobs: mobArr.filter(m=>m.spawns&&m.spawns.length).length,
   optionGroups: optGroups.length, optionTypes: Object.keys(optTypes).length,
   skillItems: itemArr.filter(i=>i.boosts&&i.boosts.length).length,
 }));
 
-console.log(`items: ${itemArr.length}  (custom: ${itemArr.filter(i=>i.custom).length})`);
+console.log(`items: ${itemArr.length}  (custom: ${itemArr.filter(i=>i.custom).length}, funmod: ${itemArr.filter(i=>i.funmod).length})`);
 console.log(`mobs:  ${mobArr.length}  (with spawns: ${mobArr.filter(m=>m.spawns&&m.spawns.length).length})`);
+console.log(`combos: ${comboCount} set(s)`);
 console.log(`options: ${Object.keys(optTypes).length} types, ${optGroups.length} groups`);
 console.log('sizes:',
   (fs.statSync(path.join(OUT,'items.json')).size/1048576).toFixed(2)+'MB items,',

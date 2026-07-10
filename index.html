@@ -60,6 +60,7 @@
   td.mono{font-family:'JetBrains Mono';color:var(--faint);font-size:12px}
   .badge{display:inline-block;font-family:'JetBrains Mono';font-size:10px;font-weight:600;padding:1px 6px;border-radius:6px;border:1px solid var(--border-2);color:var(--muted);background:var(--panel-2);vertical-align:middle}
   .badge.custom{color:var(--rune-deep);border-color:rgba(13,148,136,.4);background:rgba(13,148,136,.08)}
+  .badge.funmod{color:#b3691a;border-color:rgba(214,137,27,.4);background:rgba(214,137,27,.1)}
   .badge.mvp{color:#fff;border-color:transparent;background:linear-gradient(135deg,#f0b94e,#d6891b);box-shadow:0 1px 4px rgba(214,137,27,.4)}
   .scry{max-height:calc(100vh - 200px);overflow:auto;display:block}
   .count{font-size:12px;color:var(--muted);margin:8px 2px}
@@ -483,7 +484,7 @@ function setView(v){
   // type filter options
   const f=$('#filterType'); f.innerHTML='';
   const opts = v==='items'
-    ? ['All types','Weapon','Armor','Card','Healing','Usable','Etc','Delayconsume','Ammo','Custom']
+    ? ['All types','Weapon','Armor','Card','Healing','Usable','Etc','Delayconsume','Ammo','Custom','Fun Mods']
     : v==='mobs' ? ['All','MVP only','Normal only']
     : v==='skills' ? ['Trans skills (up to ep13)']
     : ['Rune Zero','All groups'];
@@ -504,8 +505,9 @@ function render(){
     for(const i of ITEMS){
       if(q && !i._s.includes(q)) continue;
       if(ft==='Custom' && !i.custom) continue;
-      else if(ft!=='All types' && ft!=='Custom' && i.type!==ft) continue;
-      total++; if(n<300){out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td><img class="ico" src="${ICO(i.id)}" loading="lazy" onerror="this.style.display='none'">${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}${i.slots?` <span class="badge">[${i.slots}]</span>`:''}</td><td>${i.type||''}</td><td>${(i.loc||[]).join(', ')||'-'}</td></tr>`;n++;}
+      else if(ft==='Fun Mods' && !i.funmod) continue;
+      else if(ft!=='All types' && ft!=='Custom' && ft!=='Fun Mods' && i.type!==ft) continue;
+      total++; if(n<300){out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td><img class="ico" src="${ICO(i.id)}" loading="lazy" onerror="this.style.display='none'">${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}${i.funmod?'<span class="badge funmod">FUN</span>':''}${i.slots?` <span class="badge">[${i.slots}]</span>`:''}</td><td>${i.type||''}</td><td>${(i.loc||[]).join(', ')||'-'}</td></tr>`;n++;}
     }
   }else if(view==='mobs'){
     for(const m of MOBS){
@@ -524,7 +526,7 @@ function render(){
         const has3=i.boosts.some(b=>b.t3);
         const skn=trans.map(b=>skillName(b.skill)).slice(0,3).join(', ')+(trans.length>3?' +'+(trans.length-3):'');
         const tier=has3?'<span class="badge">+3rd</span>':'<span class="badge">Trans</span>';
-        out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td><img class="ico" src="${ICO(i.id)}" loading="lazy" onerror="this.style.display='none'">${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}</td><td style="font-size:12px">${esc(skn)}</td><td>${tier}</td></tr>`;n++;
+        out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td><img class="ico" src="${ICO(i.id)}" loading="lazy" onerror="this.style.display='none'">${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}${i.funmod?'<span class="badge funmod">FUN</span>':''}</td><td style="font-size:12px">${esc(skn)}</td><td>${tier}</td></tr>`;n++;
       }
     }
   }else{ // enchants
@@ -568,7 +570,7 @@ function showItem(id){
   const i=ITEM_BY_ID.get(id); if(!i)return;
   if(view!=='items' && view!=='skills'){view='items';setView('items');}  // stay on Skill Items tab when browsing it
   highlight(id);
-  let h=`<div class="ihead"><img class="iimg" src="${IMG(i.id)}" onerror="this.classList.add('hide')" alt=""><div><h2>${esc(i.name)} ${i.custom?'<span class="badge custom">Rune Zero</span>':''}</h2><div class="sub mono">ID ${i.id} · ${esc(i.aegis||'')}</div></div></div>`;
+  let h=`<div class="ihead"><img class="iimg" src="${IMG(i.id)}" onerror="this.classList.add('hide')" alt=""><div><h2>${esc(i.name)} ${i.custom?'<span class="badge custom">Rune Zero</span>':''}${i.funmod?'<span class="badge funmod">Fun Mod</span>':''}</h2><div class="sub mono">ID ${i.id} · ${esc(i.aegis||'')}</div></div></div>`;
   h+='<dl class="kv">';
   h+=row('Type', i.type + (i.sub?` (${i.sub})`:''));
   if(i.slots)h+=row('Card slots', i.slots);
@@ -593,6 +595,17 @@ function showItem(id){
     if(pe.length) h+=pe.map(l=>`<div class="eff${l.cond?' cond':''}">${esc(l.text)}</div>`).join('');
     else h+='<div class="eff" style="margin-left:0">A special effect — see the script below.</div>';
     h+=`<details class="raw"><summary>▸ Show raw script</summary><pre class="script">${esc(i.script)}</pre></details></div>`;
+  }
+  if(i.combos&&i.combos.length){
+    h+='<div class="sec"><h4>Set combo</h4>';
+    for(const c of i.combos){
+      const withnames=c.with.map(w=>`<a onclick="location.hash='item/${w.id}'">${esc(w.name)}</a>`).join(' + ');
+      h+=`<div class="droprow" style="display:block"><div style="margin-bottom:4px">Worn with ${withnames}:</div>`;
+      const pe=plainEffect(c.script);
+      h+=(pe.length?pe:[{text:c.script,cond:false}]).map(l=>`<div class="eff${l.cond?' cond':''}">${esc(l.text)}</div>`).join('');
+      h+='</div>';
+    }
+    h+='</div>';
   }
   // dropped by
   const db=(i.droppedBy||[]).slice().sort((a,b)=>b.rate-a.rate);
@@ -848,6 +861,7 @@ function renderSystems(){
   ${card('⚖️','Class &amp; monster balance','High-damage, multi-build philosophy: <b>52 underused skills</b> made spammable/affordable and <b>15 given real damage</b> so every class has 2–3 viable builds. To match, <b>26 MVPs were toughened ~2.5–3× HP</b> and elites bumped — bosses bite back. See the <b>Skill Changes</b> tab for every before→after.')}
   ${card('🔭','Planned','An in-game <b>economy pass</b> (rationalising the coin/currency set) and a full <b>balance tuning</b> sweep once class damage is tested in-game.')}
   ${card('🧩','Custom items',`${(META.customItems||0)} Rune Zero items are flagged <span class="badge custom">RZ</span> in the Items tab (use the <b>Custom</b> filter). The DB has ${(META.items||0).toLocaleString()} items and ${(META.mobs||0).toLocaleString()} monsters; built ${META.built||''}.`)}
+  ${card('🎉','Fun Mods','Classic/cheap gear (Earring, Main Gauche, Blade…) gets off-meta <b>bonus2 bSkillAtk</b> amps — fun, low-cost builds, not new power creep. '+(META.funmodItems||0)+' items are flagged <span class="badge funmod">FUN</span> in the Items tab (use the <b>Fun Mods</b> filter), plus '+(META.comboSets||0)+' small set combos that add a bonus amp for wearing two fun-mod pieces together.')}
   </div>`;
 }
 
