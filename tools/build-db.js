@@ -1,7 +1,9 @@
 // ============================================================================
 //  Rune Zero — game DB extractor
-//  Parses the rAthena item/mob YAML DBs (base RE + our custom import) into lean
+//  Parses the rAthena item/mob YAML DBs (stock db/pre-re + our custom import) into lean
 //  JSON the website consumes: items.json, mobs.json, meta.json.
+//  Server is PRE-RENEWAL (switched 2026-07-09) — stock reads point at db/pre-re/, NOT
+//  db/re/. Exception: item_randomopt_db/group have no pre-re file, read from db/import only.
 //  Builds the item<->monster DROP cross-reference both ways.
 //  Run: node wiki/tools/build-db.js   (from project root)
 // ============================================================================
@@ -10,7 +12,12 @@ const path = require('path');
 const YAML = require('yaml');   // tolerant of rAthena's duplicate keys (uniqueKeys:false)
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const RE = path.join(ROOT, 'server', 'rathena', 'db', 're');
+// Server runs PRE-RENEWAL (switched 2026-07-09, patch 0017 #define PRERE) — stock db/npc
+// load from db/pre-re/ + npc/pre-re/ at compile time, so the wiki must read stock data
+// from there too. db/re/ is kept on disk (dormant) but is NOT what the live server loads.
+// A few stock files exist ONLY under db/re (no pre-re counterpart) — those are read
+// straight from db/import instead (see item_randomopt_db/group below).
+const PRE = path.join(ROOT, 'server', 'rathena', 'db', 'pre-re');
 const CUSTOM = path.join(ROOT, 'custom', 'db-import');
 const OUT = path.join(ROOT, 'wiki', 'data');
 
@@ -22,14 +29,24 @@ function load(file) {
 
 // ---- items -----------------------------------------------------------------
 const itemFiles = [
-  path.join(RE, 'item_db_equip.yml'),
-  path.join(RE, 'item_db_usable.yml'),
-  path.join(RE, 'item_db_etc.yml'),
+  path.join(PRE, 'item_db_equip.yml'),
+  path.join(PRE, 'item_db_usable.yml'),
+  path.join(PRE, 'item_db_etc.yml'),
   path.join(CUSTOM, 'item_db.yml'),         // custom items + box overrides
   path.join(CUSTOM, 'item_db_equip.yml'),   // F11 trophy rebalances
   path.join(CUSTOM, 'item_db_essence.yml'), // class essences
   path.join(CUSTOM, 'item_db_eden_weapons.yml'), // Eden badge weapons
+  path.join(CUSTOM, 'item_db_eden.yml'),         // Eden badge accessories/armor
+  path.join(CUSTOM, 'item_db_gems.yml'),         // Rune Socketing gems (e.g. 40902 Rune of Might)
+  path.join(CUSTOM, 'item_db_enchantstones.yml'),// enchant-group-37 rescue stones
+  path.join(CUSTOM, 'item_db_growing.yml'),      // Memorial Growing Gear set
+  path.join(CUSTOM, 'item_db_memorial.yml'),     // memorial dungeon gear
+  path.join(CUSTOM, 'item_db_prestige.yml'),     // prestige costumes
   path.join(CUSTOM, 'item_db_cash.yml'),         // cash-shop cosmetics + bundles (merged last)
+  // NOT read: item_db_dropbeams.yml (flag-only DropEffect overrides, no displayable
+  // fields — merging it is a no-op for existing items and can't create phantom ones,
+  // since itemArr is filtered to i.name at write time).
+  // NOT read: item_enchant.yml — different schema (ITEM_ENCHANT_DB, not ITEM_DB).
 ];
 
 const items = new Map();   // id -> item
@@ -73,7 +90,7 @@ const byAegis = new Map();
 for (const it of items.values()) if (it.aegis) byAegis.set(it.aegis, it);
 
 // ---- mobs ------------------------------------------------------------------
-const mobFiles = [ path.join(RE, 'mob_db.yml'), path.join(CUSTOM, 'mob_db.yml') ];
+const mobFiles = [ path.join(PRE, 'mob_db.yml'), path.join(CUSTOM, 'mob_db.yml') ];
 const mobs = new Map();
 
 function mapDrops(list) {
@@ -131,7 +148,7 @@ for (const it of items.values()) {
 function walkTxt(dir){ let r=[]; if(!fs.existsSync(dir))return r; for(const e of fs.readdirSync(dir,{withFileTypes:true})){const fp=path.join(dir,e.name); if(e.isDirectory())r=r.concat(walkTxt(fp)); else if(e.name.endsWith('.txt'))r.push(fp);} return r; }
 const spawnByMob = new Map();
 const reSpawn = /^([a-zA-Z0-9_@]+),\d+,\d+[^\t]*\t(?:boss_)?monster\t[^\t]*\t(\d+),(\d+)/;
-for (const f of walkTxt(path.join(ROOT,'server','rathena','npc','re','mobs'))) {
+for (const f of walkTxt(path.join(ROOT,'server','rathena','npc','pre-re','mobs'))) {
   for (const line of fs.readFileSync(f,'utf8').split('\n')) {
     const mt = reSpawn.exec(line); if(!mt) continue;
     const id=+mt[2], map=mt[1], amt=+mt[3];
@@ -144,7 +161,7 @@ for (const m of mobs.values()){ const s=spawnByMob.get(m.id); m.spawns = s?[...s
 // ---- skill names (aegis -> English, from skill_db Description) — load early
 //      so random-option skill-damage descriptions can resolve real skill names.
 const skillNames = {};
-for (const e of load(path.join(RE,'skill_db.yml'))) if(e.Name && e.Description) skillNames[e.Name]=e.Description;
+for (const e of load(path.join(PRE,'skill_db.yml'))) if(e.Name && e.Description) skillNames[e.Name]=e.Description;
 
 // ---- random options / enchants ---------------------------------------------
 // Describe an option by what its SCRIPT actually does (reliable + reads in plain
@@ -207,11 +224,16 @@ function humanizeOpt(name,script){
   // fallback: prettify the raw aegis so it's at least readable
   return (name||'').replace(/^RZ_RDMOPT_/,'').replace(/_/g,' ').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
 }
+// item_randomopt_db.yml / item_randomopt_group.yml have NO db/pre-re counterpart (rAthena
+// only ships them under db/re). custom/db-import/item_randomopt_db.yml already re-hosts the
+// 57 stock option defs our groups need (copied verbatim from db/re, see that file's header),
+// so read ONLY the db/import (custom) copy here — reading stale db/re on top would just
+// re-add the same Ids from a file the live server never loads.
 const optTypes = {};
-for (const f of [path.join(RE,'item_randomopt_db.yml'), path.join(CUSTOM,'item_randomopt_db.yml')])
+for (const f of [path.join(CUSTOM,'item_randomopt_db.yml')])
   for (const e of load(f)) if(e.Option) optTypes[e.Option] = { name:e.Option, desc:humanizeOpt(e.Option,e.Script), script:(e.Script||'').trim() };
 const optGroups = [];
-for (const f of [path.join(RE,'item_randomopt_group.yml'), path.join(CUSTOM,'item_randomopt_group.yml')])
+for (const f of [path.join(CUSTOM,'item_randomopt_group.yml')])
   for (const g of load(f)) {
     const opts=[];
     for (const slot of (g.Slots||[])) for(const o of (slot.Options||[])) opts.push({name:o.Option,min:o.MinValue||0,max:o.MaxValue||0,chance:o.Chance||0,fixed:true});
@@ -225,7 +247,7 @@ for (const f of [path.join(RE,'item_randomopt_group.yml'), path.join(CUSTOM,'ite
 // (note: index 7 is "Dark"/Shadow in the YAML).
 const ELE_ORDER=['Neutral','Water','Earth','Fire','Wind','Poison','Holy','Dark','Ghost','Undead'];
 const elemMatrix=[];
-for (const lvl of load(path.join(RE,'attr_fix.yml'))) {
+for (const lvl of load(path.join(PRE,'attr_fix.yml'))) {
   const li=(lvl.Level||1)-1; elemMatrix[li]=[];
   ELE_ORDER.forEach((atk,ai)=>{ const row=lvl[atk]||{}; elemMatrix[li][ai]=ELE_ORDER.map(def=>row[def]!=null?row[def]:100); });
 }

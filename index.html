@@ -737,7 +737,7 @@ function renderHome(){
     </div>
     <h3 class="homeh">Explore the database</h3>
     <div class="hlinks">
-      ${link('items','🎒','Items','29k items, stats, drops, enchants')}
+      ${link('items','🎒','Items',`${((META.items||0)/1000).toFixed(1)}k items, stats, drops, enchants`)}
       ${link('mobs','👹','Monsters','HP, element matchup, drops, spawns')}
       ${link('balance','⚔️','Skill Changes','Every skill rebalance, before → after')}
       ${link('enchants','🎲','Enchants','Every random-option pool, in plain English')}
