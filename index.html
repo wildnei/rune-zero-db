@@ -328,7 +328,17 @@ function plainEffect(script){
         else if(cm[1]==='getrefine()'||refVars.has(cm[1])) out.push({cond:1,text:'If refined to +'+cm[3]+' or higher:'});
       }
       const body=/\{([^}]*)\}/.exec(s);   // single-line if { bonus...; } -> translate the inline body
-      if(body) for(let st of body[1].split(';')){ st=st.trim(); if(!st)continue; const t=translateBonus(st,{RC,EL,SZ,EF,CL}); if(t) out.push({text:t}); }
+      if(body){
+        for(let st of body[1].split(';')){ st=st.trim(); if(!st)continue; const t=translateBonus(st,{RC,EL,SZ,EF,CL}); if(t) out.push({text:t}); }
+      }else{
+        // 2026-07-10: the +7/+9 refine-tier kicker lines added to fun-mod headgear/MVP trophies
+        // use the single-statement no-brace form (`if (getrefine()>=7) bonus2 bSkillAtk,"X",15;`)
+        // instead of `if (...) { ...; }` — the brace-based extraction above finds nothing for
+        // these, so the "If refined to +N or higher:" label above would render with no bonus text
+        // under it. Pull the statement following the if-condition's closing paren directly.
+        const sm=/^if\s*\((?:getrefine\(\)|\.@\w+|BaseLevel)\s*(?:>=|>|==)\s*\d+\)\s*(.+)$/.exec(s);
+        if(sm){ const st=sm[1].trim(); if(st){ const t=translateBonus(st,{RC,EL,SZ,EF,CL}); if(t) out.push({text:t}); } }
+      }
       continue;
     }
     if(/^[}{]|^\.@|^(else|for|while|set\b|switch|case|default|deletearray|setarray|end|return)/.test(s)) continue;
@@ -347,6 +357,12 @@ function skillAtkAmps(script){
     let s=raw.trim();
     if(!s||/^\/\//.test(s)) continue;
     s=s.replace(/\/\/.*$/,'').replace(/;\s*$/,'').trim(); if(!s) continue;
+    // 2026-07-10 audit: skip +7/+9 refine-tier kicker lines (`if (getrefine()>=7) bonus2
+    // bSkillAtk,...`) — this estimator treats every match as an unconditional "with this item"
+    // bonus, so counting a tier line here would silently inflate the shown total (e.g. Mirror
+    // Shield would show 3 separate Holy Cross lines instead of 1 base line). The conditional
+    // "Effect" section (plainEffect, below) still shows these correctly as refine-gated.
+    if(/getrefine/.test(s)) continue;
     const m=/bonus2 bSkillAtk,"([A-Z_0-9]+)",(-?\d+)$/.exec(s);
     if(m) out.push({skill:m[1], name:skillName(m[1]), pct:+m[2]});
   }

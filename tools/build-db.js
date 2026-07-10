@@ -370,6 +370,11 @@ const FUNMOD_FAMILY = {
   Book:                { group: 'Mage / Wizard / Sage',                fantasy: "Heaven's Drive Preacher" },
   Axe:                  { group: 'Merchant',                            fantasy: 'Mammonite Merchant' },
   Jamadhar:            { group: 'Thief / Assassin / Rogue',            fantasy: 'Venom Splasher Assassin' },
+  // 2026-07-10 audit: Grimtooth (Katar-only skill) moved off Main_Gauche (a Dagger, could never
+  // legally cast it) onto Jur/Jur_ (real stock Katar) — new family entry so builds.json's
+  // dynamic sanity check (funmodItemCount vs. expectedFunmodCount, near the bottom of this file)
+  // doesn't flag these two ids as unmapped.
+  Jur:                  { group: 'Thief / Assassin / Rogue',            fantasy: 'Grimtooth Lurker' },
   Knuckle_Duster:      { group: 'Acolyte / Priest / Monk',             fantasy: 'Monk Combo Chainer' },
   Mandolin:            { group: 'Archer / Hunter / Bard-Dancer',      fantasy: 'Bard Melody Striker' },
   Whip:                { group: 'Archer / Hunter / Bard-Dancer',      fantasy: 'Dancer Melody Striker' },
@@ -431,19 +436,30 @@ function famKey(aegis) { return aegis.replace(/_$/, ''); } // strip the "_" slot
 // silently renders an empty amp list.
 function skillAmps(script) {
   const out = []; if (!script) return out;
+  // 2026-07-10 owner consistency audit: several refinable fun-mod items now carry `+7`/`+9`
+  // refine-tier kicker lines (`if (getrefine()>=7) bonus2 bSkillAtk,"X",N;`) that restate the
+  // SAME skill at a smaller bump on top of the base line. Left in, the regexes below would match
+  // those lines too and list them as extra, unconditional amp entries — e.g. Mirror Shield would
+  // show three separate "Holy Cross +30%/+15%/+15%" lines here instead of one base +30% (the
+  // +15%/+15% only apply at +7/+9 refine, which this flat per-family amp list has no way to
+  // express). Strip any line containing a literal "getrefine" call before running the regexes —
+  // the base (unconditional) line is kept, the refine-gated kicker is excluded from this list.
+  // (The item detail page's conditional `plainEffect()` translator in wiki/index.html DOES show
+  // these tiers correctly, with the "if refined to +N" condition attached.)
+  const baseScript = script.split('\n').filter(l => !/getrefine/.test(l)).join('\n');
   let m;
   const reSkill = /bonus2 bSkillAtk,"([A-Z_0-9]+)",(-?\d+)/g;
-  while ((m = reSkill.exec(script))) out.push({ kind: 'skill', skill: m[1], name: prettySkill(m[1]), pct: +m[2] });
+  while ((m = reSkill.exec(baseScript))) out.push({ kind: 'skill', skill: m[1], name: prettySkill(m[1]), pct: +m[2] });
   const reHP = /bonus bHPrecovRate,(-?\d+)/g;
-  while ((m = reHP.exec(script))) out.push({ kind: 'recov', name: 'HP Recovery', pct: +m[1] });
+  while ((m = reHP.exec(baseScript))) out.push({ kind: 'recov', name: 'HP Recovery', pct: +m[1] });
   const reSP = /bonus bSPrecovRate,(-?\d+)/g;
-  while ((m = reSP.exec(script))) out.push({ kind: 'recov', name: 'SP Recovery', pct: +m[1] });
+  while ((m = reSP.exec(baseScript))) out.push({ kind: 'recov', name: 'SP Recovery', pct: +m[1] });
   // Funmods batch 3 elemental-identity pass (item_db_funmods2.yml + the 2026-07-10
   // addendum in item_db_funmods.yml) appends bonus2 bSubEle,<Ele>,N defensive resist
   // lines — those aren't bSkillAtk so they'd otherwise vanish from the Fun Builds tab.
   // Minimal "resist" pill, reuses the EL element-name table already defined above.
   const reResist = /bonus2 bSubEle,(Ele_\w+),(-?\d+)/g;
-  while ((m = reResist.exec(script))) out.push({ kind: 'resist', name: (EL[m[1]] || m[1]) + ' Resistance', pct: +m[2] });
+  while ((m = reResist.exec(baseScript))) out.push({ kind: 'resist', name: (EL[m[1]] || m[1]) + ' Resistance', pct: +m[2] });
   return out;
 }
 const families = new Map(); // family key -> { fantasy, group, items:[] }
