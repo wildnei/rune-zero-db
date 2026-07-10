@@ -103,6 +103,13 @@
   .eff:before{content:'▸';position:absolute;left:-14px;color:var(--rune)}
   .eff.cond{color:var(--gold-deep);font-weight:700;margin:11px 0 2px 0}
   .eff.cond:before{content:''}
+  .dmgest-row{display:flex;align-items:center;gap:9px;margin:2px 0 9px;flex-wrap:wrap}
+  .dmgest-row label{font-size:12.5px;color:var(--muted)}
+  .dmgest-row input{width:100px;background:#fff;border:1px solid var(--border-2);color:var(--text);border-radius:8px;padding:6px 9px;font-size:13.5px;font-family:'JetBrains Mono';outline:none;box-shadow:var(--shadow)}
+  .dmgest-row input:focus{border-color:var(--rune);box-shadow:0 0 0 3px rgba(13,148,136,.13)}
+  .dmgestline{font-size:12.5px;margin:3px 0;color:var(--text)}
+  .dmgest-calc{font-family:'JetBrains Mono';color:var(--rune-deep);font-weight:600}
+  .dmgest-mini{margin-top:8px;padding-top:7px;border-top:1px dashed var(--border)}
   details.raw{margin-top:10px}
   details.raw summary{cursor:pointer;color:var(--muted);font-size:11.5px;font-family:'JetBrains Mono';letter-spacing:.04em}
 
@@ -273,7 +280,7 @@
 
 <script>
 const $ = s => document.querySelector(s);
-let ITEMS=[], MOBS=[], META={}, OPT={types:{},groups:[]}, ELEM=null, HUNT=null, BUILDS=null, ITEM_BY_ID=new Map(), MOB_BY_ID=new Map(), GROUP_BY_ID=new Map(), GROUP_BY_NAME=new Map();
+let ITEMS=[], MOBS=[], META={}, OPT={types:{},groups:[]}, ELEM=null, HUNT=null, BUILDS=null, ITEM_BY_ID=new Map(), MOB_BY_ID=new Map(), GROUP_BY_ID=new Map(), GROUP_BY_NAME=new Map(), SIBLING_BY_ID=new Map();
 function gearGroup(i){
   if(i.type==='Weapon') return 'RZ_DROP_WEAPON';
   if(i.type!=='Armor') return null;
@@ -328,6 +335,31 @@ function plainEffect(script){
     const t=translateBonus(s,{RC,EL,SZ,EF,CL}); if(t) out.push({text:t});
   }
   return out;
+}
+// ---- damage-delta estimator: pull flat-% bSkillAtk amps out of a raw script -----
+// (same line-scanning approach as plainEffect above, reused so the estimator never
+// drifts from what the "Effect" section already displays; only plain integer %
+// amps are estimable — BaseLevel/refine-scaling lines are skipped)
+function skillAtkAmps(script){
+  if(!script) return [];
+  const out=[];
+  for(let raw of script.split('\n')){
+    let s=raw.trim();
+    if(!s||/^\/\//.test(s)) continue;
+    s=s.replace(/\/\/.*$/,'').replace(/;\s*$/,'').trim(); if(!s) continue;
+    const m=/bonus2 bSkillAtk,"([A-Z_0-9]+)",(-?\d+)$/.exec(s);
+    if(m) out.push({skill:m[1], name:skillName(m[1]), pct:+m[2]});
+  }
+  return out;
+}
+function estLine(pct,base){ base=base||1000; return base.toLocaleString()+' → '+Math.round(base*(1+pct/100)).toLocaleString()+' (+'+pct+'%)'; }
+// recompute every ".dmgest-calc" node inside scopeSel from the #inputId value — used by
+// both the item-detail widget and the Fun Builds tab (one shared input per scope)
+function refreshDmgEst(scopeSel,inputId){
+  const root=document.querySelector(scopeSel), inp=document.getElementById(inputId);
+  if(!root||!inp) return;
+  const v=Math.max(0,+inp.value||0);
+  root.querySelectorAll('.dmgest-calc').forEach(el=>{ el.textContent=estLine(+el.dataset.pct,v); });
 }
 function valFmt(v){ v=String(v).trim(); if(/^-?\d+$/.test(v)) return (+v>=0?'+':'')+v; if(/BaseLevel/.test(v)) return '(scales with Base Level)'; if(/getrefine/.test(v)) return '(scales with refine)'; return '+'+v; }
 function pctVal(v){ const f=valFmt(v); return /^[+\-]/.test(f)?f+'%':f; }
@@ -468,6 +500,9 @@ async function boot(){
     ITEMS.forEach(i=>{i._s=(i.name+' '+(i.aegis||'')+' '+i.id+' '+(i.boosts||[]).map(b=>b.skill).join(' ')).toLowerCase(); ITEM_BY_ID.set(i.id,i);});
     MOBS.forEach(m=>{m._s=(m.name+' '+(m.aegis||'')+' '+m.id+' '+ELE[eleIdx(m.element)]+' '+(m.element||'')+' '+RACE[raceIdx(m.race)]+' '+(m.size||'')+(m.mvp?' mvp':'')).toLowerCase(); MOB_BY_ID.set(m.id,m);});
     OPT.groups.forEach(g=>{g._s=(g.name).toLowerCase(); GROUP_BY_ID.set(g.id,g); GROUP_BY_NAME.set(g.name,g);});
+    if(BUILDS&&BUILDS.groups) BUILDS.groups.forEach(g=>g.builds.forEach(f=>{
+      if(f.items.length===2){ const [a,b]=f.items; SIBLING_BY_ID.set(a.id,b); SIBLING_BY_ID.set(b.id,a); }
+    }));
     initUI();
   }catch(e){
     $('#app').innerHTML='<div class="errbox"><h2 style="color:var(--gold);font-family:Cinzel">Couldn’t load the data files</h2>'
@@ -624,6 +659,22 @@ function showItem(id){
     if(pe.length) h+=pe.map(l=>`<div class="eff${l.cond?' cond':''}">${esc(l.text)}</div>`).join('');
     else h+='<div class="eff" style="margin-left:0">A special effect — see the script below.</div>';
     h+=`<details class="raw"><summary>▸ Show raw script</summary><pre class="script">${esc(i.script)}</pre></details></div>`;
+  }
+  if(i.funmod){
+    const amps=skillAtkAmps(i.script);
+    if(amps.length){
+      h+='<div class="sec" id="dmgest-sec"><h4>Estimate</h4>';
+      h+='<div class="dmgest-row"><label for="dmgestInput">Your skill’s current average hit</label><input type="number" id="dmgestInput" min="0" step="1" value="1000" oninput="refreshDmgEst(\'#dmgest-sec\',\'dmgestInput\')"></div>';
+      for(const a of amps) h+=`<div class="dmgestline">${esc(a.name)} — with this item: <span class="dmgest-calc" data-pct="${a.pct}">${estLine(a.pct)}</span></div>`;
+      const sib=SIBLING_BY_ID.get(i.id);
+      if(sib){
+        const isSlotted=/_$/.test(i.aegis||'');
+        h+= isSlotted
+          ? `<div class="rate" style="margin-top:6px">This is the slotted twin — already the <a onclick="location.hash='item/${sib.id}'">~2x</a> version of this amp.</div>`
+          : `<div class="rate" style="margin-top:6px">The <a onclick="location.hash='item/${sib.id}'">slotted version</a> roughly doubles this.</div>`;
+      }
+      h+='</div>';
+    }
   }
   if(i.combos&&i.combos.length){
     h+='<div class="sec"><h4>Set combo</h4>';
@@ -833,16 +884,28 @@ function buildAmpPills(items){
   }
   return items.map(it=>it.amps.map(a=>`<span class="amppill">${esc(a.name)} <b>+${a.pct}%</b></span>`).join('')).join('');
 }
+function buildEstLines(items){
+  const lines=[];
+  for(const it of items) for(const a of (it.amps||[])){
+    if(a.kind!=='skill') continue;
+    lines.push(`<div class="dmgestline">${esc(it.name)}${it.slotted?' [1]':''} — ${esc(a.name)}: <span class="dmgest-calc" data-pct="${a.pct}">${estLine(a.pct)}</span></div>`);
+  }
+  return lines.join('');
+}
 function buildCard(f){
   const itemLine=f.items.map(it=>`<a onclick="location.hash='item/${it.id}'">${esc(it.name)}${it.slots?` [${it.slots}]`:''}</a>`).join(' / ');
+  const est=buildEstLines(f.items);
   return `<div class="buildcard"><div class="bt"><span class="btn">${esc(f.fantasy)}</span></div>`
     +`<div class="bitems">${itemLine}</div>`
-    +`<div>${buildAmpPills(f.items)}</div></div>`;
+    +`<div>${buildAmpPills(f.items)}</div>`
+    +(est?`<div class="dmgest-mini">${est}</div>`:'')
+    +`</div>`;
 }
 function comboCard(c){
   const withnames=c.members.map(m=>`<a onclick="location.hash='item/${m.id}'">${esc(m.name)}</a>`).join(' + ');
   const amps=c.amps.map(a=>`<span class="amppill">${esc(a.name)} <b>+${a.pct}%</b></span>`).join('');
-  return `<div class="combocard"><div class="cbwith">Wear both: ${withnames}</div><div>${amps}</div></div>`;
+  const est=c.amps.filter(a=>a.kind==='skill').map(a=>`<div class="dmgestline">${esc(a.name)}: <span class="dmgest-calc" data-pct="${a.pct}">${estLine(a.pct)}</span></div>`).join('');
+  return `<div class="combocard"><div class="cbwith">Wear both: ${withnames}</div><div>${amps}</div>`+(est?`<div class="dmgest-mini">${est}</div>`:'')+`</div>`;
 }
 function renderBuilds(){
   const el=$('#builds'); if(!el) return;
@@ -852,7 +915,8 @@ function renderBuilds(){
   let h=`<div class="homewrap">
     <div class="hero homehero"><div class="kicker">FUN PASS · OFF-META BUILDS</div><h1 style="font-size:30px">Fun Builds</h1>
       <p>Classic, cheap gear now carries bonus skill-amp mods for off-meta skills — a Buy-10 item can unlock a whole fun build alongside your main gear. The base item and its <b>[1]</b> slotted twin both work; the slotted version's amp is roughly <b>double</b>. Buy everything at the <b>Fun Gear</b> shops next to the <b>Build Librarian</b> in Prontera (172-178, y=180).</p>
-      <div class="statline"><div class="statbox"><b>${totalBuilds}</b><small>Builds</small></div><div class="statbox"><b>${totalItems}</b><small>Items</small></div><div class="statbox"><b>${(BUILDS.combos||[]).length}</b><small>Set combos</small></div></div></div>`;
+      <div class="statline"><div class="statbox"><b>${totalBuilds}</b><small>Builds</small></div><div class="statbox"><b>${totalItems}</b><small>Items</small></div><div class="statbox"><b>${(BUILDS.combos||[]).length}</b><small>Set combos</small></div></div>
+      <div class="dmgest-row" style="margin-top:12px"><label for="buildsEstInput">Estimate with your skill's current average hit</label><input type="number" id="buildsEstInput" min="0" step="1" value="1000" oninput="refreshDmgEst('#builds','buildsEstInput')"></div></div>`;
   BUILDS.groups.forEach(g=>{
     h+=`<div class="buildgrouphead"><span class="gn">${esc(g.group)}</span><span class="gl"></span><span class="gc">${g.builds.length} build${g.builds.length!==1?'s':''}</span></div>`;
     h+=`<div class="buildgrid">${g.builds.map(buildCard).join('')}</div>`;
