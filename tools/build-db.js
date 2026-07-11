@@ -35,6 +35,7 @@ const itemFiles = [
   path.join(CUSTOM, 'item_db.yml'),         // custom items + box overrides
   path.join(CUSTOM, 'item_db_equip.yml'),   // F11 trophy rebalances
   path.join(CUSTOM, 'item_db_essence.yml'), // class essences
+  path.join(CUSTOM, 'item_db_alchemist_weapons.yml'), // 2026-07-11: Sword/Mace bSkillAtk love for Bomb/Acid Terror
   path.join(CUSTOM, 'item_db_eden_weapons.yml'), // Eden badge weapons
   path.join(CUSTOM, 'item_db_eden.yml'),         // Eden badge accessories/armor
   path.join(CUSTOM, 'item_db_gems.yml'),         // Rune Socketing gems (e.g. 40902 Rune of Might)
@@ -50,6 +51,7 @@ const itemFiles = [
   path.join(CUSTOM, 'item_db_funmods_weapons.yml'), // fun-mod skill-amp overrides (weapons, batch 2)
   path.join(CUSTOM, 'item_db_funmods2.yml'),        // fun-mod skill-amp overrides, batch 3: elemental garments/shields + headgear wave 2
   path.join(CUSTOM, 'item_db_funmods_cards.yml'),   // fun-mod skill-amp overrides, batch 3: low-tier card Script overrides (Type:Card stock items, same merge path)
+  path.join(CUSTOM, 'item_db_funmods_lifesteal.yml'), // fun-mod overrides, batch 4: bHPDrainRate vampiric daggers (Dirk/Stiletto/Damascus) — NEW mechanic axis, not bSkillAtk. NOTE: FUNMOD_FAMILIES below has no Dirk/Stiletto/Damascus entries yet — the assertion at the bottom of this file WILL fail until those are added (flagged, not fixed, per this task's scope).
   // NOT read: item_db_dropbeams.yml (flag-only DropEffect overrides, no displayable
   // fields — merging it is a no-op for existing items and can't create phantom ones,
   // since itemArr is filtered to i.name at write time).
@@ -478,6 +480,19 @@ const FUNMOD_FAMILY = {
   Metaller_Card:        { group: 'Fun Cards', fantasy: 'Piercing Gaze' },
   Drainliar_Card:        { group: 'Fun Cards', fantasy: 'Chilling Drain' },
   Farmiliar_Card:        { group: 'Fun Cards', fantasy: 'Shadowy Presence' }, // AegisName is genuinely "Farmiliar_Card" (verified typo)
+
+  // 2026-07-11 policy-reversal wave: any-tier/any-skill retrofits + new life-steal axis.
+  Dirk:                  { group: 'Thief / Assassin / Rogue',       fantasy: 'Vampiric Blade' },
+  Dirk_:                { group: 'Thief / Assassin / Rogue',       fantasy: 'Vampiric Blade' },
+  Stiletto:              { group: 'Thief / Assassin / Rogue',       fantasy: 'Vampiric Assassin' },
+  Stiletto_:            { group: 'Thief / Assassin / Rogue',       fantasy: 'Vampiric Assassin' },
+  Damascus:              { group: 'Thief / Assassin / Rogue',       fantasy: 'Undying Blade' },
+  Various_Jur:          { group: 'Thief / Assassin / Rogue',       fantasy: 'Sonic Blow Jur' },
+  Lance:                { group: 'Spear Knight (Knight/Crusader)',  fantasy: 'Spiral Pierce Lancer' },
+  Lance_:                { group: 'Spear Knight (Knight/Crusader)',  fantasy: 'Spiral Pierce Lancer' },
+  Circlet:              { group: 'Mage / Wizard / Sage',            fantasy: 'High Wizard Nuker' },
+  Circlet_:              { group: 'Mage / Wizard / Sage',            fantasy: 'High Wizard Nuker' },
+  Mitten_Of_Presbyter:  { group: 'Merchant',                        fantasy: 'Alchemist / Hunter Utility' },
 };
 // display order of class-group buckets on the wiki page (matches docs/FUN_PASS_BUILDS.md order)
 const FUNMOD_GROUP_ORDER = [
