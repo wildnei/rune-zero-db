@@ -64,6 +64,15 @@
   .badge.mvp{color:#fff;border-color:transparent;background:linear-gradient(135deg,#f0b94e,#d6891b);box-shadow:0 1px 4px rgba(214,137,27,.4)}
   .scry{max-height:calc(100vh - 200px);overflow:auto;display:block}
   .count{font-size:12px;color:var(--muted);margin:8px 2px}
+  /* items-tab filter/sort bar */
+  .ibar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 2px 10px}
+  .ichips{display:flex;flex-wrap:wrap;gap:6px}
+  .ichip{background:#fff;border:1px solid var(--border-2);color:var(--muted);padding:5px 11px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;transition:.12s;box-shadow:var(--shadow);font-family:inherit}
+  .ichip:hover{color:var(--ink);background:var(--panel-2)}
+  .ichip.active{color:var(--rune-deep);background:rgba(13,148,136,.1);border-color:rgba(13,148,136,.4)}
+  .ibar select{padding:7px 9px;font-size:12.5px}
+  .sortbtn{background:#fff;border:1px solid var(--border-2);color:var(--muted);border-radius:9px;padding:7px 10px;font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:var(--shadow);line-height:1;font-family:'JetBrains Mono';transition:.12s}
+  .sortbtn:hover{color:var(--ink);background:var(--panel-2)}
 
   .detail{border:1px solid var(--border);border-radius:14px;background:var(--panel);padding:20px 22px;min-height:200px;position:sticky;top:78px;max-height:calc(100vh - 96px);overflow:auto;box-shadow:var(--shadow)}
   .detail .empty{color:var(--faint);text-align:center;padding:60px 0}
@@ -437,6 +446,55 @@ function translateBonus(s,M){
 let view='items', sel=null;
 // equip-location -> our auto drop-option group (matches src patch 0010)
 const SLOT_GROUP={Weapon:'RZ_DROP_WEAPON',Armor:'RZ_DROP_ARMOR',Shield:'RZ_DROP_SHIELD',Garment:'RZ_DROP_GARMENT',Shoes:'RZ_DROP_SHOES',Headgear:'RZ_DROP_HEADGEAR',Accessory:'RZ_DROP_ACCESSORY'};
+
+// ---- Items-tab filter/sort bar (in-memory only — the app's hash routing only ever
+// carries a bare view name or item/mob/group id, e.g. #balance, #item/501, never
+// query params, so these stay session-state to match that convention rather than
+// bolting a new one on) ----------------------------------------------------------
+let itemFlt={type:'',sub:'',slot:'',sort:'',dir:'asc'};
+const SUBTYPE_LABEL={Dagger:'Dagger','1hSword':'1H Sword','2hSword':'2H Sword','1hAxe':'1H Axe','2hAxe':'2H Axe','1hSpear':'1H Spear','2hSpear':'2H Spear',Mace:'Mace',Staff:'Staff/Rod','2hStaff':'2H Staff (Rod)',Bow:'Bow',Katar:'Katar',Book:'Book',Knuckle:'Knuckle',Musical:'Instrument',Whip:'Whip',Revolver:'Gun (Revolver)',Rifle:'Gun (Rifle)',Shotgun:'Gun (Shotgun)',Gatling:'Gun (Gatling)',Grenade:'Gun (Grenade)',Huuma:'Huuma (Ninja)'};
+// mirrors gearGroup()'s Head->Left_Hand->Garment->Shoes->Accessory->Armor precedence above,
+// just relabeled to the plain-English buckets the owner asked for (Shield/Body instead of
+// the RZ_DROP_* enchant-pool names) — Costume_* headgear/garment locations fold into their
+// closest real slot since the filter bar has no separate "Costume" bucket.
+function armorSlotOf(loc){
+  const L=(loc||[]).join(' ');
+  if(/Head/.test(L)) return 'Headgear';
+  if(/Left_Hand/.test(L)) return 'Shield';
+  if(/Garment/.test(L)) return 'Garment';
+  if(/Shoes/.test(L)) return 'Shoes';
+  if(/Accessory/.test(L)) return 'Accessory';
+  if(/Armor/.test(L)) return 'Body';
+  return null;
+}
+const ITEM_TYPE_CHIPS=[['','All'],['Weapon','Weapon'],['Armor','Armor'],['Card','Card'],['Usable','Usable'],['Etc','Etc']];
+const SORT_FIELDS=[['','Default order'],['name','Name'],['id','ID'],['atk','Attack'],['def','Defense'],['weight','Weight'],['reqlv','Required Lv'],['slots','Slots']];
+function buildItemBar(){
+  const tc=$('#typeChips'); tc.innerHTML='';
+  ITEM_TYPE_CHIPS.forEach(([v,label])=>{
+    const b=document.createElement('button'); b.type='button'; b.className='ichip'+(itemFlt.type===v?' active':''); b.textContent=label;
+    b.onclick=()=>{ itemFlt.type=v; if(v!=='Weapon') itemFlt.sub=''; if(v!=='Armor') itemFlt.slot=''; syncItemBar(); render(); };
+    tc.appendChild(b);
+  });
+  // subtypes/slots are built from whatever the data actually has, not a hardcoded list
+  const subs=[...new Set(ITEMS.filter(i=>i.type==='Weapon'&&i.sub).map(i=>i.sub))].sort((a,b)=>(SUBTYPE_LABEL[a]||a).localeCompare(SUBTYPE_LABEL[b]||b));
+  const sf=$('#subFilter'); sf.innerHTML='<option value="">All weapon types</option>'+subs.map(s=>`<option value="${esc(s)}">${esc(SUBTYPE_LABEL[s]||s)}</option>`).join('');
+  sf.onchange=()=>{ itemFlt.sub=sf.value; render(); };
+  const slots=['Headgear','Body','Shield','Garment','Shoes','Accessory'];
+  const lf=$('#slotFilter'); lf.innerHTML='<option value="">All equip slots</option>'+slots.map(s=>`<option value="${s}">${s}</option>`).join('');
+  lf.onchange=()=>{ itemFlt.slot=lf.value; render(); };
+  const so=$('#sortField'); so.innerHTML=SORT_FIELDS.map(([v,l])=>`<option value="${esc(v)}">${esc(l)}</option>`).join('');
+  so.onchange=()=>{ itemFlt.sort=so.value; render(); };
+  $('#sortDir').onclick=()=>{ itemFlt.dir=itemFlt.dir==='asc'?'desc':'asc'; $('#sortDir').textContent=itemFlt.dir==='asc'?'↑ Asc':'↓ Desc'; render(); };
+  syncItemBar();
+}
+function syncItemBar(){
+  $('#typeChips').querySelectorAll('.ichip').forEach((b,idx)=>b.classList.toggle('active', ITEM_TYPE_CHIPS[idx][0]===itemFlt.type));
+  $('#subFilter').classList.toggle('hide', itemFlt.type!=='Weapon');
+  $('#subFilter').value=itemFlt.sub;
+  $('#slotFilter').classList.toggle('hide', itemFlt.type!=='Armor');
+  $('#slotFilter').value=itemFlt.slot;
+}
 const RACE=['Formless','Undead','Brute','Plant','Insect','Fish','Demon','Demihuman','Angel','Dragon'];
 const ELE=['Neutral','Water','Earth','Fire','Wind','Poison','Holy','Shadow','Ghost','Undead'];
 
@@ -531,6 +589,13 @@ async function boot(){
 function initUI(){
   $('#app').innerHTML =
     '<div class="shell" id="browse"><div class="col"><h3 id="listTitle"></h3>'
+    +'<div class="ibar hide" id="itemBar">'
+      +'<div class="ichips" id="typeChips"></div>'
+      +'<select id="subFilter" class="hide"></select>'
+      +'<select id="slotFilter" class="hide"></select>'
+      +'<select id="sortField"></select>'
+      +'<button class="sortbtn" id="sortDir" type="button" title="Toggle ascending/descending">↑ Asc</button>'
+    +'</div>'
     +'<div class="count" id="count"></div><div class="list"><div class="scry"><table>'
     +'<thead id="thead"></thead><tbody id="rows"></tbody></table></div></div></div>'
     +'<div class="col"><h3>Detail</h3><div class="detail" id="detail"><div class="empty">Select an entry to view details.</div></div></div></div>'
@@ -540,6 +605,7 @@ function initUI(){
     +'<div class="hide" id="builds"></div>'
     +'<div class="hide" id="home"></div>';
   renderSystems(); renderHome(); renderHunting(); renderBuilds();
+  buildItemBar();
   document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>setView(b.dataset.view));
   $('#search').addEventListener('input', debounce(render, 160));
   $('#filterType').addEventListener('change', render);
@@ -558,13 +624,14 @@ function setView(v){
   $('#home').classList.toggle('hide', v!=='home');
   $('#hunting').classList.toggle('hide', v!=='hunting');
   $('#builds').classList.toggle('hide', v!=='builds');
+  $('#itemBar').classList.toggle('hide', v!=='items');
   if(v==='home'||v==='hunting'||v==='builds') return;
   if(v==='balance'){ renderBalance(); return; }
   if(v==='systems') return;
   // type filter options
   const f=$('#filterType'); f.innerHTML='';
   const opts = v==='items'
-    ? ['All types','Weapon','Armor','Card','Healing','Usable','Etc','Delayconsume','Ammo','Custom','Fun Mods']
+    ? ['All types','Custom','Fun Mods']   // Weapon/Armor/Card/etc. type slicing now lives in the Items-tab filter bar (#itemBar) below
     : v==='mobs' ? ['All','MVP only','Normal only']
     : v==='skills' ? ['Trans skills (up to ep13)']
     : ['Rune Zero','All groups'];
@@ -582,12 +649,28 @@ function render(){
   const q=$('#search').value.trim().toLowerCase(), ft=$('#filterType').value;
   const rows=$('#rows'); let out='', n=0, total=0;
   if(view==='items'){
+    let list=[];
     for(const i of ITEMS){
       if(q && !i._s.includes(q)) continue;
       if(ft==='Custom' && !i.custom) continue;
-      else if(ft==='Fun Mods' && !i.funmod) continue;
-      else if(ft!=='All types' && ft!=='Custom' && ft!=='Fun Mods' && i.type!==ft) continue;
-      total++; if(n<300){out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td><img class="ico" src="${ICO(i.id)}" loading="lazy" onerror="this.style.display='none'">${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}${i.funmod?'<span class="badge funmod">FUN</span>':''}${i.slots?` <span class="badge">[${i.slots}]</span>`:''}</td><td>${i.type||''}</td><td>${(i.loc||[]).join(', ')||'-'}</td></tr>`;n++;}
+      if(ft==='Fun Mods' && !i.funmod) continue;
+      if(itemFlt.type && i.type!==itemFlt.type) continue;
+      if(itemFlt.type==='Weapon' && itemFlt.sub && i.sub!==itemFlt.sub) continue;
+      if(itemFlt.type==='Armor' && itemFlt.slot && armorSlotOf(i.loc)!==itemFlt.slot) continue;
+      list.push(i);
+    }
+    total=list.length;
+    if(itemFlt.sort){
+      const dir=itemFlt.dir==='desc'?-1:1;
+      list=list.slice().sort((a,b)=>{
+        if(itemFlt.sort==='name') return dir*String(a.name||'').localeCompare(String(b.name||''));
+        const av=a[itemFlt.sort]??0, bv=b[itemFlt.sort]??0;
+        return dir*(av-bv);
+      });
+    }
+    for(const i of list){
+      if(n>=300) break;
+      out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td><img class="ico" src="${ICO(i.id)}" loading="lazy" onerror="this.style.display='none'">${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}${i.funmod?'<span class="badge funmod">FUN</span>':''}${i.slots?` <span class="badge">[${i.slots}]</span>`:''}</td><td>${i.type||''}</td><td>${(i.loc||[]).join(', ')||'-'}</td></tr>`;n++;
     }
   }else if(view==='mobs'){
     for(const m of MOBS){

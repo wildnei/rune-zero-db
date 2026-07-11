@@ -87,6 +87,7 @@ for (const f of itemFiles) {
       wlv: e.WeaponLevel ?? prev.wlv,
       alv: e.ArmorLevel ?? prev.alv,
       range: e.Range ?? prev.range,
+      reqlv: e.EquipLevelMin ?? prev.reqlv,
       jobs: e.Jobs ? keys(e.Jobs) : (prev.jobs),         // [] / undefined = All
       loc: e.Locations ? keys(e.Locations) : prev.loc,
       classes: e.Classes ? keys(e.Classes) : prev.classes,
