@@ -419,13 +419,13 @@ const FUNMOD_FAMILY = {
   Hae_Dong_Gum:        { group: 'Swordsman / Crusader',                fantasy: 'Grand Cross Blade' },
   Tsurugi:              { group: 'Swordsman / Assassin Cross',          fantasy: 'Soul Breaker Edge' },
   Tsurugi_:            { group: 'Swordsman / Assassin Cross',          fantasy: 'Soul Breaker Edge' },
-  Partizan:            { group: 'Spear Knight (Knight/Crusader)',      fantasy: 'Spear-Stabbing Pikeman' },
-  Partizan_:            { group: 'Spear Knight (Knight/Crusader)',      fantasy: 'Spear-Stabbing Pikeman' },
+  Partizan:            { group: 'Spear Knight (Knight/Crusader)',      fantasy: 'Holy Lance Pikeman' }, // 2026-07-11: +Holy Cross (moved from Chain)
+  Partizan_:            { group: 'Spear Knight (Knight/Crusader)',      fantasy: 'Holy Lance Pikeman' }, // 2026-07-11: +Holy Cross (moved from Chain)
   Spear:                { group: 'Spear Knight (Knight/Crusader)',      fantasy: 'Brandish Spear Lancer' },
   Spear_:              { group: 'Spear Knight (Knight/Crusader)',      fantasy: 'Brandish Spear Lancer' },
   Hammer:              { group: 'Merchant',                            fantasy: 'Skull-Crushing Maul' },
   Hammer_:              { group: 'Merchant',                            fantasy: 'Skull-Crushing Maul' },
-  Chain:                { group: 'Crusader / Monk (Shield)',            fantasy: 'Holy Cross Crusader' },
+  Chain:                { group: 'Acolyte / Priest / Monk',            fantasy: 'Chain Crush Monk' }, // 2026-07-11: was Holy Cross, moved to Partizan (spear-only per owner)
   Chain_:              { group: 'Crusader / Monk (Shield)',            fantasy: 'Holy Cross Crusader' },
   Stunner:              { group: 'Crusader / Monk (Shield)',            fantasy: 'Shield-Smiting Stunner' },
   Flail:                { group: 'Crusader / Monk (Shield)',            fantasy: 'Shield-Slinging Crusader' },
