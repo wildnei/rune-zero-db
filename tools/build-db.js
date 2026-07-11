@@ -44,6 +44,8 @@ const itemFiles = [
   path.join(CUSTOM, 'item_db_prestige.yml'),     // prestige costumes
   path.join(CUSTOM, 'item_db_cash.yml'),         // cash-shop cosmetics + bundles (merged last)
   path.join(CUSTOM, 'item_db_featured.yml'),     // Featured Build Feast — NEW item 40960 (regular custom, not funmod)
+  path.join(CUSTOM, 'item_db_advanced.yml'),         // 2026-07-11: Orlean's set rescue/fix + Abyss Dress (rescued RE-only items)
+  path.join(CUSTOM, 'item_db_advanced_weapons.yml'), // 2026-07-11: Advanced Gear trans-class-skill weapons 40985-40990
   path.join(CUSTOM, 'item_db_funmods.yml'),         // fun-mod skill-amp overrides (accessories/armor)
   path.join(CUSTOM, 'item_db_funmods_weapons.yml'), // fun-mod skill-amp overrides (weapons, batch 2)
   path.join(CUSTOM, 'item_db_funmods2.yml'),        // fun-mod skill-amp overrides, batch 3: elemental garments/shields + headgear wave 2
