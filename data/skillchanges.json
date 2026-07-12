@@ -2600,21 +2600,6 @@
   "build": "Wider Service For You SP-cost aura Dancer/Gypsy"
  },
  {
-  "class": "Champion",
-  "classOrder": 3,
-  "skill": "Guillotine Fist (Asura Strike)",
-  "aegis": "MO_EXTREMITYFIST",
-  "id": 271,
-  "usability": [
-   {
-    "field": "SpiritSphereCost",
-    "before": "5",
-    "after": "1"
-   }
-  ],
-  "build": "Asura Strike as rotation finisher (1 sphere)"
- },
- {
   "class": "High Priest",
   "classOrder": 3,
   "skill": "Assumptio",

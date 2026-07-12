@@ -6,61 +6,91 @@
 <title>Rune Zero — Game Database</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#eef1f7; --panel:#ffffff; --panel-2:#f3f5fa; --panel-3:#e9edf5;
-    --border:#dde2ec; --border-2:#cdd4e2;
-    --gold:#b27c1b; --gold-deep:#8a5e10; --gold-soft:#f3e4c0;
-    --rune:#0d9488; --rune-deep:#0b766e;
-    --text:#1b2230; --ink:#0e1320; --muted:#6c7488; --faint:#9aa2b4;
-    --common:#7f8794; --rare:#2f7fd6; --mythic:#8b5cf6; --legendary:#df8a1e;
-    --good:#1f9d57; --warn:#e0794b; --bad:#d6453f;
-    --shadow:0 1px 2px rgba(18,28,51,.04),0 4px 16px rgba(18,28,51,.06);
-    --shadow-lg:0 8px 30px rgba(18,28,51,.10);
+    --bg:#0a0e1a; --panel:#121728; --panel-2:#182036; --panel-3:#1e2843;
+    --border:#232c47; --border-2:#334166;
+    --gold:#f4c430; --gold-deep:#d9a51c; --gold-soft:#2e2308;
+    --rune:#e2483f; --rune-deep:#ff6e63;
+    --text:#c9d1e6; --ink:#f5f7ff; --muted:#8792ae; --faint:#525d7d;
+    --common:#8792ae; --rare:#4ea1e8; --mythic:#a78bfa; --legendary:#f4c430;
+    --good:#2fd189; --warn:#f2994a; --bad:#ff5c5c;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 6px 22px rgba(0,0,0,.4);
+    --shadow-lg:0 10px 34px rgba(0,0,0,.55);
+    --sidebar-w:236px;
   }
   *{box-sizing:border-box}
   body{margin:0;background:
-      radial-gradient(1200px 480px at 80% -120px,#e7ecfa 0,rgba(231,236,250,0) 70%),
-      radial-gradient(900px 420px at -5% -80px,#eafaf6 0,rgba(234,250,246,0) 65%),
+      radial-gradient(1100px 480px at 90% -140px,rgba(226,72,63,.12) 0,rgba(226,72,63,0) 70%),
+      radial-gradient(900px 420px at -8% 8%,rgba(244,196,48,.08) 0,rgba(244,196,48,0) 65%),
       var(--bg);
-    color:var(--text);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+    color:var(--text);font-family:'DM Sans',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
   a{color:var(--rune-deep);text-decoration:none;cursor:pointer;font-weight:500}
-  a:hover{color:var(--rune);text-decoration:underline}
-  code,.mono{font-family:'JetBrains Mono',monospace}
-  ::selection{background:rgba(13,148,136,.18)}
+  a:hover{color:var(--gold);text-decoration:underline}
+  code,.mono{font-family:'DM Mono',monospace}
+  ::selection{background:rgba(226,72,63,.3)}
 
-  header.top{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.82);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--border)}
-  .top-inner{max-width:1320px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-  .brand{display:flex;align-items:center;gap:10px;font-family:'Cinzel',serif;font-weight:700;letter-spacing:.16em;color:var(--gold-deep);text-transform:uppercase;font-size:15px}
-  .brand .mark{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:#fff;font-size:16px;
-    background:linear-gradient(135deg,#13b3a3,#0d9488);box-shadow:0 3px 10px rgba(13,148,136,.35)}
-  .brand small{color:var(--faint);font-family:'JetBrains Mono';font-size:9.5px;letter-spacing:.2em;display:block;font-weight:500}
-  nav.tabs{display:flex;gap:3px;margin-left:6px;flex-wrap:wrap;align-items:center}
-  nav.tabs button{background:none;border:1px solid transparent;color:var(--muted);padding:7px 13px;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.12s}
-  nav.tabs button.active{color:var(--gold-deep);background:linear-gradient(180deg,#fff,var(--panel-2));border-color:var(--border-2);box-shadow:var(--shadow)}
+  /* ---- left sidebar (fixed on desktop, off-canvas drawer on mobile) ------- */
+  .backdrop{display:none;position:fixed;inset:0;background:rgba(2,4,10,.6);z-index:35}
+  .backdrop.show{display:block}
+  .sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--panel);
+    border-right:1px solid var(--border);z-index:40;display:flex;flex-direction:column;
+    padding:20px 14px 16px;overflow-y:auto;transition:transform .22s ease}
+  .sidebar .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.07em;
+    color:var(--gold);text-transform:uppercase;font-size:14.5px;padding:0 6px 16px;margin-bottom:10px;
+    border-bottom:1px solid var(--border)}
+  .sidebar .brand .mark{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;
+    color:#241a02;font-size:16px;font-weight:800;flex:none;
+    background:linear-gradient(135deg,#ffdb70,var(--gold-deep));box-shadow:0 3px 12px rgba(244,196,48,.32)}
+  .sidebar .brand small{color:var(--faint);font-family:'DM Mono';font-size:8.8px;letter-spacing:.16em;
+    display:block;font-weight:500;text-transform:none}
+  nav.tabs{display:flex;flex-direction:column;gap:2px}
+  .navgrouplabel{font-family:'DM Mono';font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--faint);margin:16px 10px 5px;font-weight:600}
+  .navgrouplabel:first-of-type{margin-top:6px}
+  nav.tabs button{background:none;border:1px solid transparent;color:var(--muted);padding:9px 12px;
+    border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.12s;text-align:left;width:100%}
+  nav.tabs button.active{color:var(--ink);background:linear-gradient(90deg,rgba(226,72,63,.18),rgba(226,72,63,.02));
+    border-color:rgba(226,72,63,.35);box-shadow:inset 3px 0 0 var(--rune)}
   nav.tabs button:hover{color:var(--ink);background:var(--panel-2)}
-  nav.tabs .navdiv{width:1px;height:20px;background:var(--border-2);margin:0 4px}
-  .search-wrap{margin-left:auto;display:flex;gap:8px;align-items:center;flex:1;min-width:240px;max-width:520px}
-  input.search{flex:1;background:#fff;border:1px solid var(--border-2);color:var(--text);border-radius:10px;padding:9px 13px;font-size:14px;outline:none;box-shadow:var(--shadow);transition:.12s}
-  input.search:focus{border-color:var(--rune);box-shadow:0 0 0 3px rgba(13,148,136,.13)}
+  .sidebar-foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--border);font-size:10.5px;
+    color:var(--faint);line-height:1.5}
+
+  /* ---- top bar inside the main content area (search + mobile hamburger) -- */
+  .mainarea{margin-left:var(--sidebar-w)}
+  .topbar{position:sticky;top:0;z-index:30;background:rgba(10,14,26,.88);backdrop-filter:saturate(140%) blur(10px);
+    border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:12px 22px}
+  .hamburger{display:none;background:none;border:1px solid var(--border-2);color:var(--text);width:36px;
+    height:36px;border-radius:9px;cursor:pointer;font-size:16px;flex:none;align-items:center;justify-content:center}
+  .topbar .brand-mini{display:none;font-weight:800;color:var(--gold);letter-spacing:.05em;font-size:14px}
+  @media(max-width:960px){
+    .sidebar{transform:translateX(-100%)}
+    .sidebar.open{transform:translateX(0);box-shadow:var(--shadow-lg)}
+    .mainarea{margin-left:0}
+    .hamburger{display:flex}
+    .topbar .brand-mini{display:block}
+  }
+  .search-wrap{margin-left:auto;display:flex;gap:8px;align-items:center;flex:1;min-width:200px;max-width:520px}
+  input.search{flex:1;background:var(--panel-2);border:1px solid var(--border-2);color:var(--text);border-radius:10px;padding:9px 13px;font-size:14px;outline:none;transition:.12s}
+  input.search:focus{border-color:var(--rune);box-shadow:0 0 0 3px rgba(226,72,63,.2)}
   input.search::placeholder{color:var(--faint)}
-  select{background:#fff;border:1px solid var(--border-2);color:var(--text);border-radius:9px;padding:8px 10px;font-size:13px;box-shadow:var(--shadow);cursor:pointer}
+  select{background:var(--panel-2);border:1px solid var(--border-2);color:var(--text);border-radius:9px;padding:8px 10px;font-size:13px;cursor:pointer}
 
   .shell{max-width:1320px;margin:0 auto;padding:18px 22px 90px;display:grid;grid-template-columns:1fr 1fr;gap:22px}
   @media(max-width:880px){.shell{grid-template-columns:1fr}}
-  .col h3{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:2px 0 10px}
+  .col h3{font-family:'DM Mono';font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:2px 0 10px}
 
   .list{border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--panel);box-shadow:var(--shadow)}
   table{border-collapse:collapse;width:100%;font-size:13.5px}
   th,td{padding:9px 13px;text-align:left;border-bottom:1px solid var(--border)}
-  thead th{position:sticky;top:0;background:var(--panel-3);font-family:'JetBrains Mono';font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;z-index:1}
+  thead th{position:sticky;top:0;background:var(--panel-3);font-family:'DM Mono';font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;z-index:1}
   tbody tr{cursor:pointer;transition:background .1s}
   tbody tr:hover{background:var(--panel-2)}
-  tbody tr.sel{background:linear-gradient(90deg,rgba(13,148,136,.12),rgba(13,148,136,.04));box-shadow:inset 3px 0 0 var(--rune)}
-  td.mono{font-family:'JetBrains Mono';color:var(--faint);font-size:12px}
-  .badge{display:inline-block;font-family:'JetBrains Mono';font-size:10px;font-weight:600;padding:1px 6px;border-radius:6px;border:1px solid var(--border-2);color:var(--muted);background:var(--panel-2);vertical-align:middle}
-  .badge.custom{color:var(--rune-deep);border-color:rgba(13,148,136,.4);background:rgba(13,148,136,.08)}
+  tbody tr.sel{background:linear-gradient(90deg,rgba(226,72,63,.12),rgba(226,72,63,.04));box-shadow:inset 3px 0 0 var(--rune)}
+  td.mono{font-family:'DM Mono';color:var(--faint);font-size:12px}
+  .badge{display:inline-block;font-family:'DM Mono';font-size:10px;font-weight:600;padding:1px 6px;border-radius:6px;border:1px solid var(--border-2);color:var(--muted);background:var(--panel-2);vertical-align:middle}
+  .badge.custom{color:var(--rune-deep);border-color:rgba(226,72,63,.4);background:rgba(226,72,63,.08)}
   .badge.funmod{color:#b3691a;border-color:rgba(214,137,27,.4);background:rgba(214,137,27,.1)}
   .badge.mvp{color:#fff;border-color:transparent;background:linear-gradient(135deg,#f0b94e,#d6891b);box-shadow:0 1px 4px rgba(214,137,27,.4)}
   .scry{max-height:calc(100vh - 200px);overflow:auto;display:block}
@@ -68,40 +98,40 @@
   /* items-tab filter/sort bar */
   .ibar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 2px 10px}
   .ichips{display:flex;flex-wrap:wrap;gap:6px}
-  .ichip{background:#fff;border:1px solid var(--border-2);color:var(--muted);padding:5px 11px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;transition:.12s;box-shadow:var(--shadow);font-family:inherit}
+  .ichip{background:var(--panel-2);border:1px solid var(--border-2);color:var(--muted);padding:5px 11px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;transition:.12s;box-shadow:var(--shadow);font-family:inherit}
   .ichip:hover{color:var(--ink);background:var(--panel-2)}
-  .ichip.active{color:var(--rune-deep);background:rgba(13,148,136,.1);border-color:rgba(13,148,136,.4)}
+  .ichip.active{color:var(--rune-deep);background:rgba(226,72,63,.1);border-color:rgba(226,72,63,.4)}
   .ibar select{padding:7px 9px;font-size:12.5px}
-  .sortbtn{background:#fff;border:1px solid var(--border-2);color:var(--muted);border-radius:9px;padding:7px 10px;font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:var(--shadow);line-height:1;font-family:'JetBrains Mono';transition:.12s}
+  .sortbtn{background:var(--panel-2);border:1px solid var(--border-2);color:var(--muted);border-radius:9px;padding:7px 10px;font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:var(--shadow);line-height:1;font-family:'DM Mono';transition:.12s}
   .sortbtn:hover{color:var(--ink);background:var(--panel-2)}
 
-  .detail{border:1px solid var(--border);border-radius:14px;background:var(--panel);padding:20px 22px;min-height:200px;position:sticky;top:78px;max-height:calc(100vh - 96px);overflow:auto;box-shadow:var(--shadow)}
+  .detail{border:1px solid var(--border);border-radius:14px;background:var(--panel);padding:20px 22px;min-height:200px;position:sticky;top:70px;max-height:calc(100vh - 90px);overflow:auto;box-shadow:var(--shadow)}
   .detail .empty{color:var(--faint);text-align:center;padding:60px 0}
-  .detail h2{font-family:'Cinzel',serif;font-size:22px;margin:0 0 2px;color:var(--ink);line-height:1.2}
+  .detail h2{font-family:'DM Sans',sans-serif;font-weight:800;font-size:22px;margin:0 0 2px;color:var(--ink);line-height:1.2}
   .detail .sub{color:var(--muted);font-size:12.5px;margin-bottom:14px}
   .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:13.5px;margin:12px 0}
   .kv dt{color:var(--muted)}
   .kv dd{margin:0;font-weight:500}
   .sec{margin-top:16px;border-top:1px solid var(--border);padding-top:13px}
-  .sec h4{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);margin:0 0 9px}
+  .sec h4{font-family:'DM Mono';font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);margin:0 0 9px}
   pre.script{background:#0f1626;border:1px solid #1d2740;border-radius:9px;padding:11px 13px;font-size:12px;overflow:auto;color:#6fe0d2;white-space:pre-wrap;line-height:1.5}
   .droprow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
   .droprow:last-child{border-bottom:none}
   .droprow .dl{display:flex;align-items:center;gap:8px;min-width:0}
-  .rate{font-family:'JetBrains Mono';color:var(--muted);font-size:12px;white-space:nowrap}
-  .note{border-left:3px solid var(--rune);background:linear-gradient(90deg,rgba(13,148,136,.07),transparent);border-radius:0 8px 8px 0;padding:10px 13px;font-size:13px;margin:12px 0;color:var(--text)}
-  .pill{display:inline-block;font-family:'JetBrains Mono';font-size:11px;background:var(--panel-2);border:1px solid var(--border-2);color:var(--muted);padding:3px 9px;border-radius:999px;margin:2px 4px 2px 0}
+  .rate{font-family:'DM Mono';color:var(--muted);font-size:12px;white-space:nowrap}
+  .note{border-left:3px solid var(--rune);background:linear-gradient(90deg,rgba(226,72,63,.07),transparent);border-radius:0 8px 8px 0;padding:10px 13px;font-size:13px;margin:12px 0;color:var(--text)}
+  .pill{display:inline-block;font-family:'DM Mono';font-size:11px;background:var(--panel-2);border:1px solid var(--border-2);color:var(--muted);padding:3px 9px;border-radius:999px;margin:2px 4px 2px 0}
 
   .loading,.errbox{max-width:680px;margin:80px auto;text-align:center;color:var(--muted)}
   .errbox code{background:var(--panel-2);padding:2px 8px;border-radius:6px;color:var(--gold-deep)}
   .systems{max-width:960px;margin:0 auto;padding:8px 4px}
-  .systems h2{font-family:'Cinzel',serif;color:var(--gold-deep);font-size:26px}
+  .systems h2{font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:26px}
   .syscards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:760px){.syscards{grid-template-columns:1fr}}
   .systems .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-  .systems .card:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--rune),#37c0b2)}
+  .systems .card:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--rune),#ff8178)}
   .systems .card.g:before{background:linear-gradient(180deg,#e7a93a,#d6891b)}
-  .systems .card h4{margin:0 0 7px;color:var(--ink);font-family:'Cinzel',serif;font-size:16px;display:flex;align-items:center;gap:9px}
+  .systems .card h4{margin:0 0 7px;color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:800;font-size:16px;display:flex;align-items:center;gap:9px}
   .systems .card h4 .si{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:16px;background:var(--panel-2);border:1px solid var(--border);flex:none}
   .systems .card p{margin:0;font-size:13.5px;color:var(--text)}
   .hide{display:none}
@@ -115,13 +145,13 @@
   .eff.cond:before{content:''}
   .dmgest-row{display:flex;align-items:center;gap:9px;margin:2px 0 9px;flex-wrap:wrap}
   .dmgest-row label{font-size:12.5px;color:var(--muted)}
-  .dmgest-row input{width:100px;background:#fff;border:1px solid var(--border-2);color:var(--text);border-radius:8px;padding:6px 9px;font-size:13.5px;font-family:'JetBrains Mono';outline:none;box-shadow:var(--shadow)}
-  .dmgest-row input:focus{border-color:var(--rune);box-shadow:0 0 0 3px rgba(13,148,136,.13)}
+  .dmgest-row input{width:100px;background:var(--panel-2);border:1px solid var(--border-2);color:var(--text);border-radius:8px;padding:6px 9px;font-size:13.5px;font-family:'DM Mono';outline:none;box-shadow:var(--shadow)}
+  .dmgest-row input:focus{border-color:var(--rune);box-shadow:0 0 0 3px rgba(226,72,63,.13)}
   .dmgestline{font-size:12.5px;margin:3px 0;color:var(--text)}
-  .dmgest-calc{font-family:'JetBrains Mono';color:var(--rune-deep);font-weight:600}
+  .dmgest-calc{font-family:'DM Mono';color:var(--rune-deep);font-weight:600}
   .dmgest-mini{margin-top:8px;padding-top:7px;border-top:1px dashed var(--border)}
   details.raw{margin-top:10px}
-  details.raw summary{cursor:pointer;color:var(--muted);font-size:11.5px;font-family:'JetBrains Mono';letter-spacing:.04em}
+  details.raw summary{cursor:pointer;color:var(--muted);font-size:11.5px;font-family:'DM Mono';letter-spacing:.04em}
 
   /* ---- visual primitives ------------------------------------------------- */
   /* element chip */
@@ -131,12 +161,12 @@
   /* element matchup */
   .emxwrap{display:flex;flex-wrap:wrap;gap:6px}
   .emx{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:8px;border:1px solid}
-  .emx i{font-style:normal}.emx b{font-family:'JetBrains Mono';font-size:11.5px}
+  .emx i{font-style:normal}.emx b{font-family:'DM Mono';font-size:11.5px}
   /* in-game loot-beam dot */
-  .beamdot{width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 0 2px rgba(255,255,255,.7),0 0 6px currentColor;display:inline-block}
+  .beamdot{width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 0 2px rgba(10,14,26,.85),0 0 6px currentColor;display:inline-block}
   .beamleg{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin:3px 12px 3px 0}
   .beampill{display:inline-block;width:16px;height:30px;border-radius:4px;vertical-align:middle;
-    box-shadow:inset 0 0 6px rgba(255,255,255,.5);background:linear-gradient(180deg,currentColor,transparent)}
+    box-shadow:inset 0 0 6px rgba(255,255,255,.18);background:linear-gradient(180deg,currentColor,transparent)}
   /* rate bar (drop rarity) */
   .ratewrap{display:flex;align-items:center;gap:7px}
   .ratebar{width:46px;height:5px;border-radius:3px;background:var(--panel-3);overflow:hidden;flex:none}
@@ -144,65 +174,65 @@
   /* monster stat mini-bars */
   .stats6{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 16px;margin:10px 0}
   .statb{font-size:12px}
-  .statb .lab{display:flex;justify-content:space-between;color:var(--muted);font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.04em}
+  .statb .lab{display:flex;justify-content:space-between;color:var(--muted);font-family:'DM Mono';font-size:10.5px;letter-spacing:.04em}
   .statb .bar{height:5px;border-radius:3px;background:var(--panel-3);margin-top:2px;overflow:hidden}
-  .statb .bar i{display:block;height:100%;background:linear-gradient(90deg,#37c0b2,#0d9488);border-radius:3px}
+  .statb .bar i{display:block;height:100%;background:linear-gradient(90deg,#ff8178,#e2483f);border-radius:3px}
   /* hp bar */
   .hpbar{height:7px;border-radius:4px;background:var(--panel-3);overflow:hidden;margin-top:4px}
   .hpbar i{display:block;height:100%;background:linear-gradient(90deg,#5fc97a,#1f9d57)}
   /* class avatar (skill changes) */
   .clsava{width:46px;height:46px;border-radius:50%;flex:none;display:grid;place-items:center;overflow:hidden;
-    background:radial-gradient(circle at 50% 30%,#fff,var(--panel-2));border:2px solid var(--border-2);box-shadow:var(--shadow)}
+    background:radial-gradient(circle at 50% 30%,var(--panel-3),var(--panel-2));border:2px solid var(--border-2);box-shadow:var(--shadow)}
   .clsava img{width:42px;height:46px;object-fit:contain;object-position:bottom;image-rendering:pixelated;margin-bottom:-2px}
   .clsava span{font-size:22px}
   /* before -> after comparison */
   .cmp{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
   .cmpchip{display:flex;align-items:center;gap:7px;background:var(--panel-2);border:1px solid var(--border);border-radius:9px;padding:5px 9px 5px 8px;font-size:12px}
-  .cmpchip .cf{color:var(--muted);font-family:'JetBrains Mono';font-size:10px;letter-spacing:.04em;text-transform:uppercase}
+  .cmpchip .cf{color:var(--muted);font-family:'DM Mono';font-size:10px;letter-spacing:.04em;text-transform:uppercase}
   .cmpbar{position:relative;width:84px;height:14px;border-radius:4px;background:var(--panel-3);overflow:hidden;flex:none}
-  .cmpbar .b4{position:absolute;left:0;top:0;bottom:0;background:repeating-linear-gradient(45deg,#cdd4e2,#cdd4e2 3px,#d9dfea 3px,#d9dfea 6px);opacity:.8}
+  .cmpbar .b4{position:absolute;left:0;top:0;bottom:0;background:repeating-linear-gradient(45deg,var(--border),var(--border) 3px,var(--border-2) 3px,var(--border-2) 6px);opacity:.8}
   .cmpbar .af{position:absolute;left:0;top:0;bottom:0;border-radius:4px}
   .cmpbar.up .af{background:linear-gradient(90deg,#5fc97a,#1f9d57)}
   .cmpbar.down .af{background:linear-gradient(90deg,#6fb6ef,#2f7fd6)}
-  .cmpval{font-family:'JetBrains Mono';font-size:11.5px}
+  .cmpval{font-family:'DM Mono';font-size:11.5px}
   .cmpval b{color:var(--ink)}
   .cmpval .o{color:var(--faint);text-decoration:line-through;font-size:10.5px}
-  .delta{font-family:'JetBrains Mono';font-size:11px;font-weight:700;padding:0 5px;border-radius:5px}
+  .delta{font-family:'DM Mono';font-size:11px;font-weight:700;padding:0 5px;border-radius:5px}
   .delta.g{color:var(--good);background:rgba(31,157,87,.1)}
   .delta.b{color:var(--rare);background:rgba(47,127,214,.1)}
   /* tier rail in skill changes */
   .tierhead{display:flex;align-items:center;gap:10px;margin:28px 0 14px}
-  .tierhead .tn{font-family:'Cinzel',serif;color:var(--gold-deep);font-size:18px}
+  .tierhead .tn{font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:18px}
   .tierhead .tl{flex:1;height:1px;background:linear-gradient(90deg,var(--border-2),transparent)}
   .clscard{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow)}
   .clscard>.ch{display:flex;align-items:center;gap:12px;margin-bottom:4px}
-  .clscard>.ch .cn{font-family:'Cinzel',serif;font-size:17px;color:var(--ink)}
-  .clscard>.ch .cc{margin-left:auto;font-size:11px;color:var(--muted);font-family:'JetBrains Mono'}
+  .clscard>.ch .cn{font-family:'DM Sans',sans-serif;font-weight:800;font-size:17px;color:var(--ink)}
+  .clscard>.ch .cc{margin-left:auto;font-size:11px;color:var(--muted);font-family:'DM Mono'}
   .skrow{padding:9px 0;border-top:1px solid var(--border)}
   .skrow:first-of-type{border-top:none}
   .skrow .sn{font-weight:600;color:var(--ink)}
-  .skrow .sa{color:var(--faint);font-size:11.5px;font-family:'JetBrains Mono'}
+  .skrow .sa{color:var(--faint);font-size:11.5px;font-family:'DM Mono'}
   .skrow .sb{color:var(--muted);font-size:12px;font-style:italic}
   .tag{display:inline-block;font-size:10px;font-weight:700;padding:1px 6px;border-radius:5px;letter-spacing:.03em;text-transform:uppercase}
   .tag.dmg{color:#fff;background:linear-gradient(135deg,#ef8a5b,#e0794b)}
   .tag.use{color:#fff;background:linear-gradient(135deg,#5aa6ea,#2f7fd6)}
-  .hero{background:linear-gradient(120deg,#fff,var(--panel-2));border:1px solid var(--border);border-radius:16px;padding:18px 22px;margin-bottom:18px;box-shadow:var(--shadow);display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+  .hero{background:linear-gradient(120deg,var(--panel-2),var(--panel));border:1px solid var(--border);border-radius:16px;padding:18px 22px;margin-bottom:18px;box-shadow:var(--shadow);display:flex;gap:18px;flex-wrap:wrap;align-items:center}
   .hero .hx{flex:1;min-width:240px}
   .hero h2{margin:0 0 4px}
   .hero p{margin:0;color:var(--muted);font-size:13.5px}
   .statline{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
   .statbox{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:9px 14px;text-align:center;min-width:84px;box-shadow:var(--shadow)}
-  .statbox b{display:block;font-size:20px;color:var(--rune-deep);font-family:'Cinzel',serif;line-height:1.1}
+  .statbox b{display:block;font-size:20px;color:var(--rune-deep);font-family:'DM Sans',sans-serif;font-weight:800;line-height:1.1}
   .statbox small{color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.08em}
   /* home / landing */
   .homewrap{max-width:980px;margin:0 auto;padding:10px 4px 60px}
   .homehero{background:
-      radial-gradient(900px 300px at 90% -60px,rgba(13,148,136,.12),transparent 70%),
-      linear-gradient(120deg,#fff,var(--panel-2));display:block;padding:26px 28px}
-  .homehero .kicker{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.22em;color:var(--rune-deep);font-weight:700;margin-bottom:8px}
-  .homehero h1{font-family:'Cinzel',serif;font-size:40px;margin:0 0 8px;color:var(--gold-deep);letter-spacing:.04em;line-height:1}
+      radial-gradient(900px 300px at 90% -60px,rgba(226,72,63,.12),transparent 70%),
+      linear-gradient(120deg,var(--panel-2),var(--panel));display:block;padding:26px 28px}
+  .homehero .kicker{font-family:'DM Mono';font-size:11px;letter-spacing:.22em;color:var(--rune-deep);font-weight:700;margin-bottom:8px}
+  .homehero h1{font-family:'DM Sans',sans-serif;font-weight:800;font-size:40px;margin:0 0 8px;color:var(--gold-deep);letter-spacing:.04em;line-height:1}
   .homehero p{font-size:14.5px;color:var(--text);max-width:680px;margin:0}
-  .homeh{font-family:'Cinzel',serif;color:var(--gold-deep);font-size:20px;margin:28px 0 12px}
+  .homeh{font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:20px;margin:28px 0 12px}
   .hlinks{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   @media(max-width:700px){.hlinks{grid-template-columns:1fr 1fr}}
   .hlink{display:flex;align-items:center;gap:11px;text-align:left;background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:13px 15px;cursor:pointer;box-shadow:var(--shadow);transition:.12s;font:inherit;color:inherit}
@@ -216,19 +246,19 @@
   @media(max-width:700px){.huntgrid{grid-template-columns:1fr}}
   .huntcard{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:14px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
   .huntcard:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#e7a93a,#d6891b)}
-  .huntcard.reg:before{background:linear-gradient(180deg,var(--rune),#37c0b2)}
+  .huntcard.reg:before{background:linear-gradient(180deg,var(--rune),#ff8178)}
   .huntcard.mvp:before{background:linear-gradient(180deg,#e0655a,#c23b30)}
   .huntcard.mvp .htbadge{color:#fff;background:linear-gradient(135deg,#e0655a,#c23b30)}
   .huntcard.ded:before{background:linear-gradient(180deg,#8b5cf6,#6d3fd0)}
   .huntcard.ded .htbadge{color:#fff;background:linear-gradient(135deg,#8b5cf6,#6d3fd0)}
   .huntcard .ht{display:flex;align-items:center;gap:9px;margin-bottom:7px}
   .huntcard .hticon{font-size:18px}
-  .huntcard .htn{font-family:'Cinzel',serif;font-size:16px;color:var(--ink);font-weight:700}
-  .huntcard .htbadge{margin-left:auto;font-family:'JetBrains Mono';font-size:9px;letter-spacing:.1em;color:var(--gold-deep);background:var(--gold-soft);border-radius:5px;padding:2px 7px}
-  .huntcard.reg .htbadge{color:var(--rune-deep);background:rgba(13,148,136,.12)}
+  .huntcard .htn{font-family:'DM Sans',sans-serif;font-weight:800;font-size:16px;color:var(--ink);font-weight:700}
+  .huntcard .htbadge{margin-left:auto;font-family:'DM Mono';font-size:9px;letter-spacing:.1em;color:var(--gold-deep);background:var(--gold-soft);border-radius:5px;padding:2px 7px}
+  .huntcard.reg .htbadge{color:var(--rune-deep);background:rgba(226,72,63,.12)}
   .huntcard .hobj{font-size:13.5px;color:var(--text);margin-bottom:10px}
   .huntcard .hobj b{color:var(--ink)}
-  .hmono{font-family:'JetBrains Mono';color:var(--muted);font-size:12px}
+  .hmono{font-family:'DM Mono';color:var(--muted);font-size:12px}
   .huntcard .hrwd{display:flex;flex-wrap:wrap;gap:6px}
   .rwd{font-size:12px;font-weight:600;color:var(--good);background:rgba(31,157,87,.1);border:1px solid rgba(31,157,87,.3);border-radius:999px;padding:2px 10px}
   /* fun builds */
@@ -237,37 +267,37 @@
   .buildcard{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:13px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
   .buildcard:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#d6891b,#b27c1b)}
   .buildcard .bt{display:flex;align-items:center;gap:9px;margin-bottom:6px;flex-wrap:wrap}
-  .buildcard .btn{font-family:'Cinzel',serif;font-size:15.5px;color:var(--ink);font-weight:700}
+  .buildcard .btn{font-family:'DM Sans',sans-serif;font-weight:800;font-size:15.5px;color:var(--ink);font-weight:700}
   .buildcard .bitems{font-size:12.5px;color:var(--muted);margin-bottom:8px}
   .buildcard .bitems a{font-weight:600}
-  .amppill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--rune-deep);background:rgba(13,148,136,.09);border:1px solid rgba(13,148,136,.3);border-radius:999px;padding:2px 10px;margin:2px 4px 0 0}
-  .amppill b{font-family:'JetBrains Mono';color:var(--gold-deep)}
+  .amppill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--rune-deep);background:rgba(226,72,63,.09);border:1px solid rgba(226,72,63,.3);border-radius:999px;padding:2px 10px;margin:2px 4px 0 0}
+  .amppill b{font-family:'DM Mono';color:var(--gold-deep)}
   .buildgrouphead{display:flex;align-items:center;gap:10px;margin:26px 0 12px}
-  .buildgrouphead .gn{font-family:'Cinzel',serif;color:var(--gold-deep);font-size:19px}
+  .buildgrouphead .gn{font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:19px}
   .buildgrouphead .gl{flex:1;height:1px;background:linear-gradient(90deg,var(--border-2),transparent)}
-  .buildgrouphead .gc{font-size:11.5px;color:var(--muted);font-family:'JetBrains Mono'}
+  .buildgrouphead .gc{font-size:11.5px;color:var(--muted);font-family:'DM Mono'}
   .combocard{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:13px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
   .combocard:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#8b5cf6,#6d3fd0)}
   .combocard .cbwith{font-size:13.5px;margin-bottom:6px}
   .combocard .cbwith a{font-weight:700}
-  .newbanner{display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,var(--gold-soft),#fff);border:1px solid var(--gold);border-radius:14px;padding:15px 20px;margin:0 0 22px;cursor:pointer;box-shadow:var(--shadow);transition:.12s}
+  .newbanner{display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,var(--gold-soft),var(--panel-2));border:1px solid var(--gold);border-radius:14px;padding:15px 20px;margin:0 0 22px;cursor:pointer;box-shadow:var(--shadow);transition:.12s}
   .newbanner:hover{transform:translateY(-1px);box-shadow:var(--shadow-lg)}
-  .newbanner .nbtag{font-family:'JetBrains Mono';font-size:10px;font-weight:700;letter-spacing:.1em;color:#fff;background:linear-gradient(135deg,#e7a93a,#d6891b);border-radius:6px;padding:3px 8px;flex:none}
-  .newbanner .nbt{font-family:'Cinzel',serif;font-size:16px;color:var(--gold-deep);flex:1}
+  .newbanner .nbtag{font-family:'DM Mono';font-size:10px;font-weight:700;letter-spacing:.1em;color:#fff;background:linear-gradient(135deg,#e7a93a,#d6891b);border-radius:6px;padding:3px 8px;flex:none}
+  .newbanner .nbt{font-family:'DM Sans',sans-serif;font-weight:800;font-size:16px;color:var(--gold-deep);flex:1}
   .newbanner .nbt small{display:block;font-family:'Inter';font-weight:500;font-size:12.5px;color:var(--text);margin-top:2px}
   .newbanner .nbarrow{font-size:20px;color:var(--gold-deep);flex:none}
   /* rates — "at a glance" table */
   .ratesgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin:14px 0 26px}
   .ratecell{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:14px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-  .ratecell:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--rune),#37c0b2)}
+  .ratecell:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--rune),#ff8178)}
   .ratecell.guard:before{background:linear-gradient(180deg,#df8a1e,#b27c1b)}
-  .ratecell .rl{font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
-  .ratecell .rv{font-family:'Cinzel',serif;font-size:24px;color:var(--ink);line-height:1.1}
+  .ratecell .rl{font-family:'DM Mono';font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+  .ratecell .rv{font-family:'DM Sans',sans-serif;font-weight:800;font-size:24px;color:var(--ink);line-height:1.1}
   .ratecell.guard .rv{color:var(--gold-deep)}
   .ratecell .rn{font-size:12px;color:var(--muted);margin-top:4px}
-  .ratecell .rg{display:inline-block;margin-top:7px;font-family:'JetBrains Mono';font-size:9.5px;font-weight:700;letter-spacing:.06em;color:#fff;background:linear-gradient(135deg,#e7a93a,#d6891b);border-radius:5px;padding:2px 7px}
+  .ratecell .rg{display:inline-block;margin-top:7px;font-family:'DM Mono';font-size:9.5px;font-weight:700;letter-spacing:.06em;color:#fff;background:linear-gradient(135deg,#e7a93a,#d6891b);border-radius:5px;padding:2px 7px}
   .sectionhead{display:flex;align-items:center;gap:10px;margin:30px 0 4px}
-  .sectionhead .sn{font-family:'Cinzel',serif;color:var(--gold-deep);font-size:18px}
+  .sectionhead .sn{font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:18px}
   .sectionhead .sl{flex:1;height:1px;background:linear-gradient(90deg,var(--border-2),transparent)}
   .sectionsub{font-size:13px;color:var(--muted);margin:2px 0 4px}
   .vipgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0 8px}
@@ -275,7 +305,7 @@
   .vipcol{border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
   .vipcol.yes{background:linear-gradient(160deg,rgba(31,157,87,.08),var(--panel));border:1px solid rgba(31,157,87,.3)}
   .vipcol.no{background:linear-gradient(160deg,rgba(214,69,63,.07),var(--panel));border:1px solid rgba(214,69,63,.28)}
-  .vipcol h4{font-family:'Cinzel',serif;font-size:15.5px;margin:0 0 10px;display:flex;align-items:center;gap:7px}
+  .vipcol h4{font-family:'DM Sans',sans-serif;font-weight:800;font-size:15.5px;margin:0 0 10px;display:flex;align-items:center;gap:7px}
   .vipcol.yes h4{color:var(--good)}
   .vipcol.no h4{color:var(--bad)}
   .vipcol ul{margin:0;padding-left:0;list-style:none}
@@ -284,7 +314,7 @@
   .vipcol.yes li:before{content:'✓';position:absolute;left:0;color:var(--good);font-weight:700}
   .vipcol.no li:before{content:'✕';position:absolute;left:0;color:var(--bad);font-weight:700}
   .cmdgrid{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 4px}
-  .cmdpill{font-family:'JetBrains Mono';font-size:12px;background:var(--panel-2);border:1px solid var(--border-2);color:var(--rune-deep);border-radius:7px;padding:4px 10px}
+  .cmdpill{font-family:'DM Mono';font-size:12px;background:var(--panel-2);border:1px solid var(--border-2);color:var(--rune-deep);border-radius:7px;padding:4px 10px}
   .rulebox{display:flex;gap:12px;background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:13px 16px;margin-bottom:10px;box-shadow:var(--shadow);align-items:flex-start}
   .rulebox .ri{font-size:20px;flex:none;margin-top:1px}
   .rulebox b{color:var(--ink)}
@@ -293,39 +323,56 @@
 </head>
 <body>
 
-<header class="top">
-  <div class="top-inner">
-    <div class="brand"><span class="mark">✦</span><span>Rune&nbsp;Zero<small>GAME DATABASE</small></span></div>
-    <nav class="tabs">
-      <button data-view="home" class="active">Home</button>
-      <button data-view="systems">Features</button>
-      <button data-view="rates">Rates</button>
-      <button data-view="customizations">Customizations</button>
-      <span class="navdiv" aria-hidden="true"></span>
-      <button data-view="items">Items</button>
-      <button data-view="mobs">Monsters</button>
-      <button data-view="skills">Skill Items</button>
-      <button data-view="enchants">Enchants</button>
-      <button data-view="builds">Fun Builds</button>
-      <button data-view="hunting">Hunting Log</button>
-      <button data-view="balance">Skill Changes</button>
-    </nav>
+<div class="backdrop" id="backdrop" onclick="toggleSidebar(false)"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><span class="mark">✦</span><span>Rune&nbsp;Zero<small>GAME DATABASE</small></span></div>
+  <nav class="tabs">
+    <button data-view="home" class="active">🏠 Home</button>
+    <div class="navgrouplabel">Server info</div>
+    <button data-view="systems">🏛️ Features</button>
+    <button data-view="rates">📈 Rates</button>
+    <button data-view="customizations">🧩 Customizations</button>
+    <div class="navgrouplabel">Database</div>
+    <button data-view="items">🎒 Items</button>
+    <button data-view="mobs">👹 Monsters</button>
+    <button data-view="skills">📜 Skill Items</button>
+    <button data-view="enchants">🎲 Enchants</button>
+    <button data-view="builds">🎉 Fun Builds</button>
+    <button data-view="hunting">🏆 Hunting Log</button>
+    <button data-view="balance">⚔️ Skill Changes</button>
+  </nav>
+  <div class="sidebar-foot">Rune Zero · Episode 13 / Trans-2nd<br>Low-rate · pay-to-fast, never pay-to-win</div>
+</aside>
+
+<div class="mainarea">
+  <div class="topbar">
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()" aria-label="Open menu">☰</button>
+    <span class="brand-mini">✦ Rune Zero</span>
     <div class="search-wrap" id="searchWrap">
       <input class="search" id="search" placeholder="Search by name, ID, or aegis…" autocomplete="off">
       <select id="filterType"></select>
     </div>
   </div>
-</header>
 
-<div id="app">
-  <div class="loading" id="loading">
-    <div style="font-family:'Cinzel',serif;font-size:20px;color:var(--gold)">Loading the database…</div>
-    <div id="loadmsg" style="margin-top:8px">fetching items &amp; monsters</div>
+  <div id="app">
+    <div class="loading" id="loading">
+      <div style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:20px;color:var(--gold)">Loading the database…</div>
+      <div id="loadmsg" style="margin-top:8px">fetching items &amp; monsters</div>
+    </div>
   </div>
 </div>
 
 <script>
 const $ = s => document.querySelector(s);
+// left sidebar (fixed on desktop, off-canvas drawer on mobile) — toggled by
+// the hamburger button and closed automatically on nav click / backdrop tap.
+function toggleSidebar(force){
+  const sb=$('#sidebar'), bd=$('#backdrop'); if(!sb||!bd) return;
+  const open = force!==undefined ? force : !sb.classList.contains('open');
+  sb.classList.toggle('open', open);
+  bd.classList.toggle('show', open);
+}
 let ITEMS=[], MOBS=[], META={}, OPT={types:{},groups:[]}, ELEM=null, HUNT=null, BUILDS=null, ITEM_BY_ID=new Map(), MOB_BY_ID=new Map(), GROUP_BY_ID=new Map(), GROUP_BY_NAME=new Map(), SIBLING_BY_ID=new Map();
 function gearGroup(i){
   if(i.type==='Weapon') return 'RZ_DROP_WEAPON';
@@ -616,7 +663,7 @@ async function boot(){
     }));
     initUI();
   }catch(e){
-    $('#app').innerHTML='<div class="errbox"><h2 style="color:var(--gold);font-family:Cinzel">Couldn’t load the data files</h2>'
+    $('#app').innerHTML='<div class="errbox"><h2 style="color:var(--gold);font-family:DM Sans;font-weight:800">Couldn’t load the data files</h2>'
       +'<p>Browsers block <code>fetch()</code> of local files. Serve this folder over http:</p>'
       +'<p><code>npx serve wiki</code> &nbsp;or&nbsp; <code>python -m http.server</code> (then open the shown URL).</p>'
       +'<p style="color:var(--muted);font-size:12px">Hosting it (GitHub Pages, Netlify, any static host) also works.</p></div>';
@@ -645,7 +692,7 @@ function initUI(){
     +'<div class="hide" id="customizations"></div>';
   renderSystems(); renderHome(); renderHunting(); renderBuilds(); renderRates(); renderCustomizations();
   buildItemBar();
-  document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>setView(b.dataset.view));
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{ setView(b.dataset.view); toggleSidebar(false); });
   $('#search').addEventListener('input', debounce(render, 160));
   $('#filterType').addEventListener('change', render);
   window.addEventListener('hashchange', routeHash);
@@ -927,7 +974,7 @@ async function renderBalance(){
   const keys=Object.keys(groups).sort((a,b)=>{const ao=+a.split('|')[0],bo=+b.split('|')[0];return ao-bo||a.split('|')[1].localeCompare(b.split('|')[1]);});
   const usab=BALANCE.filter(s=>s.usability&&s.usability.length).length, dmg=BALANCE.filter(s=>s.damage).length;
   let h='<div style="max-width:1100px;margin:0 auto;padding:8px 4px 50px">'
-    +'<div class="hero"><div class="hx"><h2 style="font-family:Cinzel,serif;color:var(--gold-deep)">Skill Changes — before → after</h2>'
+    +'<div class="hero"><div class="hx"><h2 style="font-family:DM Sans,sans-serif;font-weight:800;color:var(--gold-deep)">Skill Changes — before → after</h2>'
     +'<p>Every skill Rune Zero rebalanced, grouped by class. <b style="color:var(--rare)">Usability</b> bars shrink — cast / cooldown / SP eased so a skill becomes spammable &amp; affordable. <b style="color:var(--warn)">Damage</b> bars grow — per-level ratio buffed so it hits hard enough to main on. Hatched = old, solid = new.</p></div>'
     +`<div class="statline"><div class="statbox"><b>${BALANCE.length}</b><small>Skills</small></div><div class="statbox"><b>${usab}</b><small>Usability</small></div><div class="statbox"><b>${dmg}</b><small>Damage</small></div></div></div>`;
   let lastTier=-1;
@@ -958,13 +1005,13 @@ function renderHome(){
     <div class="hero homehero">
       <div class="kicker">LOW-RATE · EPISODE 13 · TRANSCENDENT 2ND</div>
       <h1>Rune Zero</h1>
-      <p>A slow, meaningful Ragnarok Online server where rare drops feel rare — episode-13 / transcendent-2nd content with modern quality-of-life and a high-damage, multi-build combat rework. <b>Pay-to-fast, never pay-to-win</b>: card &amp; MVP rates stay 1×.</p>
-      <div class="statline">${stat((META.items||0).toLocaleString(),'Items')}${stat((META.mobs||0).toLocaleString(),'Monsters')}${stat(META.customItems||0,'Custom items')}${stat('120','Skills rebalanced')}${stat(META.optionGroups||'—','Enchant pools')}</div>
+      <p>A slow, meaningful Ragnarok Online server where rare drops feel rare — episode-13 / transcendent-2nd content with modern quality-of-life and a high-damage, multi-build combat rework. <b>Pay-to-fast, never pay-to-win</b>: card rates stay a hard 1×, always.</p>
+      <div class="statline">${stat((META.items||0).toLocaleString(),'Items')}${stat((META.mobs||0).toLocaleString(),'Monsters')}${stat(META.customItems||0,'Custom items')}${stat('119','Skills rebalanced')}${stat(META.optionGroups||'—','Enchant pools')}</div>
     </div>
     <div class="newbanner" onclick="setView('systems');location.hash='systems'"><span class="nbtag">NEW</span><span class="nbt">Fever Field &amp; full card coverage<small>Fever Field's timed hot-zone events joined the rotation, and every one of the 90 previously-uncovered skills now has a matching card (95 fun-mod cards total) — see Systems for the full rundown.</small></span><span class="nbarrow">→</span></div>
     <h3 class="homeh">What makes Rune Zero different</h3>
     <div class="syscards">
-      ${card('🐢','Low-rate identity','Slow, deliberate progression — rare loot stays rare. QoL is for convenience, never for inflating rewards. <b>Card &amp; MVP-card rates are a hard 1×.</b>')}
+      ${card('🐢','Low-rate identity','Slow, deliberate progression — rare loot stays rare. QoL is for convenience, never for inflating rewards. <b>Card rates are a hard 1×, always</b> — MVP hunting itself runs at the same 3× as everything else.')}
       ${card('⚔️','High-damage, multi-build','52 underused skills made spammable/affordable and 15 given real damage, so every class has 2–3 viable builds. To match, 26 MVPs were toughened ~2.5–3× HP. See the <b>Skill Changes</b> tab.','g')}
       ${card('✨','QoL without inflation','Loot-rarity beams, safe refines, account storage, stylist, daily/weekly loops, a fixed 5×/5×/3× rate — convenience &amp; UX wins, with the rate inflation stripped out.')}
       ${card('🔦','Spot-the-rare beams','Notable drops pillar on the ground — cards (blue/purple) and rare gear (green/red) — so you never walk past a rare. Purely visual; zero rate impact.','g')}
@@ -1079,10 +1126,10 @@ function renderSystems(){
   const beamLeg=`<div class="card g" style="grid-column:1/-1"><h4><span class="si">🔦</span>Loot Rarity Beams — what the colours mean</h4>
     <p style="margin-bottom:10px">When something worth noticing drops, a coloured light pillar marks it on the ground so you never walk past a rare drop. <b>Purely a spotting aid</b> — it changes nothing about how often things drop (Rune Zero stays low-rate). Two families so a glance tells you the loot type:</p>
     <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center">
-      <div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:JetBrains Mono">Cards (by source)</div>
+      <div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:'DM Mono'">Cards (by source)</div>
         <span class="beamleg" style="color:${BEAM.blue}"><span class="beampill"></span>Normal monster</span>
         <span class="beamleg" style="color:${BEAM.purple}"><span class="beampill"></span>MVP card</span></div>
-      <div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:JetBrains Mono">Equipment (by rarity)</div>
+      <div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:'DM Mono'">Equipment (by rarity)</div>
         <span class="beamleg" style="color:${BEAM.green}"><span class="beampill"></span>Rare gear (≤1%)</span>
         <span class="beamleg" style="color:${BEAM.red}"><span class="beampill"></span>Very rare / MVP prize</span></div>
     </div>
@@ -1093,21 +1140,21 @@ function renderSystems(){
     <p style="margin-bottom:12px">A play-earned power loop in three steps. Runes give <b>secondary combat stats</b> (ATK, MATK, Crit, Crit Damage, after-cast delay, cast time) - <b>linear, build-specific power</b>, not raw stat inflation. Gated behind farming + crafting + a zeny sink; never sold for cash, never touches card rates.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
       <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-        <div style="font-family:Cinzel,serif;color:var(--gold-deep);font-size:14px;margin-bottom:4px">1. Farm crystals</div>
+        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">1. Farm crystals</div>
         <p style="font-size:12.5px;margin:0">Break <b>Crystal nodes</b> in the dungeons - <b>Mana Crystal</b> (mid) and <b>Prismatic Crystal</b> (deep) - for <b>Crystal Shards</b> and the rare <b>Radiant Crystal</b>. Immobile, 0 EXP.</p></div>
       <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-        <div style="font-family:Cinzel,serif;color:var(--gold-deep);font-size:14px;margin-bottom:4px">2. Cut a rune</div>
+        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">2. Cut a rune</div>
         <p style="font-size:12.5px;margin:0"><b>Rune Artisan</b> (Prontera): shards + zeny for a <b style="color:#13a99a">Normal rune</b>; or shards + <b>Radiant Crystals</b> + zeny for a <b style="color:#b27c1b">Greater rune</b> (stronger).</p></div>
       <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-        <div style="font-family:Cinzel,serif;color:var(--gold-deep);font-size:14px;margin-bottom:4px">3. Engrave it</div>
+        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">3. Engrave it</div>
         <p style="font-size:12.5px;margin:0"><b>Rune Engraver</b>: fuse a rune into a <b>free option slot</b> of equipped gear. Up to <b>3 runes/item</b>, ~70% success (a failed rune shatters, gear safe). A <b>Radiant Crystal</b> = guaranteed.</p></div>
     </div>
-    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:JetBrains Mono">The six runes (Normal / Greater)</div>
+    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:'DM Mono'">The six runes (Normal / Greater)</div>
     <div style="display:flex;flex-wrap:wrap;gap:6px 16px">
       ${runeRow('Might','+8 / +12 ATK',0)}${runeRow('Sorcery','+8 / +12 MATK',1)}${runeRow('Precision','+2 / +3 Crit',2)}${runeRow('Ferocity','+4 / +6% Crit Dmg',3)}${runeRow('Alacrity','-2 / -3% After-cast',4)}${runeRow('Focus','-2 / -3% Cast',5)}
     </div></div>`;
   const profBox=(ic,nm,node,where,mats,craft,col)=>`<div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-      <div style="font-family:Cinzel,serif;color:${col};font-size:14px;margin-bottom:4px">${ic} ${nm}</div>
+      <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:${col};font-size:14px;margin-bottom:4px">${ic} ${nm}</div>
       <p style="font-size:12.5px;margin:0 0 6px"><b>Gather:</b> break <b>${node}</b> in ${where}. Yields ${mats}.</p>
       <p style="font-size:12.5px;margin:0;color:var(--muted)"><b style="color:var(--ink)">Craft (level-gated):</b> ${craft}</p></div>`;
   const profPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">⛏️</span>Professions — gather, level up, craft</h4>
@@ -1127,7 +1174,7 @@ function renderSystems(){
   ${card('🎲','Random Options on every drop','Dropped weapons, armor, garments, shoes, accessories and headgear roll <b>random options</b> by slot (Zero-native). A second floor beam shows the <b>option count</b>: more options = rarer roll. Weapon %-damage rolls are 5–20%.')}
   ${card('🔨','Refinement — never breaks','Enriched ore refines safely +1→+7; HD ore pushes +8→+10 and only <b>downgrades</b> on fail. Ores are crafted from bulk ore + Valor Coin. Card removal is 100% safe.')}
   ${card('🪙','Valor &amp; Hunter Coins','Valor Coin drops from almost every monster (the universal crafting/economy currency); Hunter Coin comes only from Hunter\'s Guild contracts. Both are play-only.')}
-  ${card('📈','Fixed 5× / 5× / 3× rates','Every character earns the same rates — 5× base &amp; job EXP, 3× common/heal/use/equip drops. The old per-character rate choice is retired; cards and MVP-exclusive loot stay a hard 1× no matter what.')}
+  ${card('📈','Fixed 5× / 5× / 3× rates','Every character earns the same rates — 5× base &amp; job EXP, 3× common/heal/use/equip/MVP-exclusive drops. The old per-character rate choice is retired; cards stay a hard 1× no matter what — see the <b>Rates</b> tab for the full breakdown.')}
   ${card('👑','Champion / Lucky / Frenzy monsters','Any normal kill has a small chance to spawn a roaming <b>special</b> of that monster: a <b>Champion</b> (mini-boss, ~3× strength, minions, guaranteed top-roll drop), a <b>Frenzy</b> (fast brawler → EXP burst), or a rare <b>Lucky</b> (loot piñata ≈100 kills). Each wears a coloured aura + map announce, and rolls <b>1–3 affixes</b> (Sturdy, Vigorous, Swift, Deadly, Resilient, Evasive) that stack onto its name — e.g. <i>“Swift Deadly Champion Poring”</i>. More affixes = a <b>small</b> Valor + EXP bonus (cards stay 1×). Base spawn odds are up ~50% (now 1.5%), and 15% of the time a Champion arrives with 2-3 lesser "Guard" adds flanking it — clear the whole pack for roughly <b>+40% total reward</b> over the Champion alone.')}
   ${card('🎯','Monster Hunter (bounties)','Hunt a target monster enough times and claim a skill/stat reward item. An editable bounty board: each row binds a monster → kill requirement → reward. Progress tracked per character.')}
   ${card('🌱','Memorial growing gear &amp; instances','A 5-piece <b>Memorial set</b> crafted from instance materials that <b>grows with you</b> — refine-gated bonuses (+3/+6/+9) plus a non-destructive option enchanter and a scaling set bonus. Materials drop from level-gated <b>Memorial instances</b> (Orc\'s Memory, Nidhoggur\'s Nest) in Normal/Hard.')}
@@ -1159,7 +1206,7 @@ function renderRates(){
   const head=(n)=>`<div class="sectionhead"><span class="sn">${n}</span><span class="sl"></span></div>`;
   let h=`<div class="homewrap">
     <div class="hero homehero"><div class="kicker">AT A GLANCE · LIVE CONFIG</div><h1 style="font-size:30px">Rates &amp; Fair Play</h1>
-      <p>Every number below is read straight from the server's own rate config, not a marketing page — if it changes, this page changes. The identity in one line: <b>pay-to-fast, never pay-to-win</b>. Convenience and speed are for sale; the rare-power chase (cards, MVP loot) never is.</p></div>
+      <p>Every number below is read straight from the server's own rate config, not a marketing page — if it changes, this page changes. The identity in one line: <b>pay-to-fast, never pay-to-win</b>. Convenience and speed are for sale; the rare-power chase — cards — never is.</p></div>
 
     ${head('Experience')}
     <div class="ratesgrid">
@@ -1170,13 +1217,13 @@ function renderRates(){
     </div>
 
     ${head('Drop rates')}
-    <div class="sectionsub">Common materials, potions, and equipment drop faster — the rare-power chase does not.</div>
+    <div class="sectionsub">Common materials, equipment, and even MVP-exclusive loot all run at the same fixed 3× — cards are the one rate that never moves.</div>
     <div class="ratesgrid">
       ${cell('Common drops','3×','junk, materials, consumables')}
       ${cell('Heal / Use items','3×','potions &amp; consumables')}
       ${cell('Equipment drops','3×','weapons &amp; armor')}
+      ${cell('MVP-exclusive loot','3×','trophy pieces, MVP-only gear')}
       ${cell('Card drops','1×','never boosted, ever',true)}
-      ${cell('MVP-exclusive loot','1×','never boosted, ever',true)}
       ${cell('Treasure boxes','1×','economy/WoE-linked')}
       ${cell('Scripted bonus drops','1×','e.g. Monster Hunter rewards')}
     </div>
@@ -1241,13 +1288,13 @@ function renderCustomizations(){
   let h=`<div class="homewrap">
     <div class="hero homehero"><div class="kicker">CUSTOM CONTENT · EPISODE 13 / TRANS-2ND</div><h1 style="font-size:30px">Customizations</h1>
       <p>Every skill rebalance, custom item, and off-meta build Rune Zero adds on top of stock rAthena — high-damage and multi-build by design, but never inflating the rare-power chase.</p>
-      <div class="statline">${stat((META.customItems||0).toLocaleString(),'Custom items')}${stat((META.funmodItems||0).toLocaleString(),'Fun-mod items')}${stat((META.comboSets||0),'Set combos')}${stat('120','Skills rebalanced')}${stat((META.skillItems||0).toLocaleString(),'Skill-boosting items')}</div>
+      <div class="statline">${stat((META.customItems||0).toLocaleString(),'Custom items')}${stat((META.funmodItems||0).toLocaleString(),'Fun-mod items')}${stat((META.comboSets||0),'Set combos')}${stat('119','Skills rebalanced')}${stat((META.skillItems||0).toLocaleString(),'Skill-boosting items')}</div>
     </div>
 
     <div class="sectionhead"><span class="sn">Class &amp; skill balance</span><span class="sl"></span></div>
     <div class="syscards">
       ${card('⚖️','Class &amp; monster balance','High-damage, multi-build philosophy: <b>52 underused skills</b> made spammable/affordable and <b>15 given real damage</b> so every class has 2–3 viable builds. To match, <b>26 MVPs were toughened ~2.5–3× HP</b> and elites bumped — bosses bite back. See the <b>Skill Changes</b> tab for every before→after.','g')}
-      ${card('⚡','Skill QoL pass','19 stock skills got usability-only modernizations (no damage changes): Impositio Manus &amp; Suffragium are now party-wide self-casts, Magical Bullet is a real self-buff, Back Stab auto-repositions behind its target, the 4 Sage weapon endows always succeed, Bowling Bash is a flat 5×5 hit, Sonic Blow trades its animation lock for a short cooldown, Asura Strike costs 1 Spirit Sphere instead of 5, EDP lasts twice as long, and Kyrie Eleison &amp; Assumptio can now be active together. See <b>Skill Changes</b> for the full list.','g')}
+      ${card('⚡','Skill QoL pass','18 stock skills got usability-only modernizations (no damage changes): Impositio Manus &amp; Suffragium are now party-wide self-casts, Magical Bullet is a real self-buff, Back Stab auto-repositions behind its target, the 4 Sage weapon endows always succeed, Bowling Bash is a flat 5×5 hit, Sonic Blow trades its animation lock for a short cooldown, EDP lasts twice as long, and Kyrie Eleison &amp; Assumptio can now be active together. See <b>Skill Changes</b> for the full list.','g')}
       ${card('💠','Class Essences','Trans-class <b>Essence</b> accessories (Lv 1 &amp; 2 per class) granting a class stat plus % boosts to that class\'s signature skills — faithful to kRO Zero, tuned for our high-damage server.')}
       ${card('🏆','Legacy MVP trophies','Dead legacy MVP gear revived into refine-gated chase pieces — e.g. Majestic Goat: Bash / Bowling Bash <b>+28%</b> at +9. The server is intentionally high-damage; trophy spikes are meaningful, not timid.')}
     </div>
@@ -1263,7 +1310,7 @@ function renderCustomizations(){
     ${rule('🚫','No Double Attack damage amps, anywhere','Double Attack (TF_DOUBLE) doesn\'t get a %-damage fun-mod on any item, full stop — it doesn\'t exist as a build path here, by design, not an oversight.')}
     ${rule('🔒','Asura Strike is capped at +50% from any single item','Monk/Champion\'s Asura Strike (MO_EXTREMITYFIST) is a deliberate hard special case — no fun-mod item may push past a 50% total bonus, regardless of tier.')}
     ${rule('📈','Trans-exclusive skills get noticeably bigger amps than base-class skills','A comparable item amping a transcendent-only skill leans bigger than one amping a 1st/2nd-class skill of the same tier — rewarding the deeper class investment.')}
-    ${rule('🃏','Cards stay a hard 1× — customization never means inflation','Every rebalance above changes damage or usability, never drop rate. Card and MVP-loot rates are governed separately — see the <b>Rates</b> tab.')}
+    ${rule('🃏','Cards stay a hard 1× — customization never means inflation','Every rebalance above changes damage or usability, never drop rate. Card rates are governed separately and never move — see the <b>Rates</b> tab for the full breakdown.')}
 
     <p class="homefoot">Full item-by-item detail lives in the <b>Fun Builds</b> and <b>Skill Changes</b> tabs · custom/fun-mod items are filterable in the <b>Items</b> tab · built ${META.built||''}.</p>
   </div>`;
