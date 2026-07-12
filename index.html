@@ -319,6 +319,38 @@
   .rulebox .ri{font-size:20px;flex:none;margin-top:1px}
   .rulebox b{color:var(--ink)}
   .rulebox p{margin:2px 0 0;font-size:13px;color:var(--text)}
+
+  /* ---- accordions (progressive disclosure — group cards under a fold) ---- */
+  .acc{background:var(--panel);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden}
+  .acc>summary{list-style:none;cursor:pointer;padding:15px 18px;display:flex;align-items:center;gap:12px;font-weight:700;color:var(--ink);user-select:none}
+  .acc>summary::-webkit-details-marker{display:none}
+  .acc>summary .accicon{font-size:18px;flex:none}
+  .acc>summary .acccount{margin-left:auto;font-family:'DM Mono';font-size:11px;color:var(--faint);font-weight:500}
+  .acc>summary .accarrow{font-size:12px;color:var(--faint);transition:transform .15s;flex:none}
+  .acc[open]>summary .accarrow{transform:rotate(90deg)}
+  .acc>summary:hover{background:var(--panel-2)}
+  .acc>.accbody{padding:4px 18px 18px;border-top:1px solid var(--border)}
+  .acc>.accbody .syscards{margin-top:14px}
+
+  /* ---- classes tab ------------------------------------------------------- */
+  .classcard{background:var(--panel);border:1px solid var(--border);border-radius:13px;margin-bottom:10px;box-shadow:var(--shadow);overflow:hidden}
+  .classcard>summary{list-style:none;cursor:pointer;padding:13px 16px;display:flex;align-items:center;gap:11px;user-select:none}
+  .classcard>summary::-webkit-details-marker{display:none}
+  .classcard>summary:hover{background:var(--panel-2)}
+  .classcard .ccn{font-weight:700;color:var(--ink);font-size:14.5px}
+  .classcard .accarrow{margin-left:auto;font-size:12px;color:var(--faint);transition:transform .15s;flex:none}
+  .classcard[open] .accarrow{transform:rotate(90deg)}
+  .roletag{display:inline-block;font-family:'DM Mono';font-size:10px;font-weight:700;letter-spacing:.05em;padding:2px 8px;border-radius:999px;flex:none}
+  .roletag.str{color:#ff8178;background:rgba(226,72,63,.12);border:1px solid rgba(226,72,63,.3)}
+  .roletag.agi{color:#2fd189;background:rgba(47,209,137,.12);border:1px solid rgba(47,209,137,.3)}
+  .roletag.int{color:#4ea1e8;background:rgba(78,161,232,.12);border:1px solid rgba(78,161,232,.3)}
+  .roletag.dex{color:#f4c430;background:rgba(244,196,48,.12);border:1px solid rgba(244,196,48,.3)}
+  .roletag.vit{color:#a78bfa;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.3)}
+  .roletag.sup{color:var(--muted);background:var(--panel-2);border:1px solid var(--border-2)}
+  .classcard .ccbody{padding:0 16px 15px;border-top:1px solid var(--border)}
+  .classcard .ccbody p{font-size:13px;margin:10px 0 0;color:var(--text)}
+  .classcard .ccbody p b{color:var(--gold)}
+  .classfilters{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 16px}
 </style>
 </head>
 <body>
@@ -333,6 +365,7 @@
     <button data-view="systems">🏛️ Features</button>
     <button data-view="rates">📈 Rates</button>
     <button data-view="customizations">🧩 Customizations</button>
+    <button data-view="classes">🎓 Classes</button>
     <div class="navgrouplabel">Database</div>
     <button data-view="items">🎒 Items</button>
     <button data-view="mobs">👹 Monsters</button>
@@ -689,8 +722,9 @@ function initUI(){
     +'<div class="hide" id="builds"></div>'
     +'<div class="hide" id="home"></div>'
     +'<div class="hide" id="rates"></div>'
-    +'<div class="hide" id="customizations"></div>';
-  renderSystems(); renderHome(); renderHunting(); renderBuilds(); renderRates(); renderCustomizations();
+    +'<div class="hide" id="customizations"></div>'
+    +'<div class="hide" id="classes"></div>';
+  renderSystems(); renderHome(); renderHunting(); renderBuilds(); renderRates(); renderCustomizations(); renderClasses();
   buildItemBar();
   document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{ setView(b.dataset.view); toggleSidebar(false); });
   $('#search').addEventListener('input', debounce(render, 160));
@@ -702,7 +736,7 @@ function initUI(){
 function setView(v){
   view=v;
   document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
-  const isPanel = (v==='systems'||v==='balance'||v==='home'||v==='hunting'||v==='builds'||v==='rates'||v==='customizations');
+  const isPanel = (v==='systems'||v==='balance'||v==='home'||v==='hunting'||v==='builds'||v==='rates'||v==='customizations'||v==='classes');
   $('#searchWrap').style.visibility = isPanel?'hidden':'visible';
   $('#browse').classList.toggle('hide', isPanel);
   $('#systems').classList.toggle('hide', v!=='systems');
@@ -712,8 +746,9 @@ function setView(v){
   $('#builds').classList.toggle('hide', v!=='builds');
   $('#rates').classList.toggle('hide', v!=='rates');
   $('#customizations').classList.toggle('hide', v!=='customizations');
+  $('#classes').classList.toggle('hide', v!=='classes');
   $('#itemBar').classList.toggle('hide', v!=='items');
-  if(v==='home'||v==='hunting'||v==='builds'||v==='rates'||v==='customizations') return;
+  if(v==='home'||v==='hunting'||v==='builds'||v==='rates'||v==='customizations'||v==='classes') return;
   if(v==='balance'){ renderBalance(); return; }
   if(v==='systems') return;
   // type filter options
@@ -793,7 +828,7 @@ function render(){
   rows.querySelectorAll('tr[data-id]').forEach(tr=>tr.onclick=()=>{ location.hash = pre+tr.dataset.id; });
 }
 
-const VIEWS=['home','items','builds','mobs','skills','enchants','hunting','systems','balance','rates','customizations'];
+const VIEWS=['home','items','builds','mobs','skills','enchants','hunting','systems','balance','rates','customizations','classes'];
 function routeHash(){
   const h=location.hash.slice(1);
   if(h.startsWith('item/')){ if(view==='systems')setView('items'); showItem(+h.slice(5)); }
@@ -1022,6 +1057,7 @@ function renderHome(){
       ${link('systems','🏛️','Features','Every custom server system explained')}
       ${link('rates','📈','Rates','EXP, drops, death penalty, VIP — the real numbers')}
       ${link('customizations','🧩','Customizations','Every skill rebalance &amp; fun-mod build')}
+      ${link('classes','🎓','Classes','What to grab &amp; save for, all 14 classes')}
     </div>
     <h3 class="homeh">Explore the database</h3>
     <div class="hlinks">
@@ -1164,35 +1200,48 @@ function renderSystems(){
       ${profBox('🌿','Herbalism','Herb Clusters','fields (Prontera, Geffen, Payon, Morocc)','Yellow/Green/White/Blue/Red Herbs','brew potions — Red / Yellow / White / Blue (great with @autopot)','#1f9d57')}
       ${profBox('🎣','Fishing','Fishing Spots','ports &amp; beaches (Izlude, Alberta, Comodo)','Sharp Scale, Gill, Fish, Tendon','cook stat foods — +3 / +5 STR/AGI/VIT buff dishes','#2f7fd6')}
     </div></div>`;
+  const acc=(icon,title,count,body,openByDefault)=>`<details class="acc"${openByDefault?' open':''}><summary><span class="accicon">${icon}</span>${title}<span class="acccount">${count} systems</span><span class="accarrow">▸</span></summary><div class="accbody"><div class="syscards">${body}</div></div></details>`;
+
+  const groupGear = [
+    card('🏆','Hunting Log — permanent milestones','Kill marquee monsters or clear whole dungeons for a <b>permanent stat</b> + a <b>wearable title</b>, tracked live in your Quest Window. MVP milestones are the ultimate grind. See the <b>Hunting Log</b> tab.','g'),
+    card('🎲','Random Options on every drop','Dropped weapons, armor, garments, shoes, accessories and headgear roll <b>random options</b> by slot (Zero-native). A second floor beam shows the <b>option count</b>: more options = rarer roll. Weapon %-damage rolls are 5–20%.'),
+    card('🔨','Refinement — never breaks','Enriched ore refines safely +1→+7; HD ore pushes +8→+10 and only <b>downgrades</b> on fail. Ores are crafted from bulk ore + Valor Coin. Card removal is 100% safe.'),
+    card('🪙','Valor &amp; Hunter Coins','Valor Coin drops from almost every monster (the universal crafting/economy currency); Hunter Coin comes only from Hunter\'s Guild contracts. Both are play-only.'),
+    card('🎯','Monster Hunter (bounties)','Hunt a target monster enough times and claim a skill/stat reward item. An editable bounty board: each row binds a monster → kill requirement → reward. Progress tracked per character.'),
+    card('🌱','Memorial growing gear &amp; instances','A 5-piece <b>Memorial set</b> crafted from instance materials that <b>grows with you</b> — refine-gated bonuses (+3/+6/+9) plus a non-destructive option enchanter and a scaling set bonus. Materials drop from level-gated <b>Memorial instances</b> (Orc\'s Memory, Nidhoggur\'s Nest) in Normal/Hard.'),
+    card('🏛️','Services Hub (Eden HQ)','The Eden Group HQ doubles as the all-in-one hub: register for the Eden badge, take bounty missions, and find every service — forge, refine, enchant, instances, Monster Hunter, stylist, storage — in one map. <code>@go eden</code> warps there.'),
+    card('⚒️','Forge — risk &amp; reward','Forge any weapon with <b>5 random properties</b> and a chosen <b>element</b> baked in. ~70% success; failure consumes the materials. More ore, low coin.'),
+    card('🗡️','Eden weapons','A per-class weapon line bought with the <b>Eden badge</b>: each arrives <b>already enhanced</b> (5 options on purchase), is <b>refine-gated</b> (+3/+6/+9), and is re-rollable. Account-bound personal progression.'),
+  ].join('');
+
+  const groupEconomy = [
+    card('📈','Fixed 5× / 5× / 3× rates','Every character earns the same rates — 5× base &amp; job EXP, 3× common/heal/use/equip/MVP-exclusive drops. The old per-character rate choice is retired; cards stay a hard 1× no matter what — see the <b>Rates</b> tab for the full breakdown.'),
+    card('📅','Daily &amp; weekly loops','<b>Daily Tasks</b>: 3 rotating jobs reset at server midnight, with an escalating <b>login streak</b> day-7 jackpot. <b>Weekly Hunt</b>: a rotating featured MVP with a cross-player leaderboard and tiered rewards. The retention spine.'),
+    card('🛍️','Cash shop — cosmetics + pay-to-fast','The <b>Rune Zero Boutique</b> is a real native Cash Shop window selling <b>weekly-rotating cosmetic sets</b> (zero stats), staples, the Starter Pack, and the Premium Pass. The <b>Boutique Concierge</b> next door handles dye/name-color coupons and pay-to-fast bundles (EXP/common-drop boosts, convenience) payable in Cash Points <i>or</i> play-earned coins. <b>No power, no cards, no card/drop-on-card boosts ever sold</b>.'),
+    card('🎰','Fortune Vault — zeny-sink gacha','A pure zeny sink in Prontera: <b>25,000z</b> for one pull or <b>250,000z</b> for ten. Prizes run from a guaranteed consolation Old Blue Box up to a <b>0.1% RARE costume</b> (server-wide announce) with common costumes, refine packs and booster bundles in between — no cards, no MVP loot, ever. A hidden pity counter guarantees a common costume by your 100th pull without landing one.'),
+    card('🚪','Warp &amp; repair fees','Every warp still works for everyone, but non-VIP now pays a small zeny toll — 500z for towns, 1,000z for fields/dungeons, 300z to re-warp to your last spot — and the Repair Smith charges 5,000z to fix broken gear. An active VIP sub waives every fee. See the <b>Rates</b> tab for the full VIP comparison.'),
+  ].join('');
+
+  const groupEvents = [
+    card('👑','Champion / Lucky / Frenzy monsters','Any normal kill has a small chance to spawn a roaming <b>special</b> of that monster: a <b>Champion</b> (mini-boss, ~3× strength, minions, guaranteed top-roll drop), a <b>Frenzy</b> (fast brawler → EXP burst), or a rare <b>Lucky</b> (loot piñata ≈100 kills). Each wears a coloured aura + map announce, and rolls <b>1–3 affixes</b> (Sturdy, Vigorous, Swift, Deadly, Resilient, Evasive) that stack onto its name — e.g. <i>“Swift Deadly Champion Poring”</i>. More affixes = a <b>small</b> Valor + EXP bonus (cards stay 1×). Base spawn odds are up ~50% (now 1.5%), and 15% of the time a Champion arrives with 2-3 lesser "Guard" adds flanking it — clear the whole pack for roughly <b>+40% total reward</b> over the Champion alone.'),
+    card('🐾','Adventurer Allies — bond &amp; revive','Your recruited ally companions now carry a permanent per-class <b>Bond level</b> (1–10, earned from kills while that ally fights beside you) that boosts its buff tiers, with flavour titles at Bond 4/7/10 (Loyal / Devoted / Sworn). Town Healers now only give a free full heal — Blessing and Increase AGI moved to your Allies, so keep one summoned. If an ally dies, a 5-minute window lets you re-summon it at half the usual fee.'),
+    card('🏁','MVP Arena speedrun boards','Every Challenge Tier (Normal / Hard / Nightmare) now keeps an all-time top-5 leaderboard of fastest clears — check it from the existing <code>@mvprank</code> command\'s new Speedrun Leaderboard page. Only a genuine personal best earns a shot at the board.'),
+    card('🎣','Fishing streaks &amp; Golden Fish','Landing 5 catches in a row (broken by changing maps or idling 2 minutes) grants a bonus yield roll, and every catch has a shot at a rare <b>Golden Fish</b> — 2% normally, 4% on a streak of 10+. Turn in 5 Golden Fish at the Profession Master for Valor Coins and bonus Fishing XP.'),
+    card('🎉','Server events','<b>Find the Mushroom</b>, <b>Speed Quiz</b> (trivia — first to reach the Quizmaster with the right answer wins the pot), and <b>Fever Field</b> (a hot-zone map goes live for 25 minutes with a guaranteed +3 bonus Valor Coin per kill) rotate every 2 hours off the Event Herald, plus a classic <b>Disguise</b> event that periodically hides a random monster in a familiar mob\'s skin for whoever spots it first.'),
+  ].join('');
+
   $('#systems').innerHTML=`<h2>Rune Zero — Features</h2>
   <p style="color:var(--muted);margin-bottom:18px">Every custom system running on the live server. Looking for rates or numbers? See the <a onclick="setView('rates');location.hash='rates'">Rates</a> tab. Looking for item/skill rebalances? See <a onclick="setView('customizations');location.hash='customizations'">Customizations</a>.</p>
+  <div class="sectionhead"><span class="sn">Core systems</span><span class="sl"></span></div>
   <div class="syscards">
   ${beamLeg}
   ${gemPage}
   ${profPage}
-  ${card('🏆','Hunting Log — permanent milestones','Kill marquee monsters or clear whole dungeons for a <b>permanent stat</b> + a <b>wearable title</b>, tracked live in your Quest Window. MVP milestones are the ultimate grind. See the <b>Hunting Log</b> tab.','g')}
-  ${card('🎲','Random Options on every drop','Dropped weapons, armor, garments, shoes, accessories and headgear roll <b>random options</b> by slot (Zero-native). A second floor beam shows the <b>option count</b>: more options = rarer roll. Weapon %-damage rolls are 5–20%.')}
-  ${card('🔨','Refinement — never breaks','Enriched ore refines safely +1→+7; HD ore pushes +8→+10 and only <b>downgrades</b> on fail. Ores are crafted from bulk ore + Valor Coin. Card removal is 100% safe.')}
-  ${card('🪙','Valor &amp; Hunter Coins','Valor Coin drops from almost every monster (the universal crafting/economy currency); Hunter Coin comes only from Hunter\'s Guild contracts. Both are play-only.')}
-  ${card('📈','Fixed 5× / 5× / 3× rates','Every character earns the same rates — 5× base &amp; job EXP, 3× common/heal/use/equip/MVP-exclusive drops. The old per-character rate choice is retired; cards stay a hard 1× no matter what — see the <b>Rates</b> tab for the full breakdown.')}
-  ${card('👑','Champion / Lucky / Frenzy monsters','Any normal kill has a small chance to spawn a roaming <b>special</b> of that monster: a <b>Champion</b> (mini-boss, ~3× strength, minions, guaranteed top-roll drop), a <b>Frenzy</b> (fast brawler → EXP burst), or a rare <b>Lucky</b> (loot piñata ≈100 kills). Each wears a coloured aura + map announce, and rolls <b>1–3 affixes</b> (Sturdy, Vigorous, Swift, Deadly, Resilient, Evasive) that stack onto its name — e.g. <i>“Swift Deadly Champion Poring”</i>. More affixes = a <b>small</b> Valor + EXP bonus (cards stay 1×). Base spawn odds are up ~50% (now 1.5%), and 15% of the time a Champion arrives with 2-3 lesser "Guard" adds flanking it — clear the whole pack for roughly <b>+40% total reward</b> over the Champion alone.')}
-  ${card('🎯','Monster Hunter (bounties)','Hunt a target monster enough times and claim a skill/stat reward item. An editable bounty board: each row binds a monster → kill requirement → reward. Progress tracked per character.')}
-  ${card('🌱','Memorial growing gear &amp; instances','A 5-piece <b>Memorial set</b> crafted from instance materials that <b>grows with you</b> — refine-gated bonuses (+3/+6/+9) plus a non-destructive option enchanter and a scaling set bonus. Materials drop from level-gated <b>Memorial instances</b> (Orc\'s Memory, Nidhoggur\'s Nest) in Normal/Hard.')}
-  ${card('💠','Class Essences','Trans-class <b>Essence</b> accessories (Lv 1 &amp; 2 per class, IDs 40800+) granting a class stat plus % boosts to that class\'s signature skills — faithful to kRO Zero, tuned for our high-damage server.')}
-  ${card('🏆','Legacy MVP trophies (high-damage)','Dead legacy MVP gear revived into refine-gated chase pieces — e.g. Majestic Goat: Bash / Bowling Bash <b>+28%</b> at +9. The server is intentionally high-damage; trophy spikes are meaningful, not timid.')}
-  ${card('🏛️','Services Hub (Eden HQ)','The Eden Group HQ doubles as the all-in-one hub: register for the Eden badge, take bounty missions, and find every service — forge, refine, enchant, instances, Monster Hunter, stylist, storage — in one map. <code>@go eden</code> warps there.')}
-  ${card('⚒️','Forge — risk &amp; reward','Forge any weapon with <b>5 random properties</b> and a chosen <b>element</b> baked in. ~70% success; failure consumes the materials. More ore, low coin.')}
-  ${card('🗡️','Eden weapons','A per-class weapon line bought with the <b>Eden badge</b>: each arrives <b>already enhanced</b> (5 options on purchase), is <b>refine-gated</b> (+3/+6/+9), and is re-rollable. Account-bound personal progression.')}
-  ${card('📅','Daily &amp; weekly loops','<b>Daily Tasks</b>: 3 rotating jobs reset at server midnight, with an escalating <b>login streak</b> day-7 jackpot. <b>Weekly Hunt</b>: a rotating featured MVP with a cross-player leaderboard and tiered rewards. The retention spine.')}
-  ${card('🛍️','Cash shop — cosmetics + pay-to-fast','The <b>Rune Zero Boutique</b> is a real native Cash Shop window selling <b>weekly-rotating cosmetic sets</b> (zero stats), staples, the Starter Pack, and the Premium Pass. The <b>Boutique Concierge</b> next door handles dye/name-color coupons and pay-to-fast bundles (EXP/common-drop boosts, convenience) payable in Cash Points <i>or</i> play-earned coins. <b>No power, no cards, no card/drop-on-card boosts ever sold</b>.')}
-  ${card('🎰','Fortune Vault — zeny-sink gacha','A pure zeny sink in Prontera: <b>25,000z</b> for one pull or <b>250,000z</b> for ten. Prizes run from a guaranteed consolation Old Blue Box up to a <b>0.1% RARE costume</b> (server-wide announce) with common costumes, refine packs and booster bundles in between — no cards, no MVP loot, ever. A hidden pity counter guarantees a common costume by your 100th pull without landing one.')}
-  ${card('🐾','Adventurer Allies — bond &amp; revive','Your recruited ally companions now carry a permanent per-class <b>Bond level</b> (1–10, earned from kills while that ally fights beside you) that boosts its buff tiers, with flavour titles at Bond 4/7/10 (Loyal / Devoted / Sworn). Town Healers now only give a free full heal — Blessing and Increase AGI moved to your Allies, so keep one summoned. If an ally dies, a 5-minute window lets you re-summon it at half the usual fee.')}
-  ${card('🚪','Warp &amp; repair fees','Every warp still works for everyone, but non-VIP now pays a small zeny toll — 500z for towns, 1,000z for fields/dungeons, 300z to re-warp to your last spot — and the Repair Smith charges 5,000z to fix broken gear. An active VIP sub waives every fee. See the <b>Rates</b> tab for the full VIP comparison.')}
-  ${card('🏁','MVP Arena speedrun boards','Every Challenge Tier (Normal / Hard / Nightmare) now keeps an all-time top-5 leaderboard of fastest clears — check it from the existing <code>@mvprank</code> command\'s new Speedrun Leaderboard page. Only a genuine personal best earns a shot at the board.')}
-  ${card('🎣','Fishing streaks &amp; Golden Fish','Landing 5 catches in a row (broken by changing maps or idling 2 minutes) grants a bonus yield roll, and every catch has a shot at a rare <b>Golden Fish</b> — 2% normally, 4% on a streak of 10+. Turn in 5 Golden Fish at the Profession Master for Valor Coins and bonus Fishing XP.')}
-  ${card('🎉','Server events','<b>Find the Mushroom</b>, <b>Speed Quiz</b> (trivia — first to reach the Quizmaster with the right answer wins the pot), and <b>Fever Field</b> (a hot-zone map goes live for 25 minutes with a guaranteed +3 bonus Valor Coin per kill) rotate every 2 hours off the Event Herald, plus a classic <b>Disguise</b> event that periodically hides a random monster in a familiar mob\'s skin for whoever spots it first.')}
-  ${card('🔭','Planned','An in-game <b>economy pass</b> (rationalising the coin/currency set) and a full <b>balance tuning</b> sweep once class damage is tested in-game.')}
-  </div>`;
+  </div>
+  ${acc('🎒','Gear, Loot &amp; Progression',9,groupGear,true)}
+  ${acc('💰','Daily Life &amp; Economy',5,groupEconomy)}
+  ${acc('🌍','World Events &amp; Threats',5,groupEvents)}
+  <div class="note">🔭 <b>Planned:</b> an in-game economy pass (rationalising the coin/currency set) and a full balance tuning sweep once class damage is tested in-game.</div>`;
 }
 
 // ===========================================================================
@@ -1315,6 +1364,54 @@ function renderCustomizations(){
     <p class="homefoot">Full item-by-item detail lives in the <b>Fun Builds</b> and <b>Skill Changes</b> tabs · custom/fun-mod items are filterable in the <b>Items</b> tab · built ${META.built||''}.</p>
   </div>`;
   el.innerHTML=h;
+}
+
+// ===========================================================================
+//  CLASSES — mirrors custom/npc/class_advisor.txt's 14 trans-2nd guides
+//  verbatim (same item names/skill %s/essence numbers). Keep in lockstep if
+//  that NPC's content ever changes — this is presentation only, not a
+//  second source of truth.
+// ===========================================================================
+const CLASS_GUIDES=[
+ {name:'Lord Knight',tags:['str'],id:'2h-sword STR bruiser',blurb:'Two-handed-sword STR bruiser. Bowling Bash carries you through 2nd job; once you trans, Spiral Pierce (spear) comes online as a second signature hit.',grabs:'<b>Zweihander[1]</b> (Bowling Bash +140%), <b>Hydra Card</b> (Bowling Bash +15%), <b>Worm Tail Card</b> (Spiral Pierce +18%).',essence:'<b>Lord Knight Essence</b> → <b>Essence II</b> (Hunter\'s Guild shop, 60 / 150 Hunter Coins) — +Str and both signatures +35%.',next:'Monster Hunter\'s bounty board has two Advanced Gear weapons just for you — <b>Lord Knight\'s Warbreaker</b> (Bowling Bash) and <b>Ravenspine</b> (Spiral Pierce).'},
+ {name:'Paladin',tags:['vit'],id:'VIT shield tank',blurb:'VIT shield tank who still hits like a caster. Shield Chain, Grand Cross, and Pressure all scale together, so keep a shield on at all times.',grabs:'<b>Buckler[1]</b> (Shield Boomerang +80%), <b>Haedonggum</b> (Grand Cross +50%), <b>Yoyo Card</b> (Shield Chain +18%).',essence:'<b>Paladin Essence</b> → <b>Essence II</b> — +Vit and all three signatures +35%.',next:'Monster Hunter\'s bounty board has <b>Crusader\'s Juggernaut Wall</b> (Shield Boomerang +150%) waiting for you.'},
+ {name:'High Priest',tags:['int','sup'],id:'INT support/nuker',blurb:'The support backbone who can still throw real damage. Magnus Exorcismus and Holy Light are your two signature nukes, best against Undead/Demon packs.',grabs:'<b>Rosary[1]</b> (Magnus Exorcismus +60%, Holy Light +100% — one item covers both), <b>Mace[1]</b> (Magnus Exorcismus +50%), <b>Mummy Card</b> (Magnus Exorcismus +15%).',essence:'<b>High Priest Essence</b> → <b>Essence II</b> — +Int and both signatures +35%.',next:'No Monster Hunter weapon specifically, but the <b>Build Librarian</b> has the full Priest Zealot Support combo write-up (the same Rosary above).'},
+ {name:'High Wizard',tags:['int'],id:'INT glass cannon',blurb:'INT glass cannon. Meteor Storm, Napalm Vulcan, and Jupitel Thunder are your trans-tier signatures, stacked on top of the Bolts/Storm Gust you already know.',grabs:'<b>Circlet[1]</b> (Storm Gust / Vermilion / Jupitel Thunder +50% each), <b>Glasses[1]</b> (Napalm Vulcan +60%), <b>Pasana Card</b> (Meteor Storm +15%).',essence:'<b>High Wizard Essence</b> → <b>Essence II</b> — +Int and all three signatures +35%.',next:'Card coverage is some of the best on the server here — the <b>Build Librarian</b> can check your Circlet/Glasses combo progress.'},
+ {name:'Whitesmith',tags:['str'],id:'STR cart-smith',blurb:'STR cart-smith. Cart Termination is your single-target hammer, Cart Revolution clears the room; both want your cart parked and full.',grabs:'<b>Axe[1]</b> (Cart Termination +120%), <b>Belt</b> (Cart Revolution +100% and Mammonite +40% in one slot), <b>Goblin Card</b> (Cart Termination +15%).',essence:'<b>Whitesmith Essence</b> → <b>Essence II</b> — +Str, Cart Termination +40%, Cart Revolution +35%.',next:'The <b>Build Librarian</b> has the full Merchant Brawler combo if you want to see how far that single Belt can take you.'},
+ {name:'Creator',tags:['int','dex'],id:'INT/DEX bomber',blurb:'INT/DEX bomber. Acid Demonstration is your main-target burst, Acid Terror and Demonstration are your everyday bomb throws.',grabs:'<b>Cutlus</b> or <b>Smasher[1]</b> (both amp Demonstration + Acid Terror), <b>Celebrant\'s Mitten</b> (Acid Demonstration +60%), <b>Scorpion Card</b> (all three +12–15%).',essence:'<b>Creator Essence</b> → <b>Essence II</b> — +Int/+Dex, Acid Demonstration +40%, Acid Terror/Demonstration +35% each.',next:'Both weapons above are also sold straight-up at the Fun Gear Armory if you\'d rather skip the grind and start bombing today.'},
+ {name:'Sniper',tags:['dex'],id:'DEX archer',blurb:'DEX archer. Double Strafe is your leveling workhorse; Sharp Shooting and Falcon Assault come online at trans as your real burst.',grabs:'<b>Gakkung Bow</b> (Charge Arrow +75%, Sharp Shooting +50%), <b>CrossBow[1]</b> (Arrow Shower +100%), <b>Wild Rose Card</b> (Sharp Shooting +12%).',essence:'<b>Sniper Essence</b> → <b>Essence II</b> — +Dex, Double Strafe / Sharp Shooting / Falcon Assault +35% each.',next:'Monster Hunter\'s bounty board has <b>Falcon\'s Wing</b> (Falcon Assault +70%) waiting for you.'},
+ {name:'Assassin Cross',tags:['agi'],id:'AGI/Flee crit-crasher',blurb:'AGI/Flee crit-crasher. Sonic Blow is your opener; Soul Breaker and Venom Splasher round out your trans kit.',grabs:'<b>Tsurugi[1]</b> (Soul Breaker +100%), <b>Jur[1]</b> (Grimtooth +80%), <b>Orc Warrior Card</b> (Sonic Blow +12%).',essence:'<b>Assassin Cross Essence</b> → <b>Essence II</b> — +Agi, +5 Flee, Sonic Blow / Soul Breaker +35% each, Venom Splasher +40%.',next:'Card coverage here is some of the best on the server — the <b>Build Librarian</b> has the full Assassin Bomber combo (Brooch, Grimtooth + Venom Splasher).'},
+ {name:'Champion',tags:['str','dex'],id:'STR/DEX fist fighter',blurb:'STR/DEX fist fighter. Combo into Chain Crush Combo pre-trans, then Asura Strike, Finger Offensive, and Palm Strike take over as your trans signatures.',grabs:'<b>Fist[1]</b> (Finger Offensive +80%, Asura Strike +50%), <b>Chain[1]</b> (Chain Crush Combo +120%), <b>Matyr Card</b> (Palm Strike +15%).',essence:'<b>Champion Essence</b> → <b>Essence II</b> — +Str, all three signatures +35% each.',next:'The <b>Biretta[1]</b> headgear stacks even more Finger Offensive/Chain Combo on top — the <b>Build Librarian</b> has the full combo.'},
+ {name:'Professor',tags:['int','sup'],id:'INT caster/support hybrid',blurb:'INT caster/support hybrid. Soul Burn is your signature punish; Soul Strike and Fire Ball are still your everyday damage.',grabs:'<b>Wand[1]</b> (Fire Ball +100%), <b>Rod[1]</b> (Soul Strike +100%), <b>Ghostring Card</b> (Soul Strike + Soul Burn +15%).',essence:'<b>Professor Essence</b> → <b>Essence II</b> — +Int, Soul Burn / Soul Strike / Fire Ball +35% each.',next:'The <b>Build Librarian</b> has the Battle Mage Grimoire combo (Ribbon) if you want the full caster-support look.'},
+ {name:'Stalker',tags:['agi'],id:'AGI rogue',blurb:'AGI rogue. Back Stab is your opener from stealth, Sightless Mind (Raid) is your finisher once you trans.',grabs:'<b>Gladius</b> (Back Stab +100%, Intimidate +80%), <b>Rogue\'s Treasure</b> (Sightless Mind +50%, single item), <b>Pest Card</b> (Sightless Mind +15%).',essence:'<b>Stalker Essence</b> → <b>Essence II</b> — +Agi, Back Stab / Sightless Mind +35% each.',next:'The <b>Build Librarian</b> can check your Shadow Skirmisher\'s Toolkit combo (Rogue\'s Treasure) progress.'},
+ {name:'Clown',tags:['dex'],id:'DEX bard-archer hybrid',blurb:'DEX bard-archer hybrid. Arrow Vulcan is your signature shared with Gypsy; Musical Strike is your solo bread-and-butter.',grabs:'<b>Lute[1]</b> (Musical Strike +100%), <b>Jakk Card</b> (Arrow Vulcan +12%), <b>Requiem Card</b> (Musical Strike +15%).',essence:'<b>Clown Essence</b> → <b>Essence II</b> — +Dex, Arrow Vulcan / Musical Strike +35% each.',next:'Monster Hunter\'s bounty board has <b>Vulcan\'s Fanfare</b> (Arrow Vulcan +110%) waiting for you.'},
+ {name:'Gypsy',tags:['dex'],id:'DEX dancer-archer hybrid',blurb:'DEX dancer-archer hybrid. Arrow Vulcan is your signature shared with Clown; Slinging Arrow (Throw Arrow) is your solo bread-and-butter.',grabs:'<b>Rope[1]</b> (Slinging Arrow +100%), <b>Jakk Card</b> (Arrow Vulcan +12%), <b>Toad Card</b> (Slinging Arrow +15%).',essence:'<b>Gypsy Essence</b> → <b>Essence II</b> — +Dex, Arrow Vulcan / Slinging Arrow +35% each.',next:'Monster Hunter\'s bounty board has <b>Vulcan\'s Refrain</b> (Arrow Vulcan +110%) waiting for you.'},
+ {name:'Soul Linker',tags:['int','sup'],id:'INT support/utility',blurb:'INT support/utility class. Esma, Estin, and Estun are basically your only offense; your real value is Spirit-Linking allies, so gear coverage here is intentionally thin.',grabs:'<b>Deviruchi Card</b> (Esma +15%), <b>Munak Card</b> (Estin +15%), <b>Dokebi Card</b> (Estun +15%) — that\'s the whole cheap-tier list for this class.',essence:'<b>Soul Linker Essence</b> → <b>Essence II</b> — +Int, all three +35% each. Since gear is thin here, this essence is a bigger relative jump than most classes get.',next:'Bring a friend, or hire one with <code>@allies</code> — Soul Linker earns its keep buffing a party, not soloing.'},
+];
+const ROLE_LABEL={str:'STR',agi:'AGI',int:'INT',dex:'DEX',vit:'VIT',sup:'Support'};
+let classFlt='';
+function renderClasses(){
+  const el=$('#classes'); if(!el) return;
+  const chips=['','str','agi','int','dex','vit','sup'];
+  const roleTags=(tags)=>tags.map(t=>`<span class="roletag ${t}">${ROLE_LABEL[t]}</span>`).join(' ');
+  const classCard=(c)=>`<details class="classcard"><summary>${roleTags(c.tags)}<span class="ccn">${esc(c.name)}</span><span style="color:var(--muted);font-size:12px">${esc(c.id)}</span><span class="accarrow">▸</span></summary>`
+    +`<div class="ccbody"><p>${c.blurb}</p><p><b>Best early grabs:</b> ${c.grabs}</p><p><b>Save up for:</b> ${c.essence}</p><p><b>Once you're geared:</b> ${c.next}</p></div></details>`;
+  function paint(){
+    const list = classFlt ? CLASS_GUIDES.filter(c=>c.tags.includes(classFlt)) : CLASS_GUIDES;
+    $('#classlist').innerHTML = list.map(classCard).join('');
+  }
+  el.innerHTML=`<div class="homewrap">
+    <div class="hero homehero"><div class="kicker">EPISODE 13 / TRANS-2ND · 14 CLASSES</div><h1 style="font-size:30px">Classes</h1>
+      <p>A quick early-game plan for each of the server's 14 trans-2nd classes — what to grab cheap, what to save Hunter Coins for, and where to go once you're geared. Same content as the in-game <b>Class Advisor</b> NPC (Prontera, near the Weapon Sage) — read it here, or ask them in person.</p>
+    </div>
+    <div class="classfilters" id="classChips"></div>
+    <div id="classlist"></div>
+    <p class="homefoot">All item names, skill %s and essence costs are pulled straight from the live item database — nothing here is aspirational.</p>
+  </div>`;
+  const cc=$('#classChips');
+  cc.innerHTML = chips.map(t=>`<button type="button" class="ichip${classFlt===t?' active':''}">${t?ROLE_LABEL[t]:'All classes'}</button>`).join('');
+  cc.querySelectorAll('button').forEach((b,i)=>b.onclick=()=>{ classFlt=chips[i]; cc.querySelectorAll('button').forEach((bb,ii)=>bb.classList.toggle('active',ii===i)); paint(); });
+  paint();
 }
 
 const row=(k,v)=> v!=null&&v!==''?`<dt>${k}</dt><dd>${v}</dd>`:'';
