@@ -2653,5 +2653,101 @@
    }
   ],
   "build": "Magical Bullet self-buff enabling INT-scaled gunslinger damage"
+ },
+ {
+  "class": "Hunter",
+  "classOrder": 2,
+  "skill": "Land Mine",
+  "aegis": "HT_LANDMINE",
+  "id": 116,
+  "usability": [
+   {
+    "field": "Duration1",
+    "before": "per-lv 200000..40000",
+    "after": "7500 (flat, all levels)"
+   },
+   {
+    "field": "Unit.Interval",
+    "before": "1000",
+    "after": "500 (15 ticks over the field's life)"
+   }
+  ],
+  "damage": {
+   "before": "single on-touch hit, DEX/INT-scaled",
+   "after": "40+8*lv MATK-scaled ratio per tick (15 ticks); built-in Stun now fires every tick"
+  },
+  "build": "Ticking Earth trap-field Hunter/Sniper"
+ },
+ {
+  "class": "Hunter",
+  "classOrder": 2,
+  "skill": "Blast Mine",
+  "aegis": "HT_BLASTMINE",
+  "id": 122,
+  "usability": [
+   {
+    "field": "Duration1",
+    "before": "per-lv 25000..5000",
+    "after": "7500 (flat, all levels)"
+   },
+   {
+    "field": "Unit.Interval",
+    "before": "1000",
+    "after": "500 (15 ticks over the field's life)"
+   }
+  ],
+  "damage": {
+   "before": "single on-touch hit, DEX/INT-scaled",
+   "after": "30+6*lv MATK-scaled ratio per tick (15 ticks)"
+  },
+  "build": "Ticking Wind trap-field Hunter/Sniper"
+ },
+ {
+  "class": "Hunter",
+  "classOrder": 2,
+  "skill": "Claymore Trap",
+  "aegis": "HT_CLAYMORETRAP",
+  "id": 123,
+  "usability": [
+   {
+    "field": "Duration1",
+    "before": "per-lv 20000..100000",
+    "after": "7500 (flat, all levels)"
+   },
+   {
+    "field": "Unit.Interval",
+    "before": "1000",
+    "after": "500 (15 ticks over the field's life)"
+   },
+   {
+    "field": "Unit.Range",
+    "before": "1 (single-cell trigger)",
+    "after": "2 (5x5 trigger field)"
+   }
+  ],
+  "damage": {
+   "before": "single on-touch hit, DEX/INT-scaled",
+   "after": "25+5*lv MATK-scaled ratio per tick (15 ticks)"
+  },
+  "build": "Wide ticking Fire trap-field Hunter/Sniper"
+ },
+ {
+  "class": "Blacksmith",
+  "classOrder": 2,
+  "skill": "Hammer Fall",
+  "aegis": "BS_HAMMERFALL",
+  "id": 110,
+  "usability": [
+   {
+    "field": "DamageFlags.NoDamage",
+    "before": "true (stun-only, zero damage ever)",
+    "after": "false (deals real damage)"
+   }
+  ],
+  "damage": {
+   "before": "0 (no-damage stun skill)",
+   "after": "100+80*lv splash weapon damage (stun retained, ~min(20+10*lv,50+5*lv)% chance)"
+  },
+  "build": "Splash-damage stun opener Blacksmith/Whitesmith"
  }
 ]
