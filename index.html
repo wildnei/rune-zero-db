@@ -36,10 +36,11 @@
   .brand .mark{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:#fff;font-size:16px;
     background:linear-gradient(135deg,#13b3a3,#0d9488);box-shadow:0 3px 10px rgba(13,148,136,.35)}
   .brand small{color:var(--faint);font-family:'JetBrains Mono';font-size:9.5px;letter-spacing:.2em;display:block;font-weight:500}
-  nav.tabs{display:flex;gap:3px;margin-left:6px;flex-wrap:wrap}
+  nav.tabs{display:flex;gap:3px;margin-left:6px;flex-wrap:wrap;align-items:center}
   nav.tabs button{background:none;border:1px solid transparent;color:var(--muted);padding:7px 13px;border-radius:9px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.12s}
   nav.tabs button.active{color:var(--gold-deep);background:linear-gradient(180deg,#fff,var(--panel-2));border-color:var(--border-2);box-shadow:var(--shadow)}
   nav.tabs button:hover{color:var(--ink);background:var(--panel-2)}
+  nav.tabs .navdiv{width:1px;height:20px;background:var(--border-2);margin:0 4px}
   .search-wrap{margin-left:auto;display:flex;gap:8px;align-items:center;flex:1;min-width:240px;max-width:520px}
   input.search{flex:1;background:#fff;border:1px solid var(--border-2);color:var(--text);border-radius:10px;padding:9px 13px;font-size:14px;outline:none;box-shadow:var(--shadow);transition:.12s}
   input.search:focus{border-color:var(--rune);box-shadow:0 0 0 3px rgba(13,148,136,.13)}
@@ -255,6 +256,39 @@
   .newbanner .nbt{font-family:'Cinzel',serif;font-size:16px;color:var(--gold-deep);flex:1}
   .newbanner .nbt small{display:block;font-family:'Inter';font-weight:500;font-size:12.5px;color:var(--text);margin-top:2px}
   .newbanner .nbarrow{font-size:20px;color:var(--gold-deep);flex:none}
+  /* rates — "at a glance" table */
+  .ratesgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin:14px 0 26px}
+  .ratecell{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:14px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .ratecell:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--rune),#37c0b2)}
+  .ratecell.guard:before{background:linear-gradient(180deg,#df8a1e,#b27c1b)}
+  .ratecell .rl{font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+  .ratecell .rv{font-family:'Cinzel',serif;font-size:24px;color:var(--ink);line-height:1.1}
+  .ratecell.guard .rv{color:var(--gold-deep)}
+  .ratecell .rn{font-size:12px;color:var(--muted);margin-top:4px}
+  .ratecell .rg{display:inline-block;margin-top:7px;font-family:'JetBrains Mono';font-size:9.5px;font-weight:700;letter-spacing:.06em;color:#fff;background:linear-gradient(135deg,#e7a93a,#d6891b);border-radius:5px;padding:2px 7px}
+  .sectionhead{display:flex;align-items:center;gap:10px;margin:30px 0 4px}
+  .sectionhead .sn{font-family:'Cinzel',serif;color:var(--gold-deep);font-size:18px}
+  .sectionhead .sl{flex:1;height:1px;background:linear-gradient(90deg,var(--border-2),transparent)}
+  .sectionsub{font-size:13px;color:var(--muted);margin:2px 0 4px}
+  .vipgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0 8px}
+  @media(max-width:760px){.vipgrid{grid-template-columns:1fr}}
+  .vipcol{border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
+  .vipcol.yes{background:linear-gradient(160deg,rgba(31,157,87,.08),var(--panel));border:1px solid rgba(31,157,87,.3)}
+  .vipcol.no{background:linear-gradient(160deg,rgba(214,69,63,.07),var(--panel));border:1px solid rgba(214,69,63,.28)}
+  .vipcol h4{font-family:'Cinzel',serif;font-size:15.5px;margin:0 0 10px;display:flex;align-items:center;gap:7px}
+  .vipcol.yes h4{color:var(--good)}
+  .vipcol.no h4{color:var(--bad)}
+  .vipcol ul{margin:0;padding-left:0;list-style:none}
+  .vipcol li{font-size:13px;padding:5px 0 5px 22px;position:relative;border-bottom:1px dashed var(--border)}
+  .vipcol li:last-child{border-bottom:none}
+  .vipcol.yes li:before{content:'✓';position:absolute;left:0;color:var(--good);font-weight:700}
+  .vipcol.no li:before{content:'✕';position:absolute;left:0;color:var(--bad);font-weight:700}
+  .cmdgrid{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 4px}
+  .cmdpill{font-family:'JetBrains Mono';font-size:12px;background:var(--panel-2);border:1px solid var(--border-2);color:var(--rune-deep);border-radius:7px;padding:4px 10px}
+  .rulebox{display:flex;gap:12px;background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:13px 16px;margin-bottom:10px;box-shadow:var(--shadow);align-items:flex-start}
+  .rulebox .ri{font-size:20px;flex:none;margin-top:1px}
+  .rulebox b{color:var(--ink)}
+  .rulebox p{margin:2px 0 0;font-size:13px;color:var(--text)}
 </style>
 </head>
 <body>
@@ -264,13 +298,16 @@
     <div class="brand"><span class="mark">✦</span><span>Rune&nbsp;Zero<small>GAME DATABASE</small></span></div>
     <nav class="tabs">
       <button data-view="home" class="active">Home</button>
+      <button data-view="systems">Features</button>
+      <button data-view="rates">Rates</button>
+      <button data-view="customizations">Customizations</button>
+      <span class="navdiv" aria-hidden="true"></span>
       <button data-view="items">Items</button>
-      <button data-view="builds">Fun Builds</button>
       <button data-view="mobs">Monsters</button>
       <button data-view="skills">Skill Items</button>
       <button data-view="enchants">Enchants</button>
+      <button data-view="builds">Fun Builds</button>
       <button data-view="hunting">Hunting Log</button>
-      <button data-view="systems">Systems</button>
       <button data-view="balance">Skill Changes</button>
     </nav>
     <div class="search-wrap" id="searchWrap">
@@ -603,8 +640,10 @@ function initUI(){
     +'<div class="systems hide" id="balance"></div>'
     +'<div class="hide" id="hunting"></div>'
     +'<div class="hide" id="builds"></div>'
-    +'<div class="hide" id="home"></div>';
-  renderSystems(); renderHome(); renderHunting(); renderBuilds();
+    +'<div class="hide" id="home"></div>'
+    +'<div class="hide" id="rates"></div>'
+    +'<div class="hide" id="customizations"></div>';
+  renderSystems(); renderHome(); renderHunting(); renderBuilds(); renderRates(); renderCustomizations();
   buildItemBar();
   document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>setView(b.dataset.view));
   $('#search').addEventListener('input', debounce(render, 160));
@@ -616,7 +655,7 @@ function initUI(){
 function setView(v){
   view=v;
   document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
-  const isPanel = (v==='systems'||v==='balance'||v==='home'||v==='hunting'||v==='builds');
+  const isPanel = (v==='systems'||v==='balance'||v==='home'||v==='hunting'||v==='builds'||v==='rates'||v==='customizations');
   $('#searchWrap').style.visibility = isPanel?'hidden':'visible';
   $('#browse').classList.toggle('hide', isPanel);
   $('#systems').classList.toggle('hide', v!=='systems');
@@ -624,8 +663,10 @@ function setView(v){
   $('#home').classList.toggle('hide', v!=='home');
   $('#hunting').classList.toggle('hide', v!=='hunting');
   $('#builds').classList.toggle('hide', v!=='builds');
+  $('#rates').classList.toggle('hide', v!=='rates');
+  $('#customizations').classList.toggle('hide', v!=='customizations');
   $('#itemBar').classList.toggle('hide', v!=='items');
-  if(v==='home'||v==='hunting'||v==='builds') return;
+  if(v==='home'||v==='hunting'||v==='builds'||v==='rates'||v==='customizations') return;
   if(v==='balance'){ renderBalance(); return; }
   if(v==='systems') return;
   // type filter options
@@ -705,7 +746,7 @@ function render(){
   rows.querySelectorAll('tr[data-id]').forEach(tr=>tr.onclick=()=>{ location.hash = pre+tr.dataset.id; });
 }
 
-const VIEWS=['home','items','builds','mobs','skills','enchants','hunting','systems','balance'];
+const VIEWS=['home','items','builds','mobs','skills','enchants','hunting','systems','balance','rates','customizations'];
 function routeHash(){
   const h=location.hash.slice(1);
   if(h.startsWith('item/')){ if(view==='systems')setView('items'); showItem(+h.slice(5)); }
@@ -929,15 +970,21 @@ function renderHome(){
       ${card('🔦','Spot-the-rare beams','Notable drops pillar on the ground — cards (blue/purple) and rare gear (green/red) — so you never walk past a rare. Purely visual; zero rate impact.','g')}
       ${card('🧭','New here?','Training grounds (movement/attack + commands cheat sheet) → pick a free starter fun-mod weapon → <b>Weapon Sage</b> in Prontera explains what your gear can do → <b>Build Librarian</b> has the full build list → hire a companion any time with <code>@allies</code>. A guided first hour, still zero rate inflation.')}
     </div>
+    <h3 class="homeh">Server info</h3>
+    <div class="hlinks">
+      ${link('systems','🏛️','Features','Every custom server system explained')}
+      ${link('rates','📈','Rates','EXP, drops, death penalty, VIP — the real numbers')}
+      ${link('customizations','🧩','Customizations','Every skill rebalance &amp; fun-mod build')}
+    </div>
     <h3 class="homeh">Explore the database</h3>
     <div class="hlinks">
       ${link('items','🎒','Items',`${((META.items||0)/1000).toFixed(1)}k items, stats, drops, enchants`)}
-      ${link('builds','🎉','Fun Builds','Off-meta skill-amp builds on classic gear')}
       ${link('mobs','👹','Monsters','HP, element matchup, drops, spawns')}
-      ${link('balance','⚔️','Skill Changes','Every skill rebalance, before → after')}
-      ${link('enchants','🎲','Enchants','Every random-option pool, in plain English')}
       ${link('skills','📜','Skill Items','Gear that boosts a class skill')}
-      ${link('systems','🏛️','Systems','Every custom server system explained')}
+      ${link('enchants','🎲','Enchants','Every random-option pool, in plain English')}
+      ${link('builds','🎉','Fun Builds','Off-meta skill-amp builds on classic gear')}
+      ${link('hunting','🏆','Hunting Log','Permanent kill milestones &amp; titles')}
+      ${link('balance','⚔️','Skill Changes','Every skill rebalance, before → after')}
     </div>
     <p class="homefoot">Database built ${META.built||''} from the live server DBs · for the full design wiki see the <a href="../index.html">Server Codex</a>.</p>
   </div>`;
@@ -1070,8 +1117,8 @@ function renderSystems(){
       ${profBox('🌿','Herbalism','Herb Clusters','fields (Prontera, Geffen, Payon, Morocc)','Yellow/Green/White/Blue/Red Herbs','brew potions — Red / Yellow / White / Blue (great with @autopot)','#1f9d57')}
       ${profBox('🎣','Fishing','Fishing Spots','ports &amp; beaches (Izlude, Alberta, Comodo)','Sharp Scale, Gill, Fish, Tendon','cook stat foods — +3 / +5 STR/AGI/VIT buff dishes','#2f7fd6')}
     </div></div>`;
-  $('#systems').innerHTML=`<h2>Rune Zero — Server Systems</h2>
-  <p style="color:var(--muted);margin-bottom:18px">This database reflects the live server, including Rune Zero's customizations. For the full design wiki, see the <a href="../index.html">Server Codex</a>.</p>
+  $('#systems').innerHTML=`<h2>Rune Zero — Features</h2>
+  <p style="color:var(--muted);margin-bottom:18px">Every custom system running on the live server. Looking for rates or numbers? See the <a onclick="setView('rates');location.hash='rates'">Rates</a> tab. Looking for item/skill rebalances? See <a onclick="setView('customizations');location.hash='customizations'">Customizations</a>.</p>
   <div class="syscards">
   ${beamLeg}
   ${gemPage}
@@ -1091,19 +1138,136 @@ function renderSystems(){
   ${card('🗡️','Eden weapons','A per-class weapon line bought with the <b>Eden badge</b>: each arrives <b>already enhanced</b> (5 options on purchase), is <b>refine-gated</b> (+3/+6/+9), and is re-rollable. Account-bound personal progression.')}
   ${card('📅','Daily &amp; weekly loops','<b>Daily Tasks</b>: 3 rotating jobs reset at server midnight, with an escalating <b>login streak</b> day-7 jackpot. <b>Weekly Hunt</b>: a rotating featured MVP with a cross-player leaderboard and tiered rewards. The retention spine.')}
   ${card('🛍️','Cash shop — cosmetics + pay-to-fast','The <b>Rune Zero Boutique</b> is a real native Cash Shop window selling <b>weekly-rotating cosmetic sets</b> (zero stats), staples, the Starter Pack, and the Premium Pass. The <b>Boutique Concierge</b> next door handles dye/name-color coupons and pay-to-fast bundles (EXP/common-drop boosts, convenience) payable in Cash Points <i>or</i> play-earned coins. <b>No power, no cards, no card/drop-on-card boosts ever sold</b>.')}
-  ${card('⚖️','Class &amp; monster balance','High-damage, multi-build philosophy: <b>52 underused skills</b> made spammable/affordable and <b>15 given real damage</b> so every class has 2–3 viable builds. To match, <b>26 MVPs were toughened ~2.5–3× HP</b> and elites bumped — bosses bite back. See the <b>Skill Changes</b> tab for every before→after.')}
-  ${card('⚡','Skill QoL pass','19 stock skills got usability-only modernizations (no damage changes): Impositio Manus &amp; Suffragium are now party-wide self-casts, Magical Bullet is a real self-buff, Back Stab auto-repositions behind its target (no longer usable from Hiding), the 4 Sage weapon endows always succeed, Bowling Bash is a flat 5×5 hit, Sonic Blow trades its animation lock for a short cooldown, Asura Strike costs 1 Spirit Sphere instead of 5, EDP lasts twice as long, and Kyrie Eleison &amp; Assumptio can now be active together. See the <b>Skill Changes</b> tab for the full before → after list.')}
-  ${card('💸','Selling &amp; dying cost more','NPC sell prices are now half of stock value (Overcharge still stacks on top), and dying costs <b>3%</b> of your current level\'s EXP instead of 1% — VIP still pays no death penalty. Both put real weight back on the economy now that EXP and zeny flow in faster at the fixed 5/5/3 rate.')}
   ${card('🎰','Fortune Vault — zeny-sink gacha','A pure zeny sink in Prontera: <b>25,000z</b> for one pull or <b>250,000z</b> for ten. Prizes run from a guaranteed consolation Old Blue Box up to a <b>0.1% RARE costume</b> (server-wide announce) with common costumes, refine packs and booster bundles in between — no cards, no MVP loot, ever. A hidden pity counter guarantees a common costume by your 100th pull without landing one.')}
   ${card('🐾','Adventurer Allies — bond &amp; revive','Your recruited ally companions now carry a permanent per-class <b>Bond level</b> (1–10, earned from kills while that ally fights beside you) that boosts its buff tiers, with flavour titles at Bond 4/7/10 (Loyal / Devoted / Sworn). Town Healers now only give a free full heal — Blessing and Increase AGI moved to your Allies, so keep one summoned. If an ally dies, a 5-minute window lets you re-summon it at half the usual fee.')}
-  ${card('🚪','Warp &amp; repair fees','Every warp still works for everyone, but non-VIP now pays a small zeny toll — 500z for towns, 1,000z for fields/dungeons, 300z to re-warp to your last spot — and the Repair Smith charges 5,000z to fix broken gear. An active VIP sub waives every fee. Pay-to-fast, never pay-to-win.')}
+  ${card('🚪','Warp &amp; repair fees','Every warp still works for everyone, but non-VIP now pays a small zeny toll — 500z for towns, 1,000z for fields/dungeons, 300z to re-warp to your last spot — and the Repair Smith charges 5,000z to fix broken gear. An active VIP sub waives every fee. See the <b>Rates</b> tab for the full VIP comparison.')}
   ${card('🏁','MVP Arena speedrun boards','Every Challenge Tier (Normal / Hard / Nightmare) now keeps an all-time top-5 leaderboard of fastest clears — check it from the existing <code>@mvprank</code> command\'s new Speedrun Leaderboard page. Only a genuine personal best earns a shot at the board.')}
   ${card('🎣','Fishing streaks &amp; Golden Fish','Landing 5 catches in a row (broken by changing maps or idling 2 minutes) grants a bonus yield roll, and every catch has a shot at a rare <b>Golden Fish</b> — 2% normally, 4% on a streak of 10+. Turn in 5 Golden Fish at the Profession Master for Valor Coins and bonus Fishing XP.')}
   ${card('🎉','Server events','<b>Find the Mushroom</b>, <b>Speed Quiz</b> (trivia — first to reach the Quizmaster with the right answer wins the pot), and <b>Fever Field</b> (a hot-zone map goes live for 25 minutes with a guaranteed +3 bonus Valor Coin per kill) rotate every 2 hours off the Event Herald, plus a classic <b>Disguise</b> event that periodically hides a random monster in a familiar mob\'s skin for whoever spots it first.')}
   ${card('🔭','Planned','An in-game <b>economy pass</b> (rationalising the coin/currency set) and a full <b>balance tuning</b> sweep once class damage is tested in-game.')}
-  ${card('🧩','Custom items',`${(META.customItems||0)} Rune Zero items are flagged <span class="badge custom">RZ</span> in the Items tab (use the <b>Custom</b> filter). The DB has ${(META.items||0).toLocaleString()} items and ${(META.mobs||0).toLocaleString()} monsters; built ${META.built||''}.`)}
-  ${card('🎉','Fun Mods','Classic/cheap gear (Earring, Main Gauche, Blade…) gets off-meta <b>bonus2 bSkillAtk</b> amps — fun, low-cost builds, not new power creep. '+(META.funmodItems||0)+' items are flagged <span class="badge funmod">FUN</span> in the Items tab (use the <b>Fun Mods</b> filter), plus '+(META.comboSets||0)+' small set combos that add a bonus amp for wearing two fun-mod pieces together. See the <b>Fun Builds</b> tab for the full cheat sheet by class.')}
   </div>`;
+}
+
+// ===========================================================================
+//  RATES — real numbers pulled straight from overlays/conf/import/battle_conf.txt
+//  (the server's single source of truth). Keep this in lockstep whenever that
+//  file changes — do not hand-guess values here.
+// ===========================================================================
+function renderRates(){
+  const el=$('#rates'); if(!el) return;
+  const cell=(label,val,note,guard)=>`<div class="ratecell${guard?' guard':''}"><div class="rl">${esc(label)}</div><div class="rv">${esc(val)}</div>${note?`<div class="rn">${note}</div>`:''}${guard?'<span class="rg">GUARDRAIL</span>':''}</div>`;
+  const head=(n)=>`<div class="sectionhead"><span class="sn">${n}</span><span class="sl"></span></div>`;
+  let h=`<div class="homewrap">
+    <div class="hero homehero"><div class="kicker">AT A GLANCE · LIVE CONFIG</div><h1 style="font-size:30px">Rates &amp; Fair Play</h1>
+      <p>Every number below is read straight from the server's own rate config, not a marketing page — if it changes, this page changes. The identity in one line: <b>pay-to-fast, never pay-to-win</b>. Convenience and speed are for sale; the rare-power chase (cards, MVP loot) never is.</p></div>
+
+    ${head('Experience')}
+    <div class="ratesgrid">
+      ${cell('Base EXP','5×','vs. official 1×')}
+      ${cell('Job EXP','5×','vs. official 1×')}
+      ${cell('MVP EXP','5×','same fixed rate')}
+      ${cell('Quest EXP','1×','modern quest rewards are already large')}
+    </div>
+
+    ${head('Drop rates')}
+    <div class="sectionsub">Common materials, potions, and equipment drop faster — the rare-power chase does not.</div>
+    <div class="ratesgrid">
+      ${cell('Common drops','3×','junk, materials, consumables')}
+      ${cell('Heal / Use items','3×','potions &amp; consumables')}
+      ${cell('Equipment drops','3×','weapons &amp; armor')}
+      ${cell('Card drops','1×','never boosted, ever',true)}
+      ${cell('MVP-exclusive loot','1×','never boosted, ever',true)}
+      ${cell('Treasure boxes','1×','economy/WoE-linked')}
+      ${cell('Scripted bonus drops','1×','e.g. Monster Hunter rewards')}
+    </div>
+
+    ${head('Death &amp; party')}
+    <div class="ratesgrid">
+      ${cell('Death penalty','3%','of current level EXP · VIP pays 0%')}
+      ${cell('Party share range','15 levels','+40% EXP per extra even-share member')}
+      ${cell('Multi-level from one kill','Off','one level at a time, official-style')}
+    </div>
+
+    ${head('Combat &amp; economy')}
+    <div class="ratesgrid">
+      ${cell('Max ASPD','190','classic pre-renewal ceiling')}
+      ${cell('NPC sell prices','50%','of stock value — Overcharge still stacks on top')}
+      ${cell('Sit HP/SP regen','+3%/sec','of max HP &amp; SP, any class, while sitting')}
+      ${cell('Warp toll (town)','500z','waived for VIP')}
+      ${cell('Warp toll (field/dungeon)','1,000z','waived for VIP')}
+      ${cell('Re-warp (last spot)','300z','waived for VIP')}
+      ${cell('Gear repair','5,000z','waived for VIP')}
+    </div>
+
+    ${head('VIP — pay-to-fast, not pay-to-win')}
+    <div class="sectionsub">Everything VIP gives is speed or convenience. The hard exclusion list never moves.</div>
+    <div class="vipgrid">
+      <div class="vipcol yes"><h4>✓ What VIP gives</h4><ul>
+        <li>+15% Base &amp; Job EXP</li>
+        <li>0% death penalty (vs. 3% for everyone else)</li>
+        <li>+300 storage slots</li>
+        <li>Gemstone-free skill casting</li>
+        <li>+10% <i>common-drop-only</i> bonus — cards &amp; MVP loot structurally excluded</li>
+        <li>Waived warp &amp; repair tolls</li>
+      </ul></div>
+      <div class="vipcol no"><h4>✕ What VIP never gives</h4><ul>
+        <li>Stat, ATK, or MATK power of any kind</li>
+        <li>Card or MVP-loot drop-rate boosts</li>
+        <li>Forge success-rate boosts</li>
+        <li>Best-in-slot gear gated behind a paywall</li>
+        <li>Easier or exclusive MVP access</li>
+      </ul></div>
+    </div>
+
+    ${head('Free QoL, for everyone')}
+    <div class="sectionsub">No VIP tier required — every player gets these from day one.</div>
+    <div class="cmdgrid">
+      ${['@go','@autoloot','@alootid','@autoloottype','@autotrade','@noks','@iteminfo','@mobinfo','@whodrops','@whereis','@storage','@time','@exp','@showexp','@showdelay','@refresh','@request'].map(c=>`<span class="cmdpill">${c}</span>`).join('')}
+    </div>
+    <p class="homefoot">Source: <code>overlays/conf/import/battle_conf.txt</code> · rate unit reminder: 100 = 1× in rAthena. Built ${META.built||''}.</p>
+  </div>`;
+  el.innerHTML=h;
+}
+
+// ===========================================================================
+//  CUSTOMIZATIONS — hub summarizing every rebalance/custom-content decision,
+//  linking out to the Fun Builds / Skill Changes / Items tabs for full detail.
+// ===========================================================================
+function renderCustomizations(){
+  const el=$('#customizations'); if(!el) return;
+  const stat=(n,l)=>`<div class="statbox"><b>${n}</b><small>${l}</small></div>`;
+  const card=(ic,t,b,cls)=>`<div class="card${cls?' '+cls:''}"><h4><span class="si">${ic}</span>${t}</h4><p>${b}</p></div>`;
+  const rule=(ic,t,b)=>`<div class="rulebox"><span class="ri">${ic}</span><div><b>${t}</b><p>${b}</p></div></div>`;
+  let h=`<div class="homewrap">
+    <div class="hero homehero"><div class="kicker">CUSTOM CONTENT · EPISODE 13 / TRANS-2ND</div><h1 style="font-size:30px">Customizations</h1>
+      <p>Every skill rebalance, custom item, and off-meta build Rune Zero adds on top of stock rAthena — high-damage and multi-build by design, but never inflating the rare-power chase.</p>
+      <div class="statline">${stat((META.customItems||0).toLocaleString(),'Custom items')}${stat((META.funmodItems||0).toLocaleString(),'Fun-mod items')}${stat((META.comboSets||0),'Set combos')}${stat('120','Skills rebalanced')}${stat((META.skillItems||0).toLocaleString(),'Skill-boosting items')}</div>
+    </div>
+
+    <div class="sectionhead"><span class="sn">Class &amp; skill balance</span><span class="sl"></span></div>
+    <div class="syscards">
+      ${card('⚖️','Class &amp; monster balance','High-damage, multi-build philosophy: <b>52 underused skills</b> made spammable/affordable and <b>15 given real damage</b> so every class has 2–3 viable builds. To match, <b>26 MVPs were toughened ~2.5–3× HP</b> and elites bumped — bosses bite back. See the <b>Skill Changes</b> tab for every before→after.','g')}
+      ${card('⚡','Skill QoL pass','19 stock skills got usability-only modernizations (no damage changes): Impositio Manus &amp; Suffragium are now party-wide self-casts, Magical Bullet is a real self-buff, Back Stab auto-repositions behind its target, the 4 Sage weapon endows always succeed, Bowling Bash is a flat 5×5 hit, Sonic Blow trades its animation lock for a short cooldown, Asura Strike costs 1 Spirit Sphere instead of 5, EDP lasts twice as long, and Kyrie Eleison &amp; Assumptio can now be active together. See <b>Skill Changes</b> for the full list.','g')}
+      ${card('💠','Class Essences','Trans-class <b>Essence</b> accessories (Lv 1 &amp; 2 per class) granting a class stat plus % boosts to that class\'s signature skills — faithful to kRO Zero, tuned for our high-damage server.')}
+      ${card('🏆','Legacy MVP trophies','Dead legacy MVP gear revived into refine-gated chase pieces — e.g. Majestic Goat: Bash / Bowling Bash <b>+28%</b> at +9. The server is intentionally high-damage; trophy spikes are meaningful, not timid.')}
+    </div>
+
+    <div class="sectionhead"><span class="sn">Fun Mods — off-meta item builds</span><span class="sl"></span></div>
+    <div class="syscards">
+      ${card('🎉','Any item, any tier, any damage skill','Classic and premium gear alike can carry off-meta <b>bonus2 bSkillAtk</b> damage amps — this isn\'t limited to cheap items anymore, it\'s meant to give every class and skill a build, not just the same handful of meta skills everyone already uses. '+(META.funmodItems||0)+' items are flagged <span class="badge funmod">FUN</span> in the <b>Items</b> tab, plus '+(META.comboSets||0)+' set combos for wearing two fun-mod pieces together. See the <b>Fun Builds</b> tab for the full cheat sheet by class.')}
+      ${card('🃏','Full card coverage','Every skill that can carry a damage amp now has a matching card option too — 95 fun-mod cards covering the skill-coverage gap, so a build isn\'t locked to one specific base item.')}
+    </div>
+
+    <div class="sectionhead"><span class="sn">Design rules we don't break</span><span class="sl"></span></div>
+    <div class="sectionsub">A few hard lines, kept consistent across every item added — so gear behaves predictably.</div>
+    ${rule('🚫','No Double Attack damage amps, anywhere','Double Attack (TF_DOUBLE) doesn\'t get a %-damage fun-mod on any item, full stop — it doesn\'t exist as a build path here, by design, not an oversight.')}
+    ${rule('🔒','Asura Strike is capped at +50% from any single item','Monk/Champion\'s Asura Strike (MO_EXTREMITYFIST) is a deliberate hard special case — no fun-mod item may push past a 50% total bonus, regardless of tier.')}
+    ${rule('📈','Trans-exclusive skills get noticeably bigger amps than base-class skills','A comparable item amping a transcendent-only skill leans bigger than one amping a 1st/2nd-class skill of the same tier — rewarding the deeper class investment.')}
+    ${rule('🃏','Cards stay a hard 1× — customization never means inflation','Every rebalance above changes damage or usability, never drop rate. Card and MVP-loot rates are governed separately — see the <b>Rates</b> tab.')}
+
+    <p class="homefoot">Full item-by-item detail lives in the <b>Fun Builds</b> and <b>Skill Changes</b> tabs · custom/fun-mod items are filterable in the <b>Items</b> tab · built ${META.built||''}.</p>
+  </div>`;
+  el.innerHTML=h;
 }
 
 const row=(k,v)=> v!=null&&v!==''?`<dt>${k}</dt><dd>${v}</dd>`:'';
