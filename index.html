@@ -1043,7 +1043,7 @@ function renderHome(){
       <p>A slow, meaningful Ragnarok Online server where rare drops feel rare — episode-13 / transcendent-2nd content with modern quality-of-life and a high-damage, multi-build combat rework. <b>Pay-to-fast, never pay-to-win</b>: card rates stay a hard 1×, always.</p>
       <div class="statline">${stat((META.items||0).toLocaleString(),'Items')}${stat((META.mobs||0).toLocaleString(),'Monsters')}${stat(META.customItems||0,'Custom items')}${stat('119','Skills rebalanced')}${stat(META.optionGroups||'—','Enchant pools')}</div>
     </div>
-    <div class="newbanner" onclick="setView('systems');location.hash='systems'"><span class="nbtag">NEW</span><span class="nbt">Old Glast Heim — Amdarais, the flagship boss<small>The server's first mechanics-gated fight: add-phases, a real enrage, and telegraphed ground attacks — not just a bigger health bar. Normal/Hard/Nightmare tiers, Base Level 99+. See Features for the full breakdown.</small></span><span class="nbarrow">→</span></div>
+    <div class="newbanner" onclick="setView('systems');location.hash='systems'"><span class="nbtag">NEW</span><span class="nbt">Three new endgame dungeons<small>Two mechanics-gated flagship bosses — Old Glast Heim's Amdarais and Ferlock Ship's Captain Ferlock, both with real add-phases, enrage, and telegraphed attacks — plus Ghost Palace, a repeatable weapon-farm dungeon feeding a 14-weapon BiS line. See Features for the full breakdown.</small></span><span class="nbarrow">→</span></div>
     <h3 class="homeh">What makes Rune Zero different</h3>
     <div class="syscards">
       ${card('🐢','Low-rate identity','Slow, deliberate progression — rare loot stays rare. QoL is for convenience, never for inflating rewards. <b>Card rates are a hard 1×, always</b> — MVP hunting itself runs at the same 3× as everything else.')}
@@ -1210,7 +1210,31 @@ function renderSystems(){
       ${oghPhase(2,'Enrage','At ≤40% HP he enrages (+ATK) and starts <b>channeling real ground-targeted attacks</b> at a random party member\'s tile — the cast bar is the telegraph. Reposition or eat real AoE damage.','#c9853a')}
       ${oghPhase(3,'Enrage timer','Run past the Challenge-Tier time limit (10/8/6 min Normal/Hard/Nightmare) and he gets meaner again — a real DPS/coordination check, not just a bigger health bar.','#b07ad6')}
     </div>
-    <p style="font-size:12.5px;color:var(--muted);margin:0">Rewards follow the same Valor/Hunter Coin + MVP Points layer as every other MVP fight (scaled up as a flagship premium), plus the grail-tier <b>Amdarais Card</b> — a real risk/reward card (+15% damage all classes, +15% MATK, but drains 4% HP every tick) at a hard 1× drop rate, same as every card, always. Hard and Nightmare clears earn their own titles.</p></div>`;
+    <p style="font-size:12.5px;color:var(--muted);margin:0">Rewards follow the same Valor/Hunter Coin + MVP Points layer as every other MVP fight (scaled up as a flagship premium), plus the grail-tier <b>Amdarais Card</b> — a real risk/reward card (+15% damage all classes, +15% MATK, but drains 666 flat HP every 4 seconds while worn) at a hard 1× drop rate, same as every card, always. Hard and Nightmare clears earn their own titles.</p></div>`;
+
+  const ferlockPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">🐉</span>Ferlock Ship — Captain Ferlock, the 2nd flagship boss</h4>
+    <p style="margin-bottom:12px">A second mechanics-gated fight, same real-consequence philosophy as Amdarais — reused from the real Airship Assault's actual final boss (a true MVP-flagged Dragon), retuned to our level-99 cap a notch below Amdarais so the two flagships have a clear pecking order. Enter via the <b>Sky Warden</b> (Eden HQ, Base Level 99+), same Normal/Hard/Nightmare Challenge Tiers and Fast Mode as Old Glast Heim.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
+      ${oghPhase(1,'Reinforcements','At ≤75% HP, two Sky Sentinels spawn. Leave them alive and Ferlock <b>heals</b> a slice of max HP every tick.','#4f8fe0')}
+      ${oghPhase(2,'Airborne fury','At ≤40% HP he takes to the air (+ATK) and starts <b>breathing real fire</b> at a random party member\'s tile — the cast bar is the telegraph. Reposition or burn.','#e0655a')}
+      ${oghPhase(3,'Enrage timer','Run past the Challenge-Tier time limit and the ship groans under his fury — a real DPS/coordination check.','#c9853a')}
+    </div>
+    <p style="font-size:12.5px;color:var(--muted);margin:0">Reward set: <b>Felock Armor / Cloak / Boots / Hat</b> (real stock gear, retuned to level 99) plus the grail-tier <b>Felock Card</b> — the real card targeted a class that doesn\'t exist on this server (Rebellion), so it was rebuilt as a universal +ATK/+MATK/anti-Dragon bonus instead of shipping dead weight. Hard and Nightmare clears earn their own titles.</p></div>`;
+
+  const ghostPalacePage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">⚔️</span>Ghost Palace — the weapon-farm dungeon</h4>
+    <p style="margin-bottom:12px">Not a boss fight — a repeatable farm loop feeding the server's widest horizontal BiS weapon tier. Two short waves of Torturous Redeemers (each guaranteed to drop <b>Gray Shard</b>, plus a Challenge-Tier-scaled bonus bundle on a full clear) via the <b>Palace Keeper</b> (Eden HQ, Base Level 99+, 2 free entries/day). Spend shards with the <b>Dimension Traveler</b> next door — no instance clear required to browse or buy.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
+        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🗡️ Thanos weapons — 200 shards</div>
+        <p style="font-size:12.5px;margin:0">One weapon per subtype — <b>14 types</b> from sword to whip — so every class has a real BiS pick. Real kRO stats: solid flat ATK/MATK, built-in lifesteal, and a genuine drawback (100 flat HP lost every 10s while equipped).</p></div>
+      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
+        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🛡️ Gray armor set — 100 shards</div>
+        <p style="font-size:12.5px;margin:0">Shield, body, garment, shoes, headgear — a full 5-piece refine-scaling set (Holy resist that grows with refine), open to every class.</p></div>
+      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
+        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🃏 Knight Sakray Card — 10,000 shards</div>
+        <p style="font-size:12.5px;margin:0">The special-tab grail: +20 ATK, +30% damage to Demon &amp; Undead. Real kRO price, real kRO power — a long-term grind, not a quick pickup.</p></div>
+    </div></div>`;
+
   const acc=(icon,title,count,body,openByDefault)=>`<details class="acc"${openByDefault?' open':''}><summary><span class="accicon">${icon}</span>${title}<span class="acccount">${count} systems</span><span class="accarrow">▸</span></summary><div class="accbody"><div class="syscards">${body}</div></div></details>`;
 
   const groupGear = [
@@ -1246,6 +1270,8 @@ function renderSystems(){
   <div class="sectionhead"><span class="sn">Core systems</span><span class="sl"></span></div>
   <div class="syscards">
   ${oghPage}
+  ${ferlockPage}
+  ${ghostPalacePage}
   ${beamLeg}
   ${gemPage}
   ${profPage}

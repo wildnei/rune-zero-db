@@ -47,6 +47,9 @@ const itemFiles = [
   path.join(CUSTOM, 'item_db_featured.yml'),     // Featured Build Feast — NEW item 40960 (regular custom, not funmod)
   path.join(CUSTOM, 'item_db_advanced.yml'),         // 2026-07-11: Orlean's set rescue/fix + Abyss Dress (rescued RE-only items)
   path.join(CUSTOM, 'item_db_advanced_weapons.yml'), // 2026-07-11: Advanced Gear trans-class-skill weapons 40985-40990
+  path.join(CUSTOM, 'item_db_oldglastheim.yml'),     // 2026-07-13: Amdarais_Card (4601) rescue — Old Glast Heim flagship boss reward
+  path.join(CUSTOM, 'item_db_ghostpalace.yml'),      // 2026-07-13: Thanos_* weapon line (13) + Gray armor set + Knight_Sakray_Card + Gray_Shard rescue — Ghost Palace exchange
+  path.join(CUSTOM, 'item_db_ferlock.yml'),          // 2026-07-13: Felock_Armor/Cape/Boots/Cap_/Card rescue — Ferlock Ship flagship boss reward
   path.join(CUSTOM, 'item_db_funmods.yml'),         // fun-mod skill-amp overrides (accessories/armor)
   path.join(CUSTOM, 'item_db_funmods_weapons.yml'), // fun-mod skill-amp overrides (weapons, batch 2)
   path.join(CUSTOM, 'item_db_funmods2.yml'),        // fun-mod skill-amp overrides, batch 3: elemental garments/shields + headgear wave 2
