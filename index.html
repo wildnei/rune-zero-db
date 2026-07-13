@@ -1043,7 +1043,7 @@ function renderHome(){
       <p>A slow, meaningful Ragnarok Online server where rare drops feel rare — episode-13 / transcendent-2nd content with modern quality-of-life and a high-damage, multi-build combat rework. <b>Pay-to-fast, never pay-to-win</b>: card rates stay a hard 1×, always.</p>
       <div class="statline">${stat((META.items||0).toLocaleString(),'Items')}${stat((META.mobs||0).toLocaleString(),'Monsters')}${stat(META.customItems||0,'Custom items')}${stat('119','Skills rebalanced')}${stat(META.optionGroups||'—','Enchant pools')}</div>
     </div>
-    <div class="newbanner" onclick="setView('systems');location.hash='systems'"><span class="nbtag">NEW</span><span class="nbt">Fever Field &amp; full card coverage<small>Fever Field's timed hot-zone events joined the rotation, and every one of the 90 previously-uncovered skills now has a matching card (95 fun-mod cards total) — see Systems for the full rundown.</small></span><span class="nbarrow">→</span></div>
+    <div class="newbanner" onclick="setView('systems');location.hash='systems'"><span class="nbtag">NEW</span><span class="nbt">Old Glast Heim — Amdarais, the flagship boss<small>The server's first mechanics-gated fight: add-phases, a real enrage, and telegraphed ground attacks — not just a bigger health bar. Normal/Hard/Nightmare tiers, Base Level 99+. See Features for the full breakdown.</small></span><span class="nbarrow">→</span></div>
     <h3 class="homeh">What makes Rune Zero different</h3>
     <div class="syscards">
       ${card('🐢','Low-rate identity','Slow, deliberate progression — rare loot stays rare. QoL is for convenience, never for inflating rewards. <b>Card rates are a hard 1×, always</b> — MVP hunting itself runs at the same 3× as everything else.')}
@@ -1200,6 +1200,17 @@ function renderSystems(){
       ${profBox('🌿','Herbalism','Herb Clusters','fields (Prontera, Geffen, Payon, Morocc)','Yellow/Green/White/Blue/Red Herbs','brew potions — Red / Yellow / White / Blue (great with @autopot)','#1f9d57')}
       ${profBox('🎣','Fishing','Fishing Spots','ports &amp; beaches (Izlude, Alberta, Comodo)','Sharp Scale, Gill, Fish, Tendon','cook stat foods — +3 / +5 STR/AGI/VIT buff dishes','#2f7fd6')}
     </div></div>`;
+  const oghPhase=(n,title,body,col)=>`<div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
+      <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:${col};font-size:14px;margin-bottom:4px">${n}. ${title}</div>
+      <p style="font-size:12.5px;margin:0">${body}</p></div>`;
+  const oghPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">👑</span>Old Glast Heim — Amdarais, the flagship boss</h4>
+    <p style="margin-bottom:12px">The server's first genuinely <b>mechanics-gated</b> fight — every other boss here scales HP/ATK, this one changes what you have to <i>do</i>. Two waves of guardians, then Amdarais himself, in the real Old Glast Heim arena, retuned from his real kRO stats down to our level-99/trans-2nd cap (a deliberate notch above Valkyrie Randgris, our previous toughest MVP). Enter via the <b>Ghost of the Sovereign</b> (Eden HQ, Base Level 99+), Normal/Hard/Nightmare Challenge Tiers exactly like MVP Arena — harder tiers never cost an extra entry or touch drop/card rates.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
+      ${oghPhase(1,'Reinforcements','At ≤75% HP, two adds spawn. Leave them alive and Amdarais <b>heals</b> a slice of max HP every tick — clear them fast or lose the DPS race.','#e0655a')}
+      ${oghPhase(2,'Enrage','At ≤40% HP he enrages (+ATK) and starts <b>channeling real ground-targeted attacks</b> at a random party member\'s tile — the cast bar is the telegraph. Reposition or eat real AoE damage.','#c9853a')}
+      ${oghPhase(3,'Enrage timer','Run past the Challenge-Tier time limit (10/8/6 min Normal/Hard/Nightmare) and he gets meaner again — a real DPS/coordination check, not just a bigger health bar.','#b07ad6')}
+    </div>
+    <p style="font-size:12.5px;color:var(--muted);margin:0">Rewards follow the same Valor/Hunter Coin + MVP Points layer as every other MVP fight (scaled up as a flagship premium), plus the grail-tier <b>Amdarais Card</b> — a real risk/reward card (+15% damage all classes, +15% MATK, but drains 4% HP every tick) at a hard 1× drop rate, same as every card, always. Hard and Nightmare clears earn their own titles.</p></div>`;
   const acc=(icon,title,count,body,openByDefault)=>`<details class="acc"${openByDefault?' open':''}><summary><span class="accicon">${icon}</span>${title}<span class="acccount">${count} systems</span><span class="accarrow">▸</span></summary><div class="accbody"><div class="syscards">${body}</div></div></details>`;
 
   const groupGear = [
@@ -1234,6 +1245,7 @@ function renderSystems(){
   <p style="color:var(--muted);margin-bottom:18px">Every custom system running on the live server. Looking for rates or numbers? See the <a onclick="setView('rates');location.hash='rates'">Rates</a> tab. Looking for item/skill rebalances? See <a onclick="setView('customizations');location.hash='customizations'">Customizations</a>.</p>
   <div class="sectionhead"><span class="sn">Core systems</span><span class="sl"></span></div>
   <div class="syscards">
+  ${oghPage}
   ${beamLeg}
   ${gemPage}
   ${profPage}
