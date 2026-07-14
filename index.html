@@ -437,6 +437,47 @@ function gearGroup(i){
 // item icons (public Divine Pride CDN)
 const IMG = id => 'https://static.divine-pride.net/images/items/collection/'+id+'.png';
 const ICO = id => 'https://static.divine-pride.net/images/items/item/'+id+'.png';
+// Same placeholder gotcha as monster art (see MOB_IMG below): a handful of
+// genuinely-invented custom item ids with NO real stock counterpart return the
+// identical fixed 5610-byte placeholder from the item CDN (verified 2026-07-13:
+// 40980/40981/40982 all measured exactly 5610 bytes, vs. a real rescued item/card's
+// couple-hundred-byte icon — e.g. Amdarais_Card 4601 and the Ferlock cards all
+// measured ~310 bytes, real Ferlock gear 479-918 bytes). HTTP 200, so onerror can't
+// catch it — skip the request outright for these known ids.
+const NO_ART_ITEM_IDS = new Set([40980, 40981, 40982]);
+function itemIcoTag(id){
+  if(NO_ART_ITEM_IDS.has(id)) return '<span class="ico" style="display:inline-grid;place-items:center;font-size:14px;vertical-align:middle;margin-right:8px">📦</span>';
+  return `<img class="ico" src="${ICO(id)}" loading="lazy" onerror="this.style.display='none'">`;
+}
+function itemImgTag(id){
+  if(NO_ART_ITEM_IDS.has(id)) return '<span class="iimg" style="display:grid;place-items:center;font-size:26px">📦</span>';
+  return `<img class="iimg" src="${IMG(id)}" onerror="this.classList.add('hide')" alt="">`;
+}
+// monster portraits (same CDN). GOTCHA (verified 2026-07-13): an id with no real
+// divine-pride art does NOT 404 — it returns HTTP 200 with a fixed 5610-byte
+// generic placeholder image, so a plain onerror handler can't catch it (the
+// request "succeeds"). Only mobs the build script has confirmed are genuine
+// rAthena stock ids (mob.custom===false — present in db/pre-re OR db/re, see
+// tools/build-db.js) are safe to point at this CDN directly.
+const MOB_IMG = id => 'https://static.divine-pride.net/images/mobs/png/'+id+'.png';
+// Reliquary Warden (31030) is a truly-invented custom mob id with no client sprite
+// of its own — remapped in custom/db-import/mob_avail.yml to reuse Doppelganger's
+// (1046) sprite, so its "real" in-game look is Doppelganger's art. Any OTHER
+// mob.custom===true id with no entry here has no known-good art source at all, so
+// it falls back to a generic emoji instead of hitting the CDN (which would only
+// ever return that same placeholder).
+const MOB_IMG_OVERRIDE = {31030:1046};
+function mobPortrait(m){
+  const emoji='👹';
+  const box = src => '<span class="iimg" style="display:grid;place-items:center;overflow:hidden;padding:0">'
+    +'<img src="'+src+'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated" '
+    +'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'grid\'">'
+    +'<span style="display:none;place-items:center;width:100%;height:100%;font-size:28px">'+emoji+'</span></span>';
+  if(!m.custom) return box(MOB_IMG(m.id));
+  const ov=MOB_IMG_OVERRIDE[m.id];
+  if(ov) return box(MOB_IMG(ov));
+  return '<span class="iimg" style="display:grid;place-items:center;font-size:28px">'+emoji+'</span>';
+}
 let SKILLS = {};
 function skillName(a){ return SKILLS[a] || a.replace(/^[A-Z]{1,3}_/,'').replace(/_/g,' ').toLowerCase().replace(/\b\w/g,c=>c.toUpperCase()); }
 // friendly enchant-pool names
@@ -811,7 +852,7 @@ function render(){
     }
     for(const i of list){
       if(n>=300) break;
-      out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td><img class="ico" src="${ICO(i.id)}" loading="lazy" onerror="this.style.display='none'">${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}${i.funmod?'<span class="badge funmod">FUN</span>':''}${i.slots?` <span class="badge">[${i.slots}]</span>`:''}</td><td>${i.type||''}</td><td>${(i.loc||[]).join(', ')||'-'}</td></tr>`;n++;
+      out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td>${itemIcoTag(i.id)}${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}${i.funmod?'<span class="badge funmod">FUN</span>':''}${i.slots?` <span class="badge">[${i.slots}]</span>`:''}</td><td>${i.type||''}</td><td>${(i.loc||[]).join(', ')||'-'}</td></tr>`;n++;
     }
   }else if(view==='mobs'){
     for(const m of MOBS){
@@ -830,7 +871,7 @@ function render(){
         const has3=i.boosts.some(b=>b.t3);
         const skn=trans.map(b=>skillName(b.skill)).slice(0,3).join(', ')+(trans.length>3?' +'+(trans.length-3):'');
         const tier=has3?'<span class="badge">+3rd</span>':'<span class="badge">Trans</span>';
-        out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td><img class="ico" src="${ICO(i.id)}" loading="lazy" onerror="this.style.display='none'">${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}${i.funmod?'<span class="badge funmod">FUN</span>':''}</td><td style="font-size:12px">${esc(skn)}</td><td>${tier}</td></tr>`;n++;
+        out+=`<tr data-id="${i.id}"><td class="mono">${i.id}</td><td>${itemIcoTag(i.id)}${esc(i.name)} ${i.custom?'<span class="badge custom">RZ</span>':''}${i.funmod?'<span class="badge funmod">FUN</span>':''}</td><td style="font-size:12px">${esc(skn)}</td><td>${tier}</td></tr>`;n++;
       }
     }
   }else{ // enchants
@@ -875,7 +916,7 @@ function showItem(id){
   const i=ITEM_BY_ID.get(id); if(!i)return;
   if(view!=='items' && view!=='skills'){view='items';setView('items');}  // stay on Skill Items tab when browsing it
   highlight(id);
-  let h=`<div class="ihead"><img class="iimg" src="${IMG(i.id)}" onerror="this.classList.add('hide')" alt=""><div><h2>${esc(i.name)} ${i.custom?'<span class="badge custom">Rune Zero</span>':''}${i.funmod?'<span class="badge funmod">Fun Mod</span>':''}</h2><div class="sub mono">ID ${i.id} · ${esc(i.aegis||'')}</div></div></div>`;
+  let h=`<div class="ihead">${itemImgTag(i.id)}<div><h2>${esc(i.name)} ${i.custom?'<span class="badge custom">Rune Zero</span>':''}${i.funmod?'<span class="badge funmod">Fun Mod</span>':''}</h2><div class="sub mono">ID ${i.id} · ${esc(i.aegis||'')}</div></div></div>`;
   h+='<dl class="kv">';
   h+=row('Type', i.type + (i.sub?` (${i.sub})`:''));
   if(i.slots)h+=row('Card slots', i.slots);
@@ -951,8 +992,7 @@ function showMob(id){
   const m=MOB_BY_ID.get(id); if(!m)return;
   if(view!=='mobs'){view='mobs';setView('mobs');}
   highlight(id);
-  let h=`<h2>${esc(m.name)} ${m.mvp?'<span class="badge mvp">★ MVP</span>':''}</h2>`;
-  h+=`<div class="sub mono">ID ${m.id} · ${esc(m.aegis||'')}</div>`;
+  let h=`<div class="ihead">${mobPortrait(m)}<div><h2>${esc(m.name)} ${m.mvp?'<span class="badge mvp">★ MVP</span>':''}</h2><div class="sub mono">ID ${m.id} · ${esc(m.aegis||'')}</div></div></div>`;
   h+=`<div style="display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px">${eleChip(m.element,m.eleLv)}${raceChip(m.race)}${sizeChip(m.size)}<span class="ele" style="color:#5b637a;border-color:var(--border-2);background:var(--panel-2)"><i>📈</i>Lv ${m.lvl||'?'}</span></div>`;
   // HP bar (log-scaled: 100 .. 10M)
   const hp=m.hp||0, hpPct=Math.max(3,Math.min(100,Math.round((Math.log10(Math.max(hp,1))-2)/5*100)));
@@ -1510,13 +1550,52 @@ const GRAY_ARMOR=[
   {id:18820,note:'Headgear — Holy resist scales with refine'},
 ];
 const TEMPORAL_BOOTS=[
-  {id:22000,nm:'Str',fav:'flat ATK that scales with refine, plus a bonus ATK kicker once your STR hits 120+'},
-  {id:22001,nm:'Int',fav:'MATK that scales with refine, plus a bonus MATK kicker once your INT hits 120+'},
-  {id:22002,nm:'Agi',fav:'ASPD that scales with refine, plus a flat ASPD kicker once your AGI hits 120+'},
-  {id:22003,nm:'Vit',fav:'a much bigger Max HP scaling, plus a Max HP% kicker once your VIT hits 120+'},
-  {id:22004,nm:'Dex',fav:'flat DEX that scales with refine, plus ranged damage and reduced fixed cast once your DEX hits 120+'},
-  {id:22005,nm:'Luk',fav:'Critical Damage that scales with refine, plus a big Critical Damage kicker once your LUK hits 120+'},
+  {id:22000,nm:'Str',fav:'flat ATK that scales with refine, plus a bonus ATK kicker once your STR hits 95+'},
+  {id:22001,nm:'Int',fav:'MATK that scales with refine, plus a bonus MATK kicker once your INT hits 95+'},
+  {id:22002,nm:'Agi',fav:'ASPD that scales with refine, plus a flat ASPD kicker once your AGI hits 95+'},
+  {id:22003,nm:'Vit',fav:'a much bigger Max HP scaling, plus a Max HP% kicker once your VIT hits 95+'},
+  {id:22004,nm:'Dex',fav:'flat DEX that scales with refine, plus ranged damage and reduced fixed cast once your DEX hits 95+'},
+  {id:22005,nm:'Luk',fav:'Critical Damage that scales with refine, plus a big Critical Damage kicker once your LUK hits 95+'},
 ];
+// 4th-slot enchant ladder — pick ONE family when first enchanting the unslotted
+// boots (sectionBoots step 4); it grows through 4 escalating tiers. Verified
+// directly against the live server/rathena/db/re/item_db_etc.yml source, 2026-07-13.
+const BOOT_ENCHANT_LADDER=[
+  {name:'Fighting Spirit',boots:'Str',tiers:['+15 ATK, +5 Hit','+18 ATK, +5 Hit','+21 ATK, +5 Hit','+24 ATK, +5 Hit']},
+  {name:'Archery',boots:'Int',tiers:['+2% ranged damage','+4% ranged damage','+6% ranged damage','+8% ranged damage']},
+  {name:'Spell',boots:'Agi',tiers:['+9 MATK, -6% cast time','+12 MATK, -8% cast time','+15 MATK, -10% cast time','+18 MATK, -10% cast time']},
+  {name:'Vitality',boots:'Vit',tiers:['+2 VIT','+3 VIT','+1% Max HP','+2% Max HP']},
+  {name:'Attack Speed',boots:'Dex',tiers:['+4% ASPD','+6% ASPD','+8% ASPD','+10% ASPD']},
+  {name:'Lucky',boots:'Luk',tiers:['+3 LUK','+4 LUK','+5 LUK','+6 LUK']},
+];
+// 3rd-slot bonus-effect card — a single random pick once the 4th slot hits its
+// final tier (costs more Coagulated Spell). Every one is an on-hit PROC, not an
+// always-on bonus, and every one has a real "unequip tax" — a player deciding
+// whether to chase one needs the chance, the buff, AND the drawback together.
+const BOOT_BONUS_EFFECTS=[
+  {name:"Bear's Power",chance:'20%',trigger:'weapon hit',buff:'5s: +200 STR',drain:'5% Max HP drained per second while active',tax:'300 HP on unequip'},
+  {name:'Runaway Magic',chance:'15%',trigger:'magic cast',buff:'10s: +200 INT',drain:'2% Max SP drained per second while active',tax:'2,000 HP on unequip'},
+  {name:'Speed of Light',chance:'10%',trigger:'weapon hit',buff:'5s: +100% ASPD, +100 Flee',drain:'5% Max SP drained per second while active',tax:'300 HP on unequip'},
+  {name:'Muscle Fool',chance:'20%',trigger:'weapon hit',buff:'5s: +1000 DEF',drain:'5% Max SP drained per second while active',tax:'300 HP on unequip'},
+  {name:'Hawkeye',chance:'30%',trigger:'weapon hit',buff:'5s: +200 DEX',drain:'5% Max SP drained per second while active',tax:'300 HP on unequip'},
+  {name:'Lucky Day',chance:'15–16%',trigger:'any hit',buff:'5s: +200 LUK, plus a big boost to rare-drop luck',drain:'none',tax:'300 HP on unequip'},
+];
+function bootEnchantTable(){
+  let h='<table><thead><tr><th>Family</th><th>Tier 1</th><th>Tier 2</th><th>Tier 3</th><th>Tier 4</th></tr></thead><tbody>';
+  BOOT_ENCHANT_LADDER.forEach(f=>{
+    h+=`<tr><td><b>${esc(f.name)}</b><br><span class="mono" style="color:var(--muted);font-size:11px">${esc(f.boots)} boots</span></td>${f.tiers.map(t=>`<td style="font-size:12.5px">${esc(t)}</td>`).join('')}</tr>`;
+  });
+  h+='</tbody></table>';
+  return h;
+}
+function bootBonusTable(){
+  let h='<table><thead><tr><th>Card (3rd slot)</th><th>Proc chance</th><th>Buff while active</th><th>Drain while active</th><th>Cost to unequip</th></tr></thead><tbody>';
+  BOOT_BONUS_EFFECTS.forEach(b=>{
+    h+=`<tr><td><b>${esc(b.name)}</b></td><td class="mono">${esc(b.chance)} <span style="color:var(--muted);font-size:11px">on ${esc(b.trigger)}</span></td><td style="font-size:12.5px">${esc(b.buff)}</td><td style="font-size:12.5px;color:var(--warn)">${esc(b.drain)}</td><td style="font-size:12.5px;color:var(--bad)">${esc(b.tax)}</td></tr>`;
+  });
+  h+='</tbody></table>';
+  return h;
+}
 function instStep(n,title,body){
   return `<div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:8px">
     <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">${n}. ${title}</div>
@@ -1546,7 +1625,25 @@ function sectionBoots(){
   h+=instStep(5,'Optionally add a slot — real risk','<b>Hugin&rsquo;s Craftsman</b> can socket the boots for 5 more Temporal Crystal, but it is only a <span style="color:var(--bad);font-weight:700">50% success chance</span> — fail, and the boots (with everything enchanted onto them) are destroyed outright. Think carefully before rolling.');
   h+=instStep(6,'Further-enchant the slotted boots','Once slotted, <b>Dark magic master</b> continues the same 4-tier ladder using Coagulated Spell + <a onclick="location.hash=\'item/6755\'">Contaminated Magic</a> + 100,000 zeny per attempt. The first tier always succeeds, but every tier after that (including the final bonus-effect roll) is only a <span style="color:var(--bad);font-weight:700">70% success chance</span> — a failed attempt destroys the boots.');
   h+='</div>';
+  h+=`<div class="sec"><h4>4th slot — the effect ladder (pick one family)</h4>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">Whichever family you pick at step 4 grows through all 4 tiers on the same boots — you can't mix families on one pair. Matches the boots' native stat (Str boots want Fighting Spirit, Int boots want Archery, etc.) but nothing stops you picking a different family if you'd rather chase a specific effect.</p>
+    ${bootEnchantTable()}
+  </div>`;
+  h+=`<div class="sec"><h4>3rd slot — bonus-effect card (one random pick)</h4>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">Rolled once the 4th slot hits its final tier (costs more Coagulated Spell) — a single random pick from the 6 below, not a choice. Every one is an on-hit <b>proc</b>, not an always-on stat — it only fires (and only drains) while its short buff window is active. Read the drain and the unequip tax before deciding if the buff is worth chasing; they're real costs, not fine print.</p>
+    ${bootBonusTable()}
+  </div>`;
   return h;
+}
+function sectionPortraitCollector(){
+  return `<div class="sec"><h4>Portrait Collector — bulk material exchange</h4>
+    <p style="font-size:13px"><b>Portrait Collector#rz</b> stands at Eden HQ — moc_para01 (183,45) — and trades a bulk pile of Old Glast Heim currency for one of two cards. Pay with <b>either</b> currency, not both.</p>
+    <table><thead><tr><th>Card</th><th><a onclick="location.hash='item/6608'">Coagulated Spell</a></th><th>OR <a onclick="location.hash='item/6755'">Contaminated Magic</a></th><th>Effect</th></tr></thead><tbody>
+      <tr><td><a onclick="location.hash='item/4608'">White Knight Card</a></td><td class="mono">3,000</td><td class="mono">70</td><td style="font-size:12.5px">+15 ATK, +20% damage to Medium size, +20% damage to Large size</td></tr>
+      <tr><td><a onclick="location.hash='item/4609'">Khalitzburg Knight Card</a></td><td class="mono">5,000</td><td class="mono">100</td><td style="font-size:12.5px">+20 DEF, -25% damage taken from Medium size, -25% damage taken from Large size</td></tr>
+    </tbody></table>
+    <div class="note">White Knight Card is a weapon card for offense against Medium/Large enemies; Khalitzburg Knight Card is a shield card for defense against the same. Both are straightforward, no-RNG buys once you've stockpiled the material — no relation to the Temporal Boots chain above, just another sink for the same currencies.</div>
+  </div>`;
 }
 function sectionShards(){
   let h=`<div class="sec"><h4>Dimension Traveler exchange</h4>
@@ -1603,7 +1700,7 @@ const INSTANCES=[
       {id:6755,rate:50,tag:'material',note:'used only for the deeper Dark magic master enchant tier'},
     ],
     mvpDrops:[{id:617,rate:5000,note:''}],
-    extraSection: sectionBoots,
+    extraSection: ()=>sectionBoots()+sectionPortraitCollector(),
   },
   {
     slug:'ferlock', icon:'🐉', name:'Ferlock Ship — Captain Ferlock',
@@ -1624,14 +1721,14 @@ const INSTANCES=[
     ],
     rewardText:"Every clear pays, guaranteed: EXP (45% of your next Base &amp; Job EXP bar), Valor Coin, Hunter Coin, and MVP Points — all scaled up by Challenge Tier (Hard: &times;1.5 coins/EXP, &times;2 points; Nightmare: &times;2 coins/EXP, &times;4 points). Drops themselves roll at the server's normal fixed rates — only Ferlock's card stays a hard 1&times; drop, same as every card, always.",
     drops:[
-      {id:15117,rate:100,note:''},
+      {id:15117,rate:100,note:'HP/SP/MDEF/All Stats that keeps stacking at +7/+9/+12 refine — good for any tanky build.'},
       {id:40982,rate:100,note:'redeem it with Sky Warden for a choice of cape — see below'},
-      {id:22047,rate:100,note:''},
+      {id:22047,rate:100,note:'ASPD keeps stacking with refine, culminating in a true +1 ASPD at +12 — good for any physical attack-speed build.'},
       {id:19144,rate:1000,note:'a filler piece — no bonus stats in stock'},
       {id:12072,rate:3000,note:''},
       {id:12087,rate:3000,note:''},
       {id:12077,rate:3000,note:''},
-      {id:27182,rate:1,tag:'boss-exclusive',note:'+30 ATK, +30 MATK, +15% damage to Dragon race (physical and magic)'},
+      {id:27182,rate:1,tag:'boss-exclusive',note:'+30 ATK, +30 MATK, +15% damage to Dragon race (physical and magic) — a universal grail pick for any class, especially strong against Dragon-race content.'},
     ],
     mvpDrops:[{id:607,rate:5000,note:''},{id:608,rate:5000,note:''}],
     extraSection: sectionCapes,

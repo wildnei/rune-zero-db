@@ -135,6 +135,7 @@ for (const e of load(path.join(CUSTOM, 'item_combos.yml'))) {
 }
 
 // ---- mobs ------------------------------------------------------------------
+const RE = path.join(ROOT, 'server', 'rathena', 'db', 're');
 const mobFiles = [ path.join(PRE, 'mob_db.yml'), path.join(CUSTOM, 'mob_db.yml') ];
 const mobs = new Map();
 
@@ -146,6 +147,24 @@ function mapDrops(list) {
     rate: d.Rate || 0,
   }));
 }
+
+// A mob is "genuinely custom" (no guaranteed real divine-pride art) only if its Id
+// never appears in ANY real rAthena stock mob_db — not just db/pre-re (what the
+// live server loads) but ALSO db/re (kept on disk, dormant under PRERE). Several of
+// our "flagship" bosses (e.g. Captain Ferlock 3181, Torturous Redeemer 2959) are
+// real kRO mob ids that only ever shipped in db/re/mob_db.yml and were rescued into
+// custom/db-import/mob_db.yml the same way rescued items work (item_db_advanced.yml
+// etc.) — those are real ids with real art, just retuned/relocated, same as Amdarais
+// (2476, present in both pre-re and re) and Doppelganger (1046, ditto). Only an id
+// absent from BOTH stock files (our allocated custom range 20020-31999, e.g. 31030
+// Reliquary Warden) is truly invented and has no guaranteed real art — divine-pride
+// returns a fixed 5610-byte placeholder image for those (verified 2026-07-13, see
+// wiki/tools/build-db.js header notes / task report, NOT a 404, so it can't be
+// caught with a plain client-side onerror).
+const stockMobIds = new Set([
+  ...load(path.join(PRE, 'mob_db.yml')).map(e => e.Id),
+  ...load(path.join(RE, 'mob_db.yml')).map(e => e.Id),
+].filter(id => id != null));
 
 for (const f of mobFiles) {
   const custom = f.includes('db-import');
@@ -164,6 +183,7 @@ for (const f of mobFiles) {
       stats: e.Str != null ? { str:e.Str,agi:e.Agi,vit:e.Vit,int:e.Int,dex:e.Dex,luk:e.Luk } : prev.stats,
       drops: e.Drops ? mapDrops(e.Drops) : (prev.drops || []),
       mvpDrops: e.MvpDrops ? mapDrops(e.MvpDrops) : (prev.mvpDrops || []),
+      custom: custom && !stockMobIds.has(e.Id),
     });
     mobs.set(e.Id, m);
   }
