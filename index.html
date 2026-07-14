@@ -960,7 +960,7 @@ function showGroup(id){
     return `<div class="droprow"><span>${esc(d)}</span><span class="rate num">${(o.chance/100).toFixed(o.chance%100?2:0)}%</span></div>`;};
   if(fixed.length){h+='<div class="sec"><h4>Guaranteed slot — one of</h4>'+fixed.map(rowOpt).join('')+'</div>';}
   if(rnd.length){h+=`<div class="sec"><h4>Random extras (up to ${g.maxRandom})</h4>`+rnd.map(rowOpt).join('')+'</div>';}
-  if(g.name.startsWith('RZ_DROP_'))h+='<div class="note">Auto-applied to dropped '+g.name.replace('RZ_DROP_','').toLowerCase()+' gear (Zero-native). The option count drives the floor drop-beam color.</div>';
+  if(g.name.startsWith('RZ_DROP_'))h+='<div class="note">Auto-applied to dropped '+g.name.replace('RZ_DROP_','').toLowerCase()+' gear. The option count drives the floor drop-beam color.</div>';
   $('#detail').innerHTML=h;
 }
 
@@ -984,7 +984,7 @@ function showItem(id){
   h+='</dl>';
   if(i.boosts&&i.boosts.length){
     h+='<div class="sec"><h4>Boosts skills</h4>';
-    for(const b of i.boosts) h+=`<div class="droprow"><span>${esc(skillName(b.skill))} <span class="mono" style="color:var(--muted);font-size:11px">${esc(b.skill)}</span></span><span class="rate num">${b.t3?'3rd class':'up to trans'}</span></div>`;
+    for(const b of i.boosts) h+=`<div class="droprow"><span>${esc(skillName(b.skill))}</span><span class="rate num">${b.t3?'3rd class':'up to trans'}</span></div>`;
     h+='</div>';
   }
   if(i.script){
@@ -1175,7 +1175,7 @@ function renderHome(){
     <div class="syscards">
       ${card('🐢','Low-rate identity','Slow, deliberate progression — rare loot stays rare. QoL is for convenience, never for inflating rewards. <b>Card rates are a hard 1×, always</b> — MVP hunting itself runs at the same 3× as everything else.')}
       ${card('⚔️','High-damage, multi-build','52 underused skills made spammable/affordable and 15 given real damage, so every class has 2–3 viable builds. To match, 26 MVPs were toughened ~2.5–3× HP. See the <b>Skill Changes</b> tab.','g')}
-      ${card('✨','QoL without inflation','Loot-rarity beams, safe refines, account storage, stylist, daily/weekly loops, a fixed 5×/5×/3× rate — convenience &amp; UX wins, with the rate inflation stripped out.')}
+      ${card('✨','QoL without inflation','Loot-rarity beams, safe refines, account storage, stylist, daily/weekly loops, a fixed 5×/5×/3× rate — convenience and UX wins, never bonus rates.')}
       ${card('🔦','Spot-the-rare beams','Notable drops pillar on the ground — cards (blue/purple) and rare gear (green/red) — so you never walk past a rare. Purely visual; zero rate impact.','g')}
       ${card('🧭','New here?','Training grounds (movement/attack + commands cheat sheet) → pick a free starter fun-mod weapon → <b>Weapon Sage</b> in Prontera explains what your gear can do → <b>Build Librarian</b> has the full build list → hire a companion any time with <code>@allies</code>. A guided first hour, still zero rate inflation.')}
     </div>
@@ -1197,7 +1197,7 @@ function renderHome(){
       ${link('hunting','🏆','Hunting Log','Permanent kill milestones &amp; titles')}
       ${link('balance','⚔️','Skill Changes','Every skill rebalance, before → after')}
     </div>
-    <p class="homefoot">Database built ${META.built||''} from the live server DBs · for the full design wiki see the <a href="../index.html">Server Codex</a>.</p>
+    <p class="homefoot">Database built ${META.built||''} from the live server DBs.</p>
   </div>`;
 }
 function renderHunting(){
@@ -1220,7 +1220,7 @@ function renderHunting(){
   const total=HUNT.monster.length+HUNT.region.length+ded.length;
   el.innerHTML=`<div class="homewrap">
     <div class="hero homehero"><div class="kicker">LONG-TERM PROGRESSION</div><h1 style="font-size:30px">Hunting Log</h1>
-      <p>Permanent kill milestones. Each grants a <b>permanent stat</b> and a <b>wearable title</b> shown above your name. Progress tracks live in your in-game <b>Quest Window</b>; manage titles at the <b>Hall of Titles</b> NPC (Prontera) or with <code>@hunting</code>. Rewards survive death &amp; relog, and cards stay 1× — play-earned, long-haul progression.</p></div>
+      <p>Permanent kill milestones. Each grants a <b>permanent stat</b> and a <b>wearable title</b> shown above your name. Progress tracks live in your in-game <b>Quest Window</b>; manage titles at the <b>Hall of Titles</b> NPC (Prontera) or with <code>@hunting</code>. Rewards survive death &amp; relog — play-earned, long-haul progression.</p></div>
     <h3 class="homeh">⚔️ Monster milestones</h3>
     <div class="huntgrid">${HUNT.monster.filter(q=>!q.mvp).map(mcard).join('')}</div>
     <h3 class="homeh">👑 MVP milestones <span style="font-size:12px;color:var(--muted);font-family:Inter">— the ultimate grind, the biggest rewards</span></h3>
@@ -1231,7 +1231,7 @@ function renderHunting(){
     <div class="huntgrid">${ded.map(dcard).join('')}</div>
     <div class="card g" style="grid-column:1/-1;margin-top:16px"><h4><span class="si">🏅</span>Grandmaster Hunter — the capstone</h4>
       <p>Complete <b>every</b> monster, MVP and region milestone to claim the prestige title <b>&lt;Grandmaster Hunter&gt;</b> and a <span class="rwd" style="display:inline-block">+3 All Stats</span> reward. The ultimate badge of a Rune Zero veteran.</p></div>
-    <p class="homefoot">Generated from the live quest database · ${total} milestones (more on the way).</p>
+    <p class="homefoot">Generated from the live quest database · ${total} milestones.</p>
   </div>`;
 }
 function buildAmpPills(items){
@@ -1271,8 +1271,8 @@ function renderBuilds(){
   const totalBuilds=BUILDS.groups.reduce((n,g)=>n+g.builds.length,0);
   const totalItems=BUILDS.groups.reduce((n,g)=>n+g.builds.reduce((m,f)=>m+f.items.length,0),0);
   let h=`<div class="homewrap">
-    <div class="hero homehero"><div class="kicker">FUN PASS · OFF-META BUILDS</div><h1 style="font-size:30px">Fun Builds</h1>
-      <p>Classic, cheap gear carries bonus skill-amp mods for off-meta skills — a Buy-10 item can unlock a whole fun build alongside your main gear. The base item and its <b>[1]</b> slotted twin both work; the slotted version's amp is roughly <b>double</b>. Buy everything at the <b>Fun Gear</b> shops next to the <b>Build Librarian</b> in Prontera (172-178, y=180).</p>
+    <div class="hero homehero"><div class="kicker">OFF-META BUILDS · CHEAP GEAR, REAL DAMAGE</div><h1 style="font-size:30px">Fun Builds</h1>
+      <p>Classic, cheap gear carries bonus skill-amp mods for off-meta skills — a 10-zeny shop staple can unlock a whole fun build alongside your main gear. The base item and its <b>[1]</b> slotted twin both work; the slotted version's amp is roughly <b>double</b>. Buy everything at the <b>Fun Gear</b> shops next to the <b>Build Librarian</b> in Prontera, by the fountain.</p>
       <div class="statline"><div class="statbox"><b>${totalBuilds}</b><small>Builds</small></div><div class="statbox"><b>${totalItems}</b><small>Items</small></div><div class="statbox"><b>${(BUILDS.combos||[]).length}</b><small>Set combos</small></div></div>
       <div class="dmgest-row" style="margin-top:12px"><label for="buildsEstInput">Estimate with your skill's current average hit</label><input type="number" id="buildsEstInput" min="0" step="1" value="1000" oninput="refreshDmgEst('#builds','buildsEstInput')"></div></div>`;
   BUILDS.groups.forEach(g=>{
@@ -1288,7 +1288,7 @@ function renderBuilds(){
 function renderSystems(){
   const card=(ic,title,body,cls)=>`<div class="card${cls?' '+cls:''}"><h4><span class="si">${ic}</span>${title}</h4><p>${body}</p></div>`;
   const beamLeg=`<div class="card g" style="grid-column:1/-1"><h4><span class="si">🔦</span>Loot Rarity Beams — what the colours mean</h4>
-    <p style="margin-bottom:10px">When something worth noticing drops, a coloured light pillar marks it on the ground so you never walk past a rare drop. <b>Purely a spotting aid</b> — it changes nothing about how often things drop (Rune Zero stays low-rate). Two families so a glance tells you the loot type:</p>
+    <p style="margin-bottom:10px">When something worth noticing drops, a coloured light pillar marks it on the ground so you never walk past a rare drop. <b>Purely a spotting aid</b> — it changes nothing about how often things drop. Two families so a glance tells you the loot type:</p>
     <div style="display:flex;flex-wrap:wrap;gap:18px;align-items:center">
       <div><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:'DM Mono'">Cards (by source)</div>
         <span class="beamleg" style="color:${BEAM.blue}"><span class="beampill"></span>Normal monster</span>
@@ -1301,7 +1301,7 @@ function renderSystems(){
   const runeColor=['#e0655a','#4f8fe0','#c9853a','#b07ad6','#37b06a','#2bb3a3'];
   const runeRow=(rune,eff,i)=>`<span class="beamleg" style="color:${runeColor[i]};font-weight:600"><span class="beampill" style="height:18px;width:14px;border-radius:50%"></span>${rune} <span style="color:var(--muted);font-weight:500">- ${eff}</span></span>`;
   const gemPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">&#128142;</span>Rune Socketing - farm crystals, cut runes, engrave secondary stats</h4>
-    <p style="margin-bottom:12px">A play-earned power loop in three steps. Runes give <b>secondary combat stats</b> (ATK, MATK, Crit, Crit Damage, after-cast delay, cast time) - <b>linear, build-specific power</b>, not raw stat inflation. Gated behind farming + crafting + a zeny sink; never sold for cash, never touches card rates.</p>
+    <p style="margin-bottom:12px">Steady, build-shaping power you earn by playing — farm it, craft it, engrave it. Runes give <b>secondary combat stats</b> (ATK, MATK, Crit, Crit Damage, after-cast delay, cast time) - <b>linear, build-specific power</b>, not raw stat inflation. Gated behind farming + crafting + a zeny sink; never sold for cash.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
       <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
         <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">1. Farm crystals</div>
@@ -1335,26 +1335,26 @@ function renderSystems(){
     <p style="margin-bottom:12px">Old Glast Heim's undead lord, and the server's premier <b>mechanics-gated</b> fight — Amdarais changes what you have to <i>do</i>, not just how big his health bar is. Fight through two waves of guardians, then face the lord himself in the haunted cathedral. Enter via the <b>Ghost of the Sovereign</b> at Eden HQ (Base Level 99+) on Normal, Hard, or Nightmare — harder tiers never cost an extra entry or touch drop rates. In a hurry? <b>Fast Mode</b> skips both guardian waves and drops you straight into the boss room, same reward either way.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
       ${oghPhase(1,'Reinforcements','At ≤75% HP, two adds spawn. Leave them alive and Amdarais <b>heals</b> a slice of max HP every tick — clear them fast or lose the DPS race.','#e0655a')}
-      ${oghPhase(2,'Enrage','At ≤40% HP he enrages (+ATK) and starts <b>channeling real ground-targeted attacks</b> at a random party member\'s tile — the cast bar is the telegraph. Reposition or eat real AoE damage.','#c9853a')}
-      ${oghPhase(3,'Enrage timer','Run past the Challenge-Tier time limit (10/8/6 min Normal/Hard/Nightmare) and he gets meaner again — a real DPS/coordination check, not just a bigger health bar.','#b07ad6')}
+      ${oghPhase(2,'Enrage','At ≤40% HP he enrages (+ATK) and starts channeling ground-targeted attacks at a random party member\'s tile — the cast circle is your dodge window; standing still is what kills you.','#c9853a')}
+      ${oghPhase(3,'Enrage timer','Run past the Challenge-Tier time limit (10/8/6 min Normal/Hard/Nightmare) and he gets meaner again — a DPS and coordination check, not just a bigger health bar.','#b07ad6')}
     </div>
-    <p style="font-size:12.5px;color:var(--muted);margin:0">Every clear pays Valor Coin, Hunter Coin and MVP Points, scaled up by Challenge Tier — plus a shot at the grail-tier <b>Amdarais Card</b>: +15% damage on every class and +15% MATK, at the cost of 666 HP every 4 seconds while worn. Like every card, it drops at a hard 1×, always. Hard and Nightmare clears earn their own titles.</p></div>`;
+    <p style="font-size:12.5px;color:var(--muted);margin:0">Every clear pays Valor Coin, Hunter Coin and MVP Points, scaled up by Challenge Tier — plus a shot at the grail-tier <b>Amdarais Card</b>: +15% damage on every class and +15% MATK, at the cost of 666 HP every 4 seconds while worn. Hard and Nightmare clears earn their own titles.</p></div>`;
 
   const ferlockPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">🐉</span>Ferlock Ship — Captain Ferlock, the 2nd flagship boss</h4>
-    <p style="margin-bottom:12px">A second mechanics-gated flagship: Captain Ferlock, a colossal MVP Dragon who commands his own airship. Every trick Amdarais pulls, Ferlock answers with fire — a hair easier than Old Glast Heim, but a real fight in its own right. Enter via the <b>Sky Warden</b> at Eden HQ (Base Level 99+), with the same Normal/Hard/Nightmare tiers and Fast Mode as Old Glast Heim.</p>
+    <p style="margin-bottom:12px">A second mechanics-gated flagship: Captain Ferlock, a colossal MVP Dragon who commands his own airship. Every trick Amdarais pulls, Ferlock answers with fire — a hair easier than Old Glast Heim, but a serious fight in its own right. Enter via the <b>Sky Warden</b> at Eden HQ (Base Level 99+), with the same Normal/Hard/Nightmare tiers and Fast Mode as Old Glast Heim.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
       ${oghPhase(1,'Reinforcements','At ≤75% HP, two Sky Sentinels spawn. Leave them alive and Ferlock <b>heals</b> a slice of max HP every tick.','#4f8fe0')}
-      ${oghPhase(2,'Airborne fury','At ≤40% HP he takes to the air (+ATK) and starts <b>breathing real fire</b> at a random party member\'s tile — the cast bar is the telegraph. Reposition or burn.','#e0655a')}
-      ${oghPhase(3,'Enrage timer','Run past the Challenge-Tier time limit and the ship groans under his fury — a real DPS/coordination check.','#c9853a')}
+      ${oghPhase(2,'Airborne fury','At ≤40% HP he takes to the air (+ATK) and starts breathing fire at your feet — the cast bar is your dodge window; standing still is what kills you.','#e0655a')}
+      ${oghPhase(3,'Enrage timer','Run past the Challenge-Tier time limit and the ship groans under his fury — a DPS and coordination check.','#c9853a')}
     </div>
     <p style="font-size:12.5px;color:var(--muted);margin:0">Defeat Ferlock for a full reward set — <b>Felrock's Armor, Cloak, Boots, and Hat</b> — plus the grail-tier <b>Felock Card</b>: a universal +30 ATK, +30 MATK, and +15% damage against Dragons, useful on any class. Hard and Nightmare clears earn their own titles.</p></div>`;
 
   const ghostPalacePage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">⚔️</span>Ghost Palace — the weapon-farm dungeon</h4>
-    <p style="margin-bottom:12px">The server's great weapon-farm dungeon — clear it for <b>Gray Shard</b>, the currency behind the widest best-in-slot weapon line on the server. Fight two waves of Torturous Redeemers, then bring down the <b>Reliquary Warden</b> itself for a guaranteed lump sum of shards. Enter via the <b>Palace Keeper</b> at Eden HQ (Base Level 99+, 2 free entries/day), then spend your haul with the <b>Dimension Traveler</b> next door — no clear needed just to browse and buy.</p>
+    <p style="margin-bottom:12px">The server's great weapon-farm dungeon — clear it for <b>Gray Shard</b>, the currency behind the widest best-in-slot weapon line on the server. Fight two waves of Torturous Redeemers, then bring down the <b>Reliquary Warden</b> itself for a guaranteed lump sum of shards. Enter via the <b>Palace Keeper</b> at Eden HQ (Base Level 99+, 1 free entry/day, VIP +1), then spend your haul with the <b>Dimension Traveler</b> next door — no clear needed just to browse and buy.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
       <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
         <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🗡️ Thanos weapons — 200 shards</div>
-        <p style="font-size:12.5px;margin:0">One weapon per subtype — <b>14 types</b>, from sword to whip — so every class has a genuine best-in-slot pick. Each brings solid flat ATK/MATK and built-in lifesteal, balanced by a real drawback: 100 HP lost every 10 seconds while equipped.</p></div>
+        <p style="font-size:12.5px;margin:0">One weapon per subtype — <b>14 types</b>, from sword to whip — so every class has a genuine best-in-slot pick. Each brings solid flat ATK/MATK and built-in lifesteal, balanced by a steep drawback: 100 HP lost every 10 seconds while equipped.</p></div>
       <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
         <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🛡️ Gray armor set — 100 shards</div>
         <p style="font-size:12.5px;margin:0">Shield, body, garment, shoes, headgear — a full 5-piece refine-scaling set (Holy resist that grows with refine), open to every class.</p></div>
@@ -1367,27 +1367,27 @@ function renderSystems(){
 
   const groupGear = [
     card('🏆','Hunting Log — permanent milestones','Kill marquee monsters or clear whole dungeons for a <b>permanent stat</b> + a <b>wearable title</b>, tracked live in your Quest Window. MVP milestones are the ultimate grind. See the <b>Hunting Log</b> tab.','g'),
-    card('🎲','Random Options on every drop','Dropped weapons, armor, garments, shoes, accessories and headgear roll <b>random options</b> by slot (Zero-native). A second floor beam shows the <b>option count</b>: more options = rarer roll. Weapon %-damage rolls are 5–20%.'),
+    card('🎲','Random Options on every drop','Dropped weapons, armor, garments, shoes, accessories and headgear roll <b>random options</b> by slot — straight from RO Zero. A second floor beam shows the <b>option count</b>: more options = rarer roll. Weapon %-damage rolls are 5–20%.'),
     card('🔨','Refinement — never breaks','Enriched ore refines safely +1→+7; HD ore pushes +8→+10 and only <b>downgrades</b> on fail. Ores are crafted from bulk ore + Valor Coin. Card removal is 100% safe.'),
-    card('🪙','Valor &amp; Hunter Coins','Valor Coin drops from almost every monster (the universal crafting/economy currency); Hunter Coin comes only from Hunter\'s Guild contracts. Both are play-only.'),
-    card('🎯','Monster Hunter (bounties)','Hunt a target monster enough times and claim a skill/stat reward item. An editable bounty board: each row binds a monster → kill requirement → reward. Progress tracked per character.'),
-    card('🌱','Memorial growing gear &amp; instances','A 5-piece <b>Memorial set</b> crafted from instance materials that <b>grows with you</b> — refine-gated bonuses (+3/+6/+9) plus a non-destructive option enchanter and a scaling set bonus. Materials drop from level-gated <b>Memorial instances</b> (Orc\'s Memory, Nidhoggur\'s Nest) in Normal/Hard.'),
+    card('🪙','Valor &amp; Hunter Coins','Nearly everything here — refines, forges, instance entries — runs on coins you earn by playing. Valor Coin drops from almost every monster (the universal crafting/economy currency); Hunter Coin comes only from Hunter\'s Guild contracts. Both are play-only.'),
+    card('🎯','Monster Hunter (bounties)','Your personal most-wanted board — rack up kills on a marked target and claim a signature weapon (Lord Knight\'s Warbreaker, Falcon\'s Wing, Vulcan\'s Fanfare) you can\'t get anywhere else.'),
+    card('🌱','Memorial growing gear &amp; instances','Gear that levels up with you — craft it once and it keeps getting stronger as you refine it and finish its instances. A 5-piece <b>Memorial set</b> with refine-gated bonuses (+3/+6/+9), a non-destructive option enchanter, and a scaling set bonus. Materials drop from level-gated <b>Memorial instances</b> (Orc\'s Memory, Nidhoggur\'s Nest) in Normal/Hard.'),
     card('🏛️','Services Hub (Eden HQ)','The Eden Group HQ doubles as the all-in-one hub: register for the Eden badge, take bounty missions, and find every service — forge, refine, enchant, instances, Monster Hunter, stylist, storage — in one map. <code>@go eden</code> warps there.'),
-    card('⚒️','Forge — risk &amp; reward','Forge any weapon with <b>5 random properties</b> and a chosen <b>element</b> baked in. ~70% success; failure consumes the materials. More ore, low coin.'),
-    card('🗡️','Eden weapons','A per-class weapon line bought with the <b>Eden badge</b>: each arrives <b>already enhanced</b> (5 options on purchase), is <b>refine-gated</b> (+3/+6/+9), and is re-rollable. Account-bound personal progression.'),
+    card('⚒️','Forge — risk &amp; reward','Forge any weapon with <b>5 random properties</b> and a chosen <b>element</b> baked in. ~70% success; failure consumes the materials. Costs mostly ore and only a little coin.'),
+    card('🗡️','Eden weapons','A per-class weapon line bought with the <b>Eden badge</b>: each arrives already enhanced (5 options on purchase), grows as you refine it (+3/+6/+9), and you can re-roll its options until they fit your build. Yours alone — account-bound.'),
   ].join('');
 
   const groupEconomy = [
     card('📈','Fixed 5× / 5× / 3× rates','Every character earns the same rates — 5× base &amp; job EXP, 3× common/heal/use/equip/MVP-exclusive drops. Cards stay a hard 1× no matter what — see the <b>Rates</b> tab for the full breakdown.'),
-    card('📅','Daily &amp; weekly loops','<b>Daily Tasks</b>: 3 rotating jobs reset at server midnight, with an escalating <b>login streak</b> day-7 jackpot. <b>Weekly Hunt</b>: a rotating featured MVP with a cross-player leaderboard and tiered rewards. The retention spine.'),
-    card('🛍️','Cash shop — cosmetics + pay-to-fast','The <b>Rune Zero Boutique</b> is a real native Cash Shop window selling <b>weekly-rotating cosmetic sets</b> (zero stats), staples, the Starter Pack, and the Premium Pass. The <b>Boutique Concierge</b> next door handles dye/name-color coupons and pay-to-fast bundles (EXP/common-drop boosts, convenience) payable in Cash Points <i>or</i> play-earned coins. <b>No power, no cards, no card/drop-on-card boosts ever sold</b>.'),
+    card('📅','Daily &amp; weekly loops','<b>Daily Tasks</b>: 3 rotating jobs reset at server midnight, with an escalating <b>login streak</b> day-7 jackpot. <b>Weekly Hunt</b>: a rotating featured MVP with a cross-player leaderboard and tiered rewards. Always something worth logging in for.'),
+    card('🛍️','Cash shop — cosmetics + pay-to-fast','The <b>Rune Zero Boutique</b> is a native Cash Shop window selling <b>weekly-rotating cosmetic sets</b> (zero stats), staples, the Starter Pack, and the Premium Pass. The <b>Boutique Concierge</b> next door handles dye/name-color coupons and pay-to-fast bundles (EXP/common-drop boosts, convenience) payable in Cash Points <i>or</i> play-earned coins. <b>No power, no cards, no card/drop-on-card boosts ever sold</b>.'),
     card('🎰','Fortune Vault — zeny-sink gacha','A pure zeny sink in Prontera: <b>25,000z</b> for one pull or <b>250,000z</b> for ten. Prizes run from a guaranteed consolation Old Blue Box up to a <b>0.1% RARE costume</b> (server-wide announce) with common costumes, refine packs and booster bundles in between — no cards, no MVP loot, ever. A hidden pity counter guarantees a common costume by your 100th pull without landing one.'),
     card('🚪','Warp &amp; repair fees','Every warp works for everyone; non-VIP pays a small zeny toll — 500z for towns, 1,000z for fields/dungeons, 300z to re-warp to your last spot — and the Repair Smith charges 5,000z to fix broken gear. An active VIP sub waives every fee. See the <b>Rates</b> tab for the full VIP comparison.'),
   ].join('');
 
   const groupEvents = [
-    card('👑','Champion / Lucky / Frenzy monsters','Any normal kill has a small chance to spawn a roaming <b>special</b> of that monster: a <b>Champion</b> (mini-boss, ~3× strength, minions, guaranteed top-roll drop), a <b>Frenzy</b> (fast brawler → EXP burst), or a rare <b>Lucky</b> (loot piñata ≈100 kills). Each wears a coloured aura + map announce, and rolls <b>1–3 affixes</b> (Sturdy, Vigorous, Swift, Deadly, Resilient, Evasive) that stack onto its name — e.g. <i>“Swift Deadly Champion Poring”</i>. More affixes = a <b>small</b> Valor + EXP bonus (cards stay 1×). Base spawn odds are about 1.5%, and 15% of the time a Champion arrives with 2-3 lesser "Guard" adds flanking it — clear the whole pack for roughly <b>+40% total reward</b> over the Champion alone.'),
-    card('🐾','Adventurer Allies — bond &amp; revive','Your recruited ally companions carry a permanent per-class <b>Bond level</b> (1–10, earned from kills while that ally fights beside you) that boosts its buff tiers, with flavour titles at Bond 4/7/10 (Loyal / Devoted / Sworn). Town Healers give a free full heal; Blessing and Increase AGI come from your Allies, so keep one summoned. If an ally dies, a 5-minute window lets you re-summon it at half the usual fee.'),
+    card('👑','Champion / Lucky / Frenzy monsters','Any normal kill can spawn a roaming <b>special</b> of that monster, aura-lit with a map announce.<br><b>Champion</b> — a mini-boss at ~3× strength with minions and a guaranteed top-roll drop; 15% of the time it brings 2–3 "Guard" adds, and clearing the whole pack pays roughly <b>+40%</b>.<br><b>Frenzy</b> — a fast brawler that bursts EXP when it drops.<br><b>Lucky</b> — a rare loot piñata worth about 100 normal kills.<br>Each rolls <b>1–3 affixes</b> (Sturdy, Vigorous, Swift, Deadly, Resilient, Evasive) stacked onto its name — <i>“Swift Deadly Champion Poring”</i> — for a small Valor + EXP bonus. Base odds about 1.5%.'),
+    card('🐾','Adventurer Allies — bond &amp; revive','Your recruited ally companions carry a permanent per-class <b>Bond level</b> (1–10, earned from kills while that ally fights beside you) that boosts its buff tiers, with flavour titles at Bond 4/7/10 (Loyal / Devoted / Sworn). Town Healers heal you for free; for Blessing and Increase AGI, summon an Ally — buffs are their job. If an ally dies, a 5-minute window lets you re-summon it at half the usual fee.'),
     card('🏁','MVP Arena speedrun boards','Every Challenge Tier (Normal / Hard / Nightmare) keeps an all-time top-5 leaderboard of fastest clears — check it from the <code>@mvprank</code> command\'s Speedrun Leaderboard page. Only a genuine personal best earns a shot at the board.'),
     card('🎣','Fishing streaks &amp; Golden Fish','Landing 5 catches in a row (broken by changing maps or idling 2 minutes) grants a bonus yield roll, and every catch has a shot at a rare <b>Golden Fish</b> — 2% normally, 4% on a streak of 10+. Turn in 5 Golden Fish at the Profession Master for Valor Coins and bonus Fishing XP.'),
     card('🎉','Server events','<b>Find the Mushroom</b>, <b>Speed Quiz</b> (trivia — first to reach the Quizmaster with the right answer wins the pot), and <b>Fever Field</b> (a hot-zone map goes live for 25 minutes with a guaranteed +3 bonus Valor Coin per kill) rotate every 2 hours off the Event Herald, plus a classic <b>Disguise</b> event that periodically hides a random monster in a familiar mob\'s skin for whoever spots it first.'),
@@ -1420,7 +1420,7 @@ function renderRates(){
   const head=(n)=>`<div class="sectionhead"><span class="sn">${n}</span><span class="sl"></span></div>`;
   let h=`<div class="homewrap">
     <div class="hero homehero"><div class="kicker">AT A GLANCE · LIVE CONFIG</div><h1 style="font-size:30px">Rates &amp; Fair Play</h1>
-      <p>Every number below is exactly what the live server runs — no marketing spin. The identity in one line: <b>pay-to-fast, never pay-to-win</b>. Convenience and speed are for sale; the rare-power chase — cards — never is.</p></div>
+      <p>Every number below is exactly what the live server runs — no marketing spin. <b>5/5/3, forever</b> — no rate events, no VIP multipliers, no card-rate inflation. Pay-to-fast, never pay-to-win: convenience and speed are for sale; the rare-power chase — cards — never is.</p></div>
 
     ${head('Experience')}
     <div class="ratesgrid">
@@ -1523,7 +1523,7 @@ function renderCustomizations(){
     <div class="sectionsub">A few hard lines, kept consistent across every item added — so gear behaves predictably.</div>
     ${rule('🔒','Asura Strike is capped at +50% from any single item','Monk/Champion\'s Asura Strike is a hard special case — no single fun-mod item pushes it past +50% total, at any tier.')}
     ${rule('📈','Trans-exclusive skills get noticeably bigger amps than base-class skills','A comparable item amping a transcendent-only skill leans bigger than one amping a 1st/2nd-class skill of the same tier — rewarding the deeper class investment.')}
-    ${rule('🃏','Cards stay a hard 1× — customization never means inflation','Every rebalance above changes damage or usability, never drop rate. Card rates are governed separately and never move — see the <b>Rates</b> tab for the full breakdown.')}
+    ${rule('🃏','Cards stay a hard 1× — customization never means inflation','Every rebalance above changes damage or usability, never drop rate. Card rates never move — period. See the <b>Rates</b> tab for the full breakdown.')}
 
     <p class="homefoot">Full item-by-item detail lives in the <b>Fun Builds</b> and <b>Skill Changes</b> tabs · custom/fun-mod items are filterable in the <b>Items</b> tab · built ${META.built||''}.</p>
   </div>`;
@@ -1592,20 +1592,20 @@ function renderClasses(){
 //  and Ghost Palace's is documented as having been retuned independently).
 // ===========================================================================
 const THANOS_WEAPONS=[
-  {id:13441,sub:'1H Sword',skill:'Holy Cross',pct:200,cls:'Crusader / Paladin'},
-  {id:21009,sub:'2H Sword',skill:'Bowling Bash',pct:200,cls:'Lord Knight'},
-  {id:1438,sub:'1H Spear',skill:'Spiral Pierce',pct:180,cls:'Lord Knight'},
-  {id:1496,sub:'2H Spear',skill:'Brandish Spear',pct:200,cls:'Knight / Paladin'},
-  {id:1669,sub:'Staff',skill:'Sustain — Heal Power +30, passive HP/SP regen proc',pct:null,cls:'Priest / support'},
-  {id:2023,sub:'2H Staff',skill:'Meteor Storm',pct:150,cls:'High Wizard'},
-  {id:18119,sub:'Bow',skill:'Sharp Shooting',pct:200,cls:'Sniper'},
-  {id:13093,sub:'Dagger',skill:'Soul Breaker',pct:220,cls:'Assassin Cross'},
-  {id:28000,sub:'Katar',skill:'Sonic Blow',pct:200,cls:'Assassin Cross'},
-  {id:1836,sub:'Knuckle',skill:'Chain Crush Combo',pct:200,cls:'Champion'},
-  {id:16028,sub:'Mace',skill:'Grand Cross',pct:200,cls:'Paladin'},
-  {id:28100,sub:'2H Axe',skill:'Cart Termination',pct:200,cls:'Whitesmith'},
-  {id:1933,sub:'Instrument (M)',skill:'Tarot Card of Fate',pct:200,cls:'Clown'},
-  {id:1988,sub:'Whip (F)',skill:'Arrow Vulcan',pct:150,cls:'Gypsy'},
+  {id:13441,sub:'1H Sword',skills:'Grand Cross +200%, Sacrifice +160%, Acid Terror +180%',cls:'Paladin / Creator'},
+  {id:21009,sub:'2H Sword',skills:'Bowling Bash +200%',cls:'Lord Knight'},
+  {id:1438,sub:'1H Spear',skills:'Spiral Pierce +180%, Holy Cross +100%',cls:'Lord Knight / Paladin'},
+  {id:1496,sub:'2H Spear',skills:'Brandish Spear +200%, Holy Cross +200%',cls:'Knight / Paladin'},
+  {id:1669,sub:'Staff',skills:'Magnus Exorcismus +180%, Heal Power +30, HP/SP regen proc',cls:'High Priest'},
+  {id:2023,sub:'2H Staff',skills:'Meteor Storm / Lord of Vermilion / Storm Gust +150% each, +10% MATK',cls:'High Wizard'},
+  {id:18119,sub:'Bow',skills:'Sharp Shooting +200%, Double Strafe +150%',cls:'Sniper'},
+  {id:13093,sub:'Dagger',skills:'Soul Breaker +220%, all 5 damage traps +150%',cls:'Assassin Cross / trap Sniper'},
+  {id:28000,sub:'Katar',skills:'Sonic Blow +200%, Meteor Assault +180%',cls:'Assassin Cross'},
+  {id:1836,sub:'Knuckle',skills:'Chain Crush +200%, Tiger Knuckle Fist +180%',cls:'Champion'},
+  {id:16028,sub:'Mace',skills:'no skill bonus — top one-hand ATK/MATK in the line, plus lifesteal',cls:'any Mace class'},
+  {id:28100,sub:'2H Axe',skills:'Cart Termination +200%',cls:'Whitesmith'},
+  {id:1933,sub:'Instrument (M)',skills:'Tarot Card of Fate +200%, Arrow Vulcan +150%',cls:'Clown'},
+  {id:1988,sub:'Whip (F)',skills:'Arrow Vulcan +150%',cls:'Gypsy'},
 ];
 const GRAY_ARMOR=[
   {id:2187,note:'Shield — Holy resist scales with refine (30+refine), plus scaling MDEF'},
@@ -1628,10 +1628,10 @@ const TEMPORAL_BOOTS=[
 // directly against the live server/rathena/db/re/item_db_etc.yml source, 2026-07-13.
 const BOOT_ENCHANT_LADDER=[
   {name:'Fighting Spirit',boots:'Str',tiers:['+15 ATK, +5 Hit','+18 ATK, +5 Hit','+21 ATK, +5 Hit','+24 ATK, +5 Hit']},
-  {name:'Archery',boots:'Int',tiers:['+2% ranged damage','+4% ranged damage','+6% ranged damage','+8% ranged damage']},
-  {name:'Spell',boots:'Agi',tiers:['+9 MATK, -6% cast time','+12 MATK, -8% cast time','+15 MATK, -10% cast time','+18 MATK, -10% cast time']},
+  {name:'Archery',boots:'Dex',tiers:['+2% ranged damage','+4% ranged damage','+6% ranged damage','+8% ranged damage']},
+  {name:'Spell',boots:'Int',tiers:['+9 MATK, -6% cast time','+12 MATK, -8% cast time','+15 MATK, -10% cast time','+18 MATK, -10% cast time']},
   {name:'Vitality',boots:'Vit',tiers:['+2 VIT','+3 VIT','+1% Max HP','+2% Max HP']},
-  {name:'Attack Speed',boots:'Dex',tiers:['+4% ASPD','+6% ASPD','+8% ASPD','+10% ASPD']},
+  {name:'Attack Speed',boots:'Agi',tiers:['+4% ASPD','+6% ASPD','+8% ASPD','+10% ASPD']},
   {name:'Lucky',boots:'Luk',tiers:['+3 LUK','+4 LUK','+5 LUK','+6 LUK']},
 ];
 // 3rd-slot bonus-effect card — a single random pick once the 4th slot hits its
@@ -1684,7 +1684,7 @@ function shopRow(id,note){ return rewardCard(id,note); }
 function thanosTable(){
   let h='<div class="rewardgrid">';
   THANOS_WEAPONS.forEach(w=>{
-    const note=esc(w.sub)+' · '+esc(w.skill)+(w.pct?' <b>+'+w.pct+'%</b>':'')+' · '+esc(w.cls);
+    const note=esc(w.sub)+' · '+esc(w.skills)+' · '+esc(w.cls);
     h+=rewardCard(w.id,note);
   });
   h+='</div>';
@@ -1702,18 +1702,18 @@ function sectionBoots(){
   h+=instStep(6,'Further-enchant the slotted boots','Once slotted, '+npcTag('Dark magic master')+' continues the same 4-tier ladder using Coagulated Spell + <a onclick="location.hash=\'item/6755\'">Contaminated Magic</a> + 100,000 zeny per attempt. The first tier always succeeds, but every tier after that (including the final bonus-effect roll) is only a <span style="color:var(--bad);font-weight:700">70% success chance</span> — a failed attempt destroys the boots.');
   h+='</div>';
   h+=`<div class="sec"><h4>4th slot — the effect ladder (pick one family)</h4>
-    <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">Whichever family you pick at step 4 grows through all 4 tiers on the same boots — you can't mix families on one pair. Matches the boots' native stat (Str boots want Fighting Spirit, Int boots want Archery, etc.) but nothing stops you picking a different family if you'd rather chase a specific effect.</p>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">Whichever family you pick at step 4 grows through all 4 tiers on the same boots — you can't mix families on one pair. Match the family to your build — Str boots pair naturally with Fighting Spirit, Dex with Archery, Int with Spell — but nothing stops you picking a different family if you'd rather chase a specific effect.</p>
     ${bootEnchantTable()}
   </div>`;
   h+=`<div class="sec"><h4>3rd slot — bonus-effect card (one random pick)</h4>
-    <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">Rolled once the 4th slot hits its final tier (costs more Coagulated Spell) — a single random pick from the 6 below, not a choice. Every one is an on-hit <b>proc</b>, not an always-on stat — it only fires (and only drains) while its short buff window is active. Read the drain and the unequip tax before deciding if the buff is worth chasing; they're real costs, not fine print.</p>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">Rolled once the 4th slot hits its final tier (costs more Coagulated Spell) — a single random pick from the 6 below, not a choice. Every one is an on-hit <b>proc</b>, not an always-on stat — it only fires (and only drains) while its short buff window is active. Read the drain and the unequip tax before deciding if the buff is worth chasing; they're costs, not fine print.</p>
     ${bootBonusTable()}
   </div>`;
   return h;
 }
 function sectionPortraitCollector(){
   return `<div class="sec"><h4>Portrait Collector — bulk material exchange</h4>
-    <p style="font-size:13px">${npcTag('Portrait Collector#rz','Portrait Collector')} stands at Eden HQ — moc_para01 (183,45) — and trades a bulk pile of Old Glast Heim currency for one of two cards. Pay with <b>either</b> currency, not both.</p>
+    <p style="font-size:13px">${npcTag('Portrait Collector')} stands at Eden HQ — moc_para01 (183,45) — and trades a bulk pile of Old Glast Heim currency for one of two cards. Pay with <b>either</b> currency, not both.</p>
     <div class="tscroll"><table class="dense"><thead><tr><th>Card</th><th><a onclick="location.hash='item/6608'">Coagulated Spell</a></th><th>OR <a onclick="location.hash='item/6755'">Contaminated Magic</a></th><th>Effect</th></tr></thead><tbody>
       <tr><td><a onclick="location.hash='item/4608'">White Knight Card</a></td><td class="mono">3,000</td><td class="mono">70</td><td>+15 ATK, +20% damage to Medium size, +20% damage to Large size</td></tr>
       <tr><td><a onclick="location.hash='item/4609'">Khalitzburg Knight Card</a></td><td class="mono">5,000</td><td class="mono">100</td><td>+20 DEF, -25% damage taken from Medium size, -25% damage taken from Large size</td></tr>
@@ -1726,7 +1726,7 @@ function sectionShards(){
     <p style="font-size:13px">Gray Shard drops two ways: a small chance off each <a onclick="location.hash='mob/2959'">Torturous Redeemer</a> trash-wave kill (two rolls, ~30% + ~10% — roughly 0.4 shard per kill), and a guaranteed lump sum when the Reliquary Warden falls — <b>40 (Normal) / 80 (Hard) / 150 (Nightmare)</b>. The real haul comes from the Warden itself. Spend your shards with ${npcTag('Dimension Traveler')}, standing right next to the Palace Keeper — no clear needed to browse or buy.</p>
   </div>`;
   h+=`<div class="sec"><h4>Thanos weapons — 200 Gray Shard each</h4>
-    <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">One weapon per subtype, 14 in total, so every class has a genuine best-in-slot pick. All of them share the same risk package: +6 INT / +6 VIT / -6 LUK, built-in lifesteal, 100 flat HP lost every 10 seconds while equipped, and a 1,000 HP hit the instant you unequip it (the Staff is the one exception — no lifesteal, it leans support instead).</p>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">One weapon per subtype, 14 in total, so every class has a genuine best-in-slot pick. All of them share the same risk package: +6 INT / +6 VIT / -6 LUK, built-in lifesteal, 100 flat HP lost every 10 seconds while equipped, and a 1,000 HP hit the instant you unequip it (the two staves are the exception — no lifesteal, they lean caster/support instead).</p>
     ${thanosTable()}
   </div>`;
   h+=`<div class="sec"><h4>Gray armor set — 100 Gray Shard each</h4>
@@ -1752,11 +1752,11 @@ function sectionCapes(){
 const INSTANCES=[
   {
     slug:'amdarais', icon:'👑', name:'Old Glast Heim — Amdarais',
-    tagline:"Old Glast Heim's undead lord, and the server's premier mechanics-gated flagship boss.",
+    tagline:"The flagship mechanics fight: Old Glast Heim's undead lord, where add-phases and telegraphed AoE decide the kill — not a bigger health bar.",
     whyFarm:'The grail-tier Amdarais Card, plus every material for the full Temporal Boots crafting chain.',
     bossLevel:99, bossHp:7500000, freeEntries:'1/day (VIP +1)',
-    entry:{npc:'Ghost of the Sovereign#rz', sprite:'4_M_JOB_KNIGHT1.gif', npcLoc:'Eden HQ — moc_para01 (174,42)', instMap:'1@gl_k — the Old Glast Heim cathedral', baseLevel:99,
-      party:'Solo or party — the NPC opens whichever instance type matches who talks to it (a party leader opens a party instance).', scrollCost:1, valorCost:30, hunterCost:8},
+    entry:{npc:'Ghost of the Sovereign', sprite:'4_M_JOB_KNIGHT1.gif', npcLoc:'Eden HQ — moc_para01 (174,42)', instMap:'the Old Glast Heim cathedral', baseLevel:99,
+      party:'Solo or party — talk as party leader to bring the whole party in.', scrollCost:1, valorCost:30, hunterCost:8},
     tiers:[
       {name:'Normal',hp:'×1',atk:'100%',def:'100%',coinExp:'100%',points:'100%'},
       {name:'Hard',hp:'×2',atk:'130%',def:'120%',coinExp:'150%',points:'200%'},
@@ -1764,7 +1764,7 @@ const INSTANCES=[
     ],
     mechanics:[
       "At 75% HP or below, Amdarais calls two reinforcements (a Wraith and an Abysmal Guardian). While either is alive, he heals about 2% of his max HP every ~2 seconds — kill the adds fast, or you'll lose the DPS race.",
-      "At 40% HP or below, Amdarais enrages (+30% ATK, permanent) and begins channeling Darkness Breath at a random party member's exact tile every ~10 seconds — the visible cast bar is the telegraph. Move off the tile before the cast finishes, or eat a real AoE hit.",
+      "At 40% HP or below, Amdarais enrages (+30% ATK, permanent) and begins channeling Darkness Breath at a random party member's exact tile every ~10 seconds — the visible cast bar is the telegraph. Move off the tile before the cast finishes, or eat the AoE hit.",
       "If the fight runs past the tier's time limit (10 min Normal / 8 min Hard / 6 min Nightmare) without a kill, Amdarais enrages further (+20% ATK, stacks with the 40% enrage) — a hard stop on stalling.",
     ],
     rewardText:"Every clear pays, guaranteed: EXP (45% of your next Base &amp; Job EXP bar), Valor Coin, Hunter Coin, and MVP Points — all scaled up by Challenge Tier (Hard: &times;1.5 coins/EXP, &times;2 points; Nightmare: &times;2 coins/EXP, &times;4 points). Drops themselves roll at the server's normal fixed rates — only Amdarais's card stays a hard 1&times; drop, same as every card, always.",
@@ -1780,11 +1780,11 @@ const INSTANCES=[
   },
   {
     slug:'ferlock', icon:'🐉', name:'Ferlock Ship — Captain Ferlock',
-    tagline:'The second flagship — a colossal MVP Dragon commanding his own airship, a hair easier than Amdarais.',
+    tagline:"The airship boss: a colossal MVP Dragon who answers Amdarais's every trick with fire — a hair easier, no pushover.",
     whyFarm:'A choice of 3 capes (pick the one that fits your build) plus the universal Felock Card.',
     bossLevel:99, bossHp:6500000, freeEntries:'1/day (VIP +1)',
-    entry:{npc:'Sky Warden#rz', sprite:'4_M_JOB_KNIGHT1.gif', npcLoc:'Eden HQ — moc_para01 (177,45)', instMap:'1@air2 — the airship interior', baseLevel:99,
-      party:'Solo or party — the NPC opens whichever instance type matches who talks to it (a party leader opens a party instance).', scrollCost:1, valorCost:30, hunterCost:8},
+    entry:{npc:'Sky Warden', sprite:'4_M_JOB_KNIGHT1.gif', npcLoc:'Eden HQ — moc_para01 (177,45)', instMap:'the airship interior', baseLevel:99,
+      party:'Solo or party — talk as party leader to bring the whole party in.', scrollCost:1, valorCost:30, hunterCost:8},
     tiers:[
       {name:'Normal',hp:'×1',atk:'100%',def:'100%',coinExp:'100%',points:'100%'},
       {name:'Hard',hp:'×2',atk:'130%',def:'120%',coinExp:'150%',points:'200%'},
@@ -1792,14 +1792,14 @@ const INSTANCES=[
     ],
     mechanics:[
       "At 75% HP or below, Ferlock signals for reinforcements — two Sky Sentinels. While either is alive, he heals about 2% of his max HP every ~2 seconds — kill the adds fast, or you'll lose the DPS race.",
-      "At 40% HP or below, Ferlock takes to the air in a rage (+30% ATK, permanent) and begins breathing fire at a random party member's exact tile every ~10 seconds — the visible cast bar is the telegraph. Move off the tile before the cast finishes, or eat a real AoE hit.",
+      "At 40% HP or below, Ferlock takes to the air in a rage (+30% ATK, permanent) and begins breathing fire at a random party member's exact tile every ~10 seconds — the visible cast bar is the telegraph. Move off the tile before the cast finishes, or eat the AoE hit.",
       "If the fight runs past the tier's time limit (10 min Normal / 8 min Hard / 6 min Nightmare) without a kill, Ferlock enrages further (+20% ATK, stacks with the 40% enrage) — a hard stop on stalling.",
     ],
     rewardText:"Every clear pays, guaranteed: EXP (45% of your next Base &amp; Job EXP bar), Valor Coin, Hunter Coin, and MVP Points — all scaled up by Challenge Tier (Hard: &times;1.5 coins/EXP, &times;2 points; Nightmare: &times;2 coins/EXP, &times;4 points). Drops themselves roll at the server's normal fixed rates — only Ferlock's card stays a hard 1&times; drop, same as every card, always.",
     drops:[
-      {id:15117,rate:100,note:'HP/SP/MDEF/All Stats that keeps stacking at +7/+9/+12 refine — good for any tanky build.'},
+      {id:15117,rate:100,note:'HP/SP/MDEF/All Stats that keeps stacking at +7/+9/+10 refine — good for any tanky build.'},
       {id:40982,rate:100,note:'redeem it with Sky Warden for a choice of cape — see below'},
-      {id:22047,rate:100,note:'ASPD keeps stacking with refine, culminating in a true +1 ASPD at +12 — good for any physical attack-speed build.'},
+      {id:22047,rate:100,note:'ASPD keeps stacking with refine, culminating in a true +1 ASPD at +10 — good for any physical attack-speed build.'},
       {id:19144,rate:1000,note:'a plain cape — no special bonus'},
       {id:12072,rate:3000,note:''},
       {id:12087,rate:3000,note:''},
@@ -1811,11 +1811,11 @@ const INSTANCES=[
   },
   {
     slug:'ghostpalace', icon:'⚱️', name:'Ghost Palace — Reliquary Warden',
-    tagline:'The toughest of the three flagships — a fourth mechanic none of the others have, guarding the widest weapon-farm reward on the server.',
+    tagline:'The weapon-farm raid: toughest of the three, gated by a damage-immunity Ward, guarding the widest best-in-slot reward on the server.',
     whyFarm:'Gray Shard — spend it on a 14-weapon BiS line, a full armor set, or the Knight Sakray Card.',
     bossLevel:99, bossHp:8500000, freeEntries:'1/day (VIP +1)',
-    entry:{npc:'Palace Keeper#rz', sprite:'4_F_VALKYRIE.gif', npcLoc:'Eden HQ — moc_para01 (171,45)', instMap:'1@spa — the Ghost Palace', baseLevel:99,
-      party:'Solo or party — the NPC opens whichever instance type matches who talks to it (a party leader opens a party instance).', scrollCost:1, valorCost:30, hunterCost:8},
+    entry:{npc:'Palace Keeper', sprite:'4_F_VALKYRIE.gif', npcLoc:'Eden HQ — moc_para01 (171,45)', instMap:'the Ghost Palace', baseLevel:99,
+      party:'Solo or party — talk as party leader to bring the whole party in.', scrollCost:1, valorCost:30, hunterCost:8},
     tiers:[
       {name:'Normal',hp:'×1',atk:'100%',def:'100%',coinExp:'100%',points:'100%'},
       {name:'Hard',hp:'×2',atk:'130%',def:'120%',coinExp:'150%',points:'200%'},
@@ -1823,7 +1823,7 @@ const INSTANCES=[
     ],
     mechanics:[
       "At 75% HP or below, the Warden binds two reinforcements to its will (Reliquary Bound). While either is alive, it heals about 2% of its max HP every ~2 seconds — kill the adds fast, or you'll lose the DPS race.",
-      "At 40% HP or below, the Warden turns cold (+30% ATK, permanent) and begins breathing frost at a random party member's exact tile every ~10 seconds — the visible cast bar is the telegraph. Move off the tile before the cast finishes, or eat a real AoE hit (with a chance to Freeze).",
+      "At 40% HP or below, the Warden turns cold (+30% ATK, permanent) and begins breathing frost at a random party member's exact tile every ~10 seconds — the visible cast bar is the telegraph. Move off the tile before the cast finishes, or eat the AoE hit (with a chance to Freeze).",
       "If the fight runs past the tier's time limit (10 min Normal / 8 min Hard / 6 min Nightmare) without a kill, the Warden enrages further (+20% ATK, stacks with the 40% enrage) — a hard stop on stalling.",
       "<b>Reliquary Ward (unique to this fight):</b> once the add-phase has started, the Warden periodically raises a Ward — a real damage-immunity window (~54s Normal / ~46s Hard / ~38s Nightmare between wards) — and summons 2 low-HP Anchor Wisps. Kill BOTH wisps fast to break the Ward early; if you don't manage it within the Ward's own timer (~14s / 12s / 10s), it completes on its own — the Warden becomes attackable again, but reclaims 3% of its max HP as a miss-penalty. Stop attacking the temporarily-unkillable boss and go kill the wisps instead.",
     ],
@@ -1899,8 +1899,8 @@ function renderInstanceDetail(slug){
   h+=instHero(inst);
   h+=sectionEnter(inst);
   h+=`<div class="sec"><h4>Challenge Tiers</h4>${tierTable(inst)}<div class="rate" style="margin-top:6px">Harder tiers scale the guaranteed reward layer — never drop rates, never the card. Same guardrail as every MVP fight on the server.</div></div>`;
-  h+=`<div class="sec"><h4>Boss mechanics</h4><ol style="padding-left:20px;margin:8px 0">${inst.mechanics.map(m=>`<li style="margin:8px 0;font-size:13.5px">${m}</li>`).join('')}</ol></div>`;
-  h+=`<div class="sec"><h4>Rewards</h4><p style="font-size:13px">${inst.rewardText}</p>`;
+  h+=`<div class="sec"><h4>The fight</h4><ol style="padding-left:20px;margin:8px 0">${inst.mechanics.map(m=>`<li style="margin:8px 0;font-size:13.5px">${m}</li>`).join('')}</ol></div>`;
+  h+=`<div class="sec"><h4>What you take home</h4><p style="font-size:13px">${inst.rewardText}</p>`;
   if(inst.drops&&inst.drops.length){
     h+='<div style="margin-top:8px"><div style="font-family:\'DM Mono\';font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Full drop table</div>'+inst.drops.map(instDropRow).join('')+'</div>';
   }
