@@ -9,36 +9,37 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0a0e1a; --panel:#121728; --panel-2:#182036; --panel-3:#1e2843;
-    --border:#232c47; --border-2:#334166;
-    --gold:#f4c430; --gold-deep:#d9a51c; --gold-soft:#2e2308;
-    --rune:#e2483f; --rune-deep:#ff6e63;
-    --text:#c9d1e6; --ink:#f5f7ff; --muted:#8792ae; --faint:#525d7d;
-    --common:#8792ae; --rare:#4ea1e8; --mythic:#a78bfa; --legendary:#f4c430;
-    --good:#2fd189; --warn:#f2994a; --bad:#ff5c5c;
-    --shadow:0 1px 2px rgba(0,0,0,.35),0 6px 22px rgba(0,0,0,.4);
-    --shadow-lg:0 10px 34px rgba(0,0,0,.55);
+    color-scheme:light;
+    --bg:#f6f7fb; --panel:#ffffff; --panel-2:#eef1f7; --panel-3:#e4e8f1;
+    --border:#e3e7f0; --border-2:#ccd3e1;
+    --gold:#f4c430; --gold-deep:#9a7112; --gold-soft:#fbf1cf;
+    --rune:#e2483f; --rune-deep:#cf3a31;
+    --text:#2b3242; --ink:#141824; --muted:#5c6577; --faint:#79828f;
+    --common:#6b7385; --rare:#2f7fd6; --mythic:#8b5cf6; --legendary:#c99a1a;
+    --good:#1f9d57; --warn:#c9772a; --bad:#d6453f;
+    --shadow:0 1px 2px rgba(20,28,48,.05),0 4px 16px rgba(20,28,48,.07);
+    --shadow-lg:0 12px 34px rgba(20,28,48,.14);
     --sidebar-w:236px;
   }
   *{box-sizing:border-box}
   body{margin:0;background:
-      radial-gradient(1100px 480px at 90% -140px,rgba(226,72,63,.12) 0,rgba(226,72,63,0) 70%),
+      radial-gradient(1100px 480px at 90% -140px,rgba(226,72,63,.06) 0,rgba(226,72,63,0) 70%),
       radial-gradient(900px 420px at -8% 8%,rgba(244,196,48,.08) 0,rgba(244,196,48,0) 65%),
       var(--bg);
     color:var(--text);font-family:'DM Sans',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
   a{color:var(--rune-deep);text-decoration:none;cursor:pointer;font-weight:500}
-  a:hover{color:var(--gold);text-decoration:underline}
+  a:hover{color:var(--gold-deep);text-decoration:underline}
   code,.mono{font-family:'DM Mono',monospace}
-  ::selection{background:rgba(226,72,63,.3)}
+  ::selection{background:rgba(226,72,63,.18)}
 
   /* ---- left sidebar (fixed on desktop, off-canvas drawer on mobile) ------- */
-  .backdrop{display:none;position:fixed;inset:0;background:rgba(2,4,10,.6);z-index:35}
+  .backdrop{display:none;position:fixed;inset:0;background:rgba(20,28,48,.38);z-index:35}
   .backdrop.show{display:block}
   .sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--panel);
     border-right:1px solid var(--border);z-index:40;display:flex;flex-direction:column;
     padding:20px 14px 16px;overflow-y:auto;transition:transform .22s ease}
   .sidebar .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.07em;
-    color:var(--gold);text-transform:uppercase;font-size:14.5px;padding:0 6px 16px;margin-bottom:10px;
+    color:var(--gold-deep);text-transform:uppercase;font-size:14.5px;padding:0 6px 16px;margin-bottom:10px;
     border-bottom:1px solid var(--border)}
   .sidebar .brand .mark{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;
     color:#241a02;font-size:16px;font-weight:800;flex:none;
@@ -59,11 +60,11 @@
 
   /* ---- top bar inside the main content area (search + mobile hamburger) -- */
   .mainarea{margin-left:var(--sidebar-w)}
-  .topbar{position:sticky;top:0;z-index:30;background:rgba(10,14,26,.88);backdrop-filter:saturate(140%) blur(10px);
+  .topbar{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.85);backdrop-filter:saturate(140%) blur(10px);
     border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:12px 22px}
   .hamburger{display:none;background:none;border:1px solid var(--border-2);color:var(--text);width:36px;
     height:36px;border-radius:9px;cursor:pointer;font-size:16px;flex:none;align-items:center;justify-content:center}
-  .topbar .brand-mini{display:none;font-weight:800;color:var(--gold);letter-spacing:.05em;font-size:14px}
+  .topbar .brand-mini{display:none;font-weight:800;color:var(--gold-deep);letter-spacing:.05em;font-size:14px}
   @media(max-width:960px){
     .sidebar{transform:translateX(-100%)}
     .sidebar.open{transform:translateX(0);box-shadow:var(--shadow-lg)}
@@ -114,7 +115,7 @@
   .kv dd{margin:0;font-weight:500}
   .sec{margin-top:16px;border-top:1px solid var(--border);padding-top:13px}
   .sec h4{font-family:'DM Mono';font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);margin:0 0 9px}
-  pre.script{background:#0f1626;border:1px solid #1d2740;border-radius:9px;padding:11px 13px;font-size:12px;overflow:auto;color:#6fe0d2;white-space:pre-wrap;line-height:1.5}
+  pre.script{background:#f4f7fb;border:1px solid var(--border);border-radius:9px;padding:11px 13px;font-size:12px;overflow:auto;color:#1f6b60;white-space:pre-wrap;line-height:1.5}
   .droprow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
   .droprow:last-child{border-bottom:none}
   .droprow .dl{display:flex;align-items:center;gap:8px;min-width:0}
@@ -163,7 +164,7 @@
   .emx{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:8px;border:1px solid}
   .emx i{font-style:normal}.emx b{font-family:'DM Mono';font-size:11.5px}
   /* in-game loot-beam dot */
-  .beamdot{width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 0 2px rgba(10,14,26,.85),0 0 6px currentColor;display:inline-block}
+  .beamdot{width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 0 2px rgba(255,255,255,.9),0 0 6px currentColor;display:inline-block}
   .beamleg{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin:3px 12px 3px 0}
   .beampill{display:inline-block;width:16px;height:30px;border-radius:4px;vertical-align:middle;
     box-shadow:inset 0 0 6px rgba(255,255,255,.18);background:linear-gradient(180deg,currentColor,transparent)}
@@ -185,6 +186,11 @@
     background:radial-gradient(circle at 50% 30%,var(--panel-3),var(--panel-2));border:2px solid var(--border-2);box-shadow:var(--shadow)}
   .clsava img{width:42px;height:46px;object-fit:contain;object-position:bottom;image-rendering:pixelated;margin-bottom:-2px}
   .clsava span{font-size:22px}
+  /* small inline NPC avatar (same framed/bottom-cropped pattern as .clsava) */
+  .npcava{width:26px;height:26px;border-radius:50%;display:inline-grid;place-items:center;overflow:hidden;
+    vertical-align:middle;margin-right:6px;background:radial-gradient(circle at 50% 30%,var(--panel-3),var(--panel-2));
+    border:1.5px solid var(--border-2);box-shadow:var(--shadow)}
+  .npcava img{width:24px;height:28px;object-fit:contain;object-position:bottom;image-rendering:pixelated;margin-bottom:-2px}
   /* before -> after comparison */
   .cmp{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
   .cmpchip{display:flex;align-items:center;gap:7px;background:var(--panel-2);border:1px solid var(--border);border-radius:9px;padding:5px 9px 5px 8px;font-size:12px}
@@ -227,7 +233,7 @@
   /* home / landing */
   .homewrap{max-width:980px;margin:0 auto;padding:10px 4px 60px}
   .homehero{background:
-      radial-gradient(900px 300px at 90% -60px,rgba(226,72,63,.12),transparent 70%),
+      radial-gradient(900px 300px at 90% -60px,rgba(226,72,63,.07),transparent 70%),
       linear-gradient(120deg,var(--panel-2),var(--panel));display:block;padding:26px 28px}
   .homehero .kicker{font-family:'DM Mono';font-size:11px;letter-spacing:.22em;color:var(--rune-deep);font-weight:700;margin-bottom:8px}
   .homehero h1{font-family:'DM Sans',sans-serif;font-weight:800;font-size:40px;margin:0 0 8px;color:var(--gold-deep);letter-spacing:.04em;line-height:1}
@@ -341,15 +347,15 @@
   .classcard .accarrow{margin-left:auto;font-size:12px;color:var(--faint);transition:transform .15s;flex:none}
   .classcard[open] .accarrow{transform:rotate(90deg)}
   .roletag{display:inline-block;font-family:'DM Mono';font-size:10px;font-weight:700;letter-spacing:.05em;padding:2px 8px;border-radius:999px;flex:none}
-  .roletag.str{color:#ff8178;background:rgba(226,72,63,.12);border:1px solid rgba(226,72,63,.3)}
-  .roletag.agi{color:#2fd189;background:rgba(47,209,137,.12);border:1px solid rgba(47,209,137,.3)}
-  .roletag.int{color:#4ea1e8;background:rgba(78,161,232,.12);border:1px solid rgba(78,161,232,.3)}
-  .roletag.dex{color:#f4c430;background:rgba(244,196,48,.12);border:1px solid rgba(244,196,48,.3)}
-  .roletag.vit{color:#a78bfa;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.3)}
+  .roletag.str{color:#d13b32;background:rgba(226,72,63,.1);border:1px solid rgba(226,72,63,.3)}
+  .roletag.agi{color:#1f9d57;background:rgba(31,157,87,.1);border:1px solid rgba(31,157,87,.3)}
+  .roletag.int{color:#2f7fd6;background:rgba(47,127,214,.1);border:1px solid rgba(47,127,214,.3)}
+  .roletag.dex{color:#b8851f;background:rgba(184,133,31,.12);border:1px solid rgba(184,133,31,.32)}
+  .roletag.vit{color:#8b5cf6;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3)}
   .roletag.sup{color:var(--muted);background:var(--panel-2);border:1px solid var(--border-2)}
   .classcard .ccbody{padding:0 16px 15px;border-top:1px solid var(--border)}
   .classcard .ccbody p{font-size:13px;margin:10px 0 0;color:var(--text)}
-  .classcard .ccbody p b{color:var(--gold)}
+  .classcard .ccbody p b{color:var(--gold-deep)}
   .classfilters{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 16px}
 
   /* ---- instances tab ------------------------------------------------------ */
@@ -365,6 +371,23 @@
   .instcard .icstats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
   .instcard .icwhy{font-size:12px;color:var(--text);border-top:1px dashed var(--border);padding-top:8px}
   .instcard .icwhy b{color:var(--gold-deep)}
+  /* horizontal-scroll wrapper so wide tables never force the page wider on
+     narrow phones; dense = the shared slightly-smaller instance-table sizing */
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:2px 0}
+  table.dense{font-size:12.5px}
+  table.dense th,table.dense td{padding:7px 9px;vertical-align:top}
+  /* never let a long link/word push a container wider than the viewport */
+  .homewrap,.detail,.instcard,.note,.droprow{overflow-wrap:anywhere}
+  /* very-narrow phones (~360px): tighten chrome so nothing overflows the box */
+  @media(max-width:480px){
+    .topbar{padding:10px 12px;gap:8px}
+    .search-wrap{min-width:120px}
+    .shell{padding:14px 12px 80px}
+    .detail{padding:16px 14px}
+    .homewrap{padding-left:6px;padding-right:6px}
+    .hero{padding:16px 15px}
+    .instcard{padding:14px 15px}
+  }
 </style>
 </head>
 <body>
@@ -405,7 +428,7 @@
 
   <div id="app">
     <div class="loading" id="loading">
-      <div style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:20px;color:var(--gold)">Loading the database…</div>
+      <div style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:20px;color:var(--gold-deep)">Loading the database…</div>
       <div id="loadmsg" style="margin-top:8px">fetching items &amp; monsters</div>
     </div>
   </div>
@@ -445,13 +468,21 @@ const ICO = id => 'https://static.divine-pride.net/images/items/item/'+id+'.png'
 // measured ~310 bytes, real Ferlock gear 479-918 bytes). HTTP 200, so onerror can't
 // catch it — skip the request outright for these known ids.
 const NO_ART_ITEM_IDS = new Set([40980, 40981, 40982]);
+// Donor art for the custom items above: they're re-flavored cuts of real stock
+// gear, so they honestly borrow that stock item's icon. Felock_Cape_Blue (40980)
+// and Felock_Cape_Red (40981) both use the real Felock_Cape (20744); Cloak Emblem
+// (40982), a quest token, borrows Chivalry Emblem (1004)'s badge icon. An id in
+// NO_ART_ITEM_IDS with no donor here still falls back to a token glyph (never the
+// broken placeholder image the CDN returns for these ids).
+const ICON_DONOR = {40980:20744, 40981:20744, 40982:1004};
+const artId = id => ICON_DONOR[id] || id;
 function itemIcoTag(id){
-  if(NO_ART_ITEM_IDS.has(id)) return '<span class="ico" style="display:inline-grid;place-items:center;font-size:14px;vertical-align:middle;margin-right:8px">📦</span>';
-  return `<img class="ico" src="${ICO(id)}" loading="lazy" onerror="this.style.display='none'">`;
+  if(NO_ART_ITEM_IDS.has(id) && !ICON_DONOR[id]) return '<span class="ico" style="display:inline-grid;place-items:center;font-size:14px;vertical-align:middle;margin-right:8px">🎫</span>';
+  return `<img class="ico" src="${ICO(artId(id))}" loading="lazy" onerror="this.style.display='none'">`;
 }
 function itemImgTag(id){
-  if(NO_ART_ITEM_IDS.has(id)) return '<span class="iimg" style="display:grid;place-items:center;font-size:26px">📦</span>';
-  return `<img class="iimg" src="${IMG(id)}" onerror="this.classList.add('hide')" alt="">`;
+  if(NO_ART_ITEM_IDS.has(id) && !ICON_DONOR[id]) return '<span class="iimg" style="display:grid;place-items:center;font-size:26px">🎫</span>';
+  return `<img class="iimg" src="${IMG(artId(id))}" onerror="this.classList.add('hide')" alt="">`;
 }
 // monster portraits (same CDN). GOTCHA (verified 2026-07-13): an id with no real
 // divine-pride art does NOT 404 — it returns HTTP 200 with a fixed 5610-byte
@@ -672,7 +703,7 @@ const RACE=['Formless','Undead','Brute','Plant','Insect','Fish','Demon','Demihum
 const ELE=['Neutral','Water','Earth','Fire','Wind','Poison','Holy','Shadow','Ghost','Undead'];
 
 // ---- visual helpers --------------------------------------------------------
-const ELE_C=['#8a93a3','#2f8fd6','#9a6b33','#e0623a','#2bb3a3','#9b59c6','#e0a93b','#6a4fb0','#8e7bd0','#6b8e4f'];
+const ELE_C=['#6b7482','#2f7fc8','#86592a','#d1522c','#1a8578','#8b47b8','#b8851f','#6a4fb0','#7a63c4','#5c7d40'];
 const ELE_I=['◇','💧','🌿','🔥','🌪️','☠️','✨','🌑','👻','💀'];
 // mob_db stores element/race/size as STRINGS ("Dark","Demon","Large"); map to
 // the RO index for colour/icon/matrix lookups. ("Dark" = Shadow = index 7.)
@@ -752,7 +783,7 @@ async function boot(){
     }));
     initUI();
   }catch(e){
-    $('#app').innerHTML='<div class="errbox"><h2 style="color:var(--gold);font-family:DM Sans;font-weight:800">Couldn’t load the data files</h2>'
+    $('#app').innerHTML='<div class="errbox"><h2 style="color:var(--gold-deep);font-family:DM Sans;font-weight:800">Couldn’t load the data files</h2>'
       +'<p>Browsers block <code>fetch()</code> of local files. Serve this folder over http:</p>'
       +'<p><code>npx serve wiki</code> &nbsp;or&nbsp; <code>python -m http.server</code> (then open the shown URL).</p>'
       +'<p style="color:var(--muted);font-size:12px">Hosting it (GitHub Pages, Netlify, any static host) also works.</p></div>';
@@ -1034,6 +1065,22 @@ function clsIcon(cls){
     +'onerror="this.style.display=\'none\';this.parentNode.querySelector(\'span\').style.display=\'grid\'">'
     +'<span style="display:none;place-items:center;width:100%;height:100%">'+emoji+'</span></span>';
 }
+// NPC sprite avatars (static GIFs in assets/npcs/, fetched once — never hotlinked).
+// Small inline portrait shown beside an instance NPC's name.
+const NPC_SPRITE={
+  "Hugin's Butler":'1_F_04.gif', "Hugin's Magician":'1_F_01.gif', 'Dark magic master':'1_F_01.gif',
+  "Hugin's Craftsman":'4_F_JOB_BLACKSMITH.gif', 'Portrait Collector':'4_M_OILMAN.gif',
+  'Ghost of the Sovereign':'4_M_JOB_KNIGHT1.gif', 'Sky Warden':'4_M_JOB_KNIGHT1.gif',
+  'Palace Keeper':'4_F_VALKYRIE.gif', 'Dimension Traveler':'4_M_SAGE_C.gif',
+};
+function npcAvatar(file){
+  return '<span class="npcava"><img src="assets/npcs/'+file+'" alt="" loading="lazy" '
+    +'onerror="this.parentNode.style.display=\'none\'"></span>';
+}
+// avatar + bold NPC name; `key` looks up the sprite (defaults to the display name).
+function npcTag(name,key){ const f=NPC_SPRITE[key||name]; return (f?npcAvatar(f):'')+'<b>'+esc(name)+'</b>'; }
+// wrap a wide table so it scrolls inside its own box on narrow phones
+const scrollT = h => '<div class="tscroll">'+h+'</div>';
 let BALANCE=null;
 async function renderBalance(){
   const el=$('#balance');
@@ -1204,7 +1251,7 @@ function renderBuilds(){
   const totalItems=BUILDS.groups.reduce((n,g)=>n+g.builds.reduce((m,f)=>m+f.items.length,0),0);
   let h=`<div class="homewrap">
     <div class="hero homehero"><div class="kicker">FUN PASS · OFF-META BUILDS</div><h1 style="font-size:30px">Fun Builds</h1>
-      <p>Classic, cheap gear now carries bonus skill-amp mods for off-meta skills — a Buy-10 item can unlock a whole fun build alongside your main gear. The base item and its <b>[1]</b> slotted twin both work; the slotted version's amp is roughly <b>double</b>. Buy everything at the <b>Fun Gear</b> shops next to the <b>Build Librarian</b> in Prontera (172-178, y=180).</p>
+      <p>Classic, cheap gear carries bonus skill-amp mods for off-meta skills — a Buy-10 item can unlock a whole fun build alongside your main gear. The base item and its <b>[1]</b> slotted twin both work; the slotted version's amp is roughly <b>double</b>. Buy everything at the <b>Fun Gear</b> shops next to the <b>Build Librarian</b> in Prontera (172-178, y=180).</p>
       <div class="statline"><div class="statbox"><b>${totalBuilds}</b><small>Builds</small></div><div class="statbox"><b>${totalItems}</b><small>Items</small></div><div class="statbox"><b>${(BUILDS.combos||[]).length}</b><small>Set combos</small></div></div>
       <div class="dmgest-row" style="margin-top:12px"><label for="buildsEstInput">Estimate with your skill's current average hit</label><input type="number" id="buildsEstInput" min="0" step="1" value="1000" oninput="refreshDmgEst('#builds','buildsEstInput')"></div></div>`;
   BUILDS.groups.forEach(g=>{
@@ -1264,35 +1311,35 @@ function renderSystems(){
       <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:${col};font-size:14px;margin-bottom:4px">${n}. ${title}</div>
       <p style="font-size:12.5px;margin:0">${body}</p></div>`;
   const oghPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">👑</span>Old Glast Heim — Amdarais, the flagship boss</h4>
-    <p style="margin-bottom:12px">The server's first genuinely <b>mechanics-gated</b> fight — every other boss here scales HP/ATK, this one changes what you have to <i>do</i>. Two waves of guardians, then Amdarais himself, in the real Old Glast Heim arena, retuned from his real kRO stats down to our level-99/trans-2nd cap (a deliberate notch above Valkyrie Randgris, our previous toughest MVP). Enter via the <b>Ghost of the Sovereign</b> (Eden HQ, Base Level 99+), Normal/Hard/Nightmare Challenge Tiers exactly like MVP Arena — harder tiers never cost an extra entry or touch drop/card rates. In a hurry? <b>Fast Mode</b> skips both guardian waves and drops you straight into the boss room, same reward either way.</p>
+    <p style="margin-bottom:12px">Old Glast Heim's undead lord, and the server's premier <b>mechanics-gated</b> fight — Amdarais changes what you have to <i>do</i>, not just how big his health bar is. Fight through two waves of guardians, then face the lord himself in the haunted cathedral. Enter via the <b>Ghost of the Sovereign</b> at Eden HQ (Base Level 99+) on Normal, Hard, or Nightmare — harder tiers never cost an extra entry or touch drop rates. In a hurry? <b>Fast Mode</b> skips both guardian waves and drops you straight into the boss room, same reward either way.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
       ${oghPhase(1,'Reinforcements','At ≤75% HP, two adds spawn. Leave them alive and Amdarais <b>heals</b> a slice of max HP every tick — clear them fast or lose the DPS race.','#e0655a')}
       ${oghPhase(2,'Enrage','At ≤40% HP he enrages (+ATK) and starts <b>channeling real ground-targeted attacks</b> at a random party member\'s tile — the cast bar is the telegraph. Reposition or eat real AoE damage.','#c9853a')}
       ${oghPhase(3,'Enrage timer','Run past the Challenge-Tier time limit (10/8/6 min Normal/Hard/Nightmare) and he gets meaner again — a real DPS/coordination check, not just a bigger health bar.','#b07ad6')}
     </div>
-    <p style="font-size:12.5px;color:var(--muted);margin:0">Rewards follow the same Valor/Hunter Coin + MVP Points layer as every other MVP fight (scaled up as a flagship premium), plus the grail-tier <b>Amdarais Card</b> — a real risk/reward card (+15% damage all classes, +15% MATK, but drains 666 flat HP every 4 seconds while worn) at a hard 1× drop rate, same as every card, always. Hard and Nightmare clears earn their own titles.</p></div>`;
+    <p style="font-size:12.5px;color:var(--muted);margin:0">Every clear pays Valor Coin, Hunter Coin and MVP Points, scaled up by Challenge Tier — plus a shot at the grail-tier <b>Amdarais Card</b>: +15% damage on every class and +15% MATK, at the cost of 666 HP every 4 seconds while worn. Like every card, it drops at a hard 1×, always. Hard and Nightmare clears earn their own titles.</p></div>`;
 
   const ferlockPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">🐉</span>Ferlock Ship — Captain Ferlock, the 2nd flagship boss</h4>
-    <p style="margin-bottom:12px">A second mechanics-gated fight, same real-consequence philosophy as Amdarais — reused from the real Airship Assault's actual final boss (a true MVP-flagged Dragon), retuned to our level-99 cap a notch below Amdarais so the two flagships have a clear pecking order. Enter via the <b>Sky Warden</b> (Eden HQ, Base Level 99+), same Normal/Hard/Nightmare Challenge Tiers and Fast Mode as Old Glast Heim.</p>
+    <p style="margin-bottom:12px">A second mechanics-gated flagship: Captain Ferlock, a colossal MVP Dragon who commands his own airship. Every trick Amdarais pulls, Ferlock answers with fire — a hair easier than Old Glast Heim, but a real fight in its own right. Enter via the <b>Sky Warden</b> at Eden HQ (Base Level 99+), with the same Normal/Hard/Nightmare tiers and Fast Mode as Old Glast Heim.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
       ${oghPhase(1,'Reinforcements','At ≤75% HP, two Sky Sentinels spawn. Leave them alive and Ferlock <b>heals</b> a slice of max HP every tick.','#4f8fe0')}
       ${oghPhase(2,'Airborne fury','At ≤40% HP he takes to the air (+ATK) and starts <b>breathing real fire</b> at a random party member\'s tile — the cast bar is the telegraph. Reposition or burn.','#e0655a')}
       ${oghPhase(3,'Enrage timer','Run past the Challenge-Tier time limit and the ship groans under his fury — a real DPS/coordination check.','#c9853a')}
     </div>
-    <p style="font-size:12.5px;color:var(--muted);margin:0">Reward set: <b>Felock Armor / Cloak / Boots / Hat</b> (real stock gear, retuned to level 99) plus the grail-tier <b>Felock Card</b> — the real card targeted a class that doesn\'t exist on this server (Rebellion), so it was rebuilt as a universal +ATK/+MATK/anti-Dragon bonus instead of shipping dead weight. Hard and Nightmare clears earn their own titles.</p></div>`;
+    <p style="font-size:12.5px;color:var(--muted);margin:0">Defeat Ferlock for a full reward set — <b>Felrock's Armor, Cloak, Boots, and Hat</b> — plus the grail-tier <b>Felock Card</b>: a universal +30 ATK, +30 MATK, and +15% damage against Dragons, useful on any class. Hard and Nightmare clears earn their own titles.</p></div>`;
 
   const ghostPalacePage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">⚔️</span>Ghost Palace — the weapon-farm dungeon</h4>
-    <p style="margin-bottom:12px">Not a boss fight — a repeatable farm loop feeding the server's widest horizontal BiS weapon tier. Two short waves of Torturous Redeemers (each guaranteed to drop <b>Gray Shard</b>, plus a Challenge-Tier-scaled bonus bundle on a full clear) via the <b>Palace Keeper</b> (Eden HQ, Base Level 99+, 2 free entries/day). Spend shards with the <b>Dimension Traveler</b> next door — no instance clear required to browse or buy.</p>
+    <p style="margin-bottom:12px">The server's great weapon-farm dungeon — clear it for <b>Gray Shard</b>, the currency behind the widest best-in-slot weapon line on the server. Fight two waves of Torturous Redeemers, then bring down the <b>Reliquary Warden</b> itself for a guaranteed lump sum of shards. Enter via the <b>Palace Keeper</b> at Eden HQ (Base Level 99+, 2 free entries/day), then spend your haul with the <b>Dimension Traveler</b> next door — no clear needed just to browse and buy.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
       <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
         <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🗡️ Thanos weapons — 200 shards</div>
-        <p style="font-size:12.5px;margin:0">One weapon per subtype — <b>14 types</b> from sword to whip — so every class has a real BiS pick. Real kRO stats: solid flat ATK/MATK, built-in lifesteal, and a genuine drawback (100 flat HP lost every 10s while equipped).</p></div>
+        <p style="font-size:12.5px;margin:0">One weapon per subtype — <b>14 types</b>, from sword to whip — so every class has a genuine best-in-slot pick. Each brings solid flat ATK/MATK and built-in lifesteal, balanced by a real drawback: 100 HP lost every 10 seconds while equipped.</p></div>
       <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
         <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🛡️ Gray armor set — 100 shards</div>
         <p style="font-size:12.5px;margin:0">Shield, body, garment, shoes, headgear — a full 5-piece refine-scaling set (Holy resist that grows with refine), open to every class.</p></div>
       <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
         <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🃏 Knight Sakray Card — 10,000 shards</div>
-        <p style="font-size:12.5px;margin:0">The special-tab grail: +20 ATK, +30% damage to Demon &amp; Undead. Real kRO price, real kRO power — a long-term grind, not a quick pickup.</p></div>
+        <p style="font-size:12.5px;margin:0">The special-tab grail: +20 ATK and +30% damage to Demon &amp; Undead. A true long-term chase at 10,000 shards — not a quick pickup.</p></div>
     </div></div>`;
 
   const acc=(icon,title,count,body,openByDefault)=>`<details class="acc"${openByDefault?' open':''}><summary><span class="accicon">${icon}</span>${title}<span class="acccount">${count} systems</span><span class="accarrow">▸</span></summary><div class="accbody"><div class="syscards">${body}</div></div></details>`;
@@ -1310,17 +1357,17 @@ function renderSystems(){
   ].join('');
 
   const groupEconomy = [
-    card('📈','Fixed 5× / 5× / 3× rates','Every character earns the same rates — 5× base &amp; job EXP, 3× common/heal/use/equip/MVP-exclusive drops. The old per-character rate choice is retired; cards stay a hard 1× no matter what — see the <b>Rates</b> tab for the full breakdown.'),
+    card('📈','Fixed 5× / 5× / 3× rates','Every character earns the same rates — 5× base &amp; job EXP, 3× common/heal/use/equip/MVP-exclusive drops. Cards stay a hard 1× no matter what — see the <b>Rates</b> tab for the full breakdown.'),
     card('📅','Daily &amp; weekly loops','<b>Daily Tasks</b>: 3 rotating jobs reset at server midnight, with an escalating <b>login streak</b> day-7 jackpot. <b>Weekly Hunt</b>: a rotating featured MVP with a cross-player leaderboard and tiered rewards. The retention spine.'),
     card('🛍️','Cash shop — cosmetics + pay-to-fast','The <b>Rune Zero Boutique</b> is a real native Cash Shop window selling <b>weekly-rotating cosmetic sets</b> (zero stats), staples, the Starter Pack, and the Premium Pass. The <b>Boutique Concierge</b> next door handles dye/name-color coupons and pay-to-fast bundles (EXP/common-drop boosts, convenience) payable in Cash Points <i>or</i> play-earned coins. <b>No power, no cards, no card/drop-on-card boosts ever sold</b>.'),
     card('🎰','Fortune Vault — zeny-sink gacha','A pure zeny sink in Prontera: <b>25,000z</b> for one pull or <b>250,000z</b> for ten. Prizes run from a guaranteed consolation Old Blue Box up to a <b>0.1% RARE costume</b> (server-wide announce) with common costumes, refine packs and booster bundles in between — no cards, no MVP loot, ever. A hidden pity counter guarantees a common costume by your 100th pull without landing one.'),
-    card('🚪','Warp &amp; repair fees','Every warp still works for everyone, but non-VIP now pays a small zeny toll — 500z for towns, 1,000z for fields/dungeons, 300z to re-warp to your last spot — and the Repair Smith charges 5,000z to fix broken gear. An active VIP sub waives every fee. See the <b>Rates</b> tab for the full VIP comparison.'),
+    card('🚪','Warp &amp; repair fees','Every warp works for everyone; non-VIP pays a small zeny toll — 500z for towns, 1,000z for fields/dungeons, 300z to re-warp to your last spot — and the Repair Smith charges 5,000z to fix broken gear. An active VIP sub waives every fee. See the <b>Rates</b> tab for the full VIP comparison.'),
   ].join('');
 
   const groupEvents = [
-    card('👑','Champion / Lucky / Frenzy monsters','Any normal kill has a small chance to spawn a roaming <b>special</b> of that monster: a <b>Champion</b> (mini-boss, ~3× strength, minions, guaranteed top-roll drop), a <b>Frenzy</b> (fast brawler → EXP burst), or a rare <b>Lucky</b> (loot piñata ≈100 kills). Each wears a coloured aura + map announce, and rolls <b>1–3 affixes</b> (Sturdy, Vigorous, Swift, Deadly, Resilient, Evasive) that stack onto its name — e.g. <i>“Swift Deadly Champion Poring”</i>. More affixes = a <b>small</b> Valor + EXP bonus (cards stay 1×). Base spawn odds are up ~50% (now 1.5%), and 15% of the time a Champion arrives with 2-3 lesser "Guard" adds flanking it — clear the whole pack for roughly <b>+40% total reward</b> over the Champion alone.'),
-    card('🐾','Adventurer Allies — bond &amp; revive','Your recruited ally companions now carry a permanent per-class <b>Bond level</b> (1–10, earned from kills while that ally fights beside you) that boosts its buff tiers, with flavour titles at Bond 4/7/10 (Loyal / Devoted / Sworn). Town Healers now only give a free full heal — Blessing and Increase AGI moved to your Allies, so keep one summoned. If an ally dies, a 5-minute window lets you re-summon it at half the usual fee.'),
-    card('🏁','MVP Arena speedrun boards','Every Challenge Tier (Normal / Hard / Nightmare) now keeps an all-time top-5 leaderboard of fastest clears — check it from the existing <code>@mvprank</code> command\'s new Speedrun Leaderboard page. Only a genuine personal best earns a shot at the board.'),
+    card('👑','Champion / Lucky / Frenzy monsters','Any normal kill has a small chance to spawn a roaming <b>special</b> of that monster: a <b>Champion</b> (mini-boss, ~3× strength, minions, guaranteed top-roll drop), a <b>Frenzy</b> (fast brawler → EXP burst), or a rare <b>Lucky</b> (loot piñata ≈100 kills). Each wears a coloured aura + map announce, and rolls <b>1–3 affixes</b> (Sturdy, Vigorous, Swift, Deadly, Resilient, Evasive) that stack onto its name — e.g. <i>“Swift Deadly Champion Poring”</i>. More affixes = a <b>small</b> Valor + EXP bonus (cards stay 1×). Base spawn odds are about 1.5%, and 15% of the time a Champion arrives with 2-3 lesser "Guard" adds flanking it — clear the whole pack for roughly <b>+40% total reward</b> over the Champion alone.'),
+    card('🐾','Adventurer Allies — bond &amp; revive','Your recruited ally companions carry a permanent per-class <b>Bond level</b> (1–10, earned from kills while that ally fights beside you) that boosts its buff tiers, with flavour titles at Bond 4/7/10 (Loyal / Devoted / Sworn). Town Healers give a free full heal; Blessing and Increase AGI come from your Allies, so keep one summoned. If an ally dies, a 5-minute window lets you re-summon it at half the usual fee.'),
+    card('🏁','MVP Arena speedrun boards','Every Challenge Tier (Normal / Hard / Nightmare) keeps an all-time top-5 leaderboard of fastest clears — check it from the <code>@mvprank</code> command\'s Speedrun Leaderboard page. Only a genuine personal best earns a shot at the board.'),
     card('🎣','Fishing streaks &amp; Golden Fish','Landing 5 catches in a row (broken by changing maps or idling 2 minutes) grants a bonus yield roll, and every catch has a shot at a rare <b>Golden Fish</b> — 2% normally, 4% on a streak of 10+. Turn in 5 Golden Fish at the Profession Master for Valor Coins and bonus Fishing XP.'),
     card('🎉','Server events','<b>Find the Mushroom</b>, <b>Speed Quiz</b> (trivia — first to reach the Quizmaster with the right answer wins the pot), and <b>Fever Field</b> (a hot-zone map goes live for 25 minutes with a guaranteed +3 bonus Valor Coin per kill) rotate every 2 hours off the Event Herald, plus a classic <b>Disguise</b> event that periodically hides a random monster in a familiar mob\'s skin for whoever spots it first.'),
   ].join('');
@@ -1338,8 +1385,7 @@ function renderSystems(){
   </div>
   ${acc('🎒','Gear, Loot &amp; Progression',9,groupGear,true)}
   ${acc('💰','Daily Life &amp; Economy',5,groupEconomy)}
-  ${acc('🌍','World Events &amp; Threats',5,groupEvents)}
-  <div class="note">🔭 <b>Planned:</b> an in-game economy pass (rationalising the coin/currency set) and a full balance tuning sweep once class damage is tested in-game.</div>`;
+  ${acc('🌍','World Events &amp; Threats',5,groupEvents)}`;
 }
 
 // ===========================================================================
@@ -1353,7 +1399,7 @@ function renderRates(){
   const head=(n)=>`<div class="sectionhead"><span class="sn">${n}</span><span class="sl"></span></div>`;
   let h=`<div class="homewrap">
     <div class="hero homehero"><div class="kicker">AT A GLANCE · LIVE CONFIG</div><h1 style="font-size:30px">Rates &amp; Fair Play</h1>
-      <p>Every number below is read straight from the server's own rate config, not a marketing page — if it changes, this page changes. The identity in one line: <b>pay-to-fast, never pay-to-win</b>. Convenience and speed are for sale; the rare-power chase — cards — never is.</p></div>
+      <p>Every number below is exactly what the live server runs — no marketing spin. The identity in one line: <b>pay-to-fast, never pay-to-win</b>. Convenience and speed are for sale; the rare-power chase — cards — never is.</p></div>
 
     ${head('Experience')}
     <div class="ratesgrid">
@@ -1418,7 +1464,7 @@ function renderRates(){
     <div class="cmdgrid">
       ${['@go','@autoloot','@alootid','@autoloottype','@autotrade','@noks','@iteminfo','@mobinfo','@whodrops','@whereis','@storage','@time','@exp','@showexp','@showdelay','@refresh','@request'].map(c=>`<span class="cmdpill">${c}</span>`).join('')}
     </div>
-    <p class="homefoot">Source: <code>overlays/conf/import/battle_conf.txt</code> · rate unit reminder: 100 = 1× in rAthena. Built ${META.built||''}.</p>
+    <p class="homefoot">Every value on this page reflects the live server configuration · built ${META.built||''}.</p>
   </div>`;
   el.innerHTML=h;
 }
@@ -1434,28 +1480,28 @@ function renderCustomizations(){
   const rule=(ic,t,b)=>`<div class="rulebox"><span class="ri">${ic}</span><div><b>${t}</b><p>${b}</p></div></div>`;
   let h=`<div class="homewrap">
     <div class="hero homehero"><div class="kicker">CUSTOM CONTENT · EPISODE 13 / TRANS-2ND</div><h1 style="font-size:30px">Customizations</h1>
-      <p>Every skill rebalance, custom item, and off-meta build Rune Zero adds on top of stock rAthena — high-damage and multi-build by design, but never inflating the rare-power chase.</p>
+      <p>Every skill rebalance, custom item, and off-meta build that makes Rune Zero its own game — high-damage and multi-build by design, but never inflating the rare-power chase.</p>
       <div class="statline">${stat((META.customItems||0).toLocaleString(),'Custom items')}${stat((META.funmodItems||0).toLocaleString(),'Fun-mod items')}${stat((META.comboSets||0),'Set combos')}${stat('119','Skills rebalanced')}${stat((META.skillItems||0).toLocaleString(),'Skill-boosting items')}</div>
     </div>
 
     <div class="sectionhead"><span class="sn">Class &amp; skill balance</span><span class="sl"></span></div>
     <div class="syscards">
       ${card('⚖️','Class &amp; monster balance','High-damage, multi-build philosophy: <b>52 underused skills</b> made spammable/affordable and <b>15 given real damage</b> so every class has 2–3 viable builds. To match, <b>26 MVPs were toughened ~2.5–3× HP</b> and elites bumped — bosses bite back. See the <b>Skill Changes</b> tab for every before→after.','g')}
-      ${card('⚡','Skill QoL pass','18 stock skills got usability-only modernizations (no damage changes): Impositio Manus &amp; Suffragium are now party-wide self-casts, Magical Bullet is a real self-buff, Back Stab auto-repositions behind its target, the 4 Sage weapon endows always succeed, Bowling Bash is a flat 5×5 hit, Sonic Blow trades its animation lock for a short cooldown, EDP lasts twice as long, and Kyrie Eleison &amp; Assumptio can now be active together. See <b>Skill Changes</b> for the full list.','g')}
+      ${card('⚡','Skill QoL pass','18 skills get usability-only upgrades (no damage changes): Impositio Manus &amp; Suffragium are now party-wide self-casts, Magical Bullet is a real self-buff, Back Stab auto-repositions behind its target, the 4 Sage weapon endows always succeed, Bowling Bash is a flat 5×5 hit, Sonic Blow trades its animation lock for a short cooldown, EDP lasts twice as long, and Kyrie Eleison &amp; Assumptio can now be active together. See <b>Skill Changes</b> for the full list.','g')}
       ${card('💠','Class Essences','Trans-class <b>Essence</b> accessories (Lv 1 &amp; 2 per class) granting a class stat plus % boosts to that class\'s signature skills — faithful to kRO Zero, tuned for our high-damage server.')}
-      ${card('🏆','Legacy MVP trophies','Dead legacy MVP gear revived into refine-gated chase pieces — e.g. Majestic Goat: Bash / Bowling Bash <b>+28%</b> at +9. The server is intentionally high-damage; trophy spikes are meaningful, not timid.')}
+      ${card('🏆','Legacy MVP trophies','Iconic MVP trophies are refine-gated chase pieces here — e.g. Majestic Goat pushes Bash / Bowling Bash <b>+28%</b> at +9. This is a high-damage server, so trophy bonuses hit hard.')}
     </div>
 
     <div class="sectionhead"><span class="sn">Fun Mods — off-meta item builds</span><span class="sl"></span></div>
     <div class="syscards">
-      ${card('🎉','Any item, any tier, any damage skill','Classic and premium gear alike can carry off-meta <b>bonus2 bSkillAtk</b> damage amps — this isn\'t limited to cheap items anymore, it\'s meant to give every class and skill a build, not just the same handful of meta skills everyone already uses. '+(META.funmodItems||0)+' items are flagged <span class="badge funmod">FUN</span> in the <b>Items</b> tab, plus '+(META.comboSets||0)+' set combos for wearing two fun-mod pieces together. See the <b>Fun Builds</b> tab for the full cheat sheet by class.')}
-      ${card('🃏','Full card coverage','Every skill that can carry a damage amp now has a matching card option too — 95 fun-mod cards covering the skill-coverage gap, so a build isn\'t locked to one specific base item.')}
+      ${card('🎉','Any item, any tier, any damage skill','Classic and premium gear alike can carry off-meta <b>%-damage skill amps</b> — from cheap staples to premium pieces, so every class and skill gets a build, not just the handful of meta skills everyone already uses. '+(META.funmodItems||0)+' items are flagged <span class="badge funmod">FUN</span> in the <b>Items</b> tab, plus '+(META.comboSets||0)+' set combos for wearing two fun-mod pieces together. See the <b>Fun Builds</b> tab for the full cheat sheet by class.')}
+      ${card('🃏','Full card coverage','Every skill that can carry a damage amp has a matching card option too — 95 fun-mod cards, so a build isn\'t locked to one specific base item.')}
     </div>
 
     <div class="sectionhead"><span class="sn">Design rules we don't break</span><span class="sl"></span></div>
     <div class="sectionsub">A few hard lines, kept consistent across every item added — so gear behaves predictably.</div>
-    ${rule('🚫','No Double Attack damage amps, anywhere','Double Attack (TF_DOUBLE) doesn\'t get a %-damage fun-mod on any item, full stop — it doesn\'t exist as a build path here, by design, not an oversight.')}
-    ${rule('🔒','Asura Strike is capped at +50% from any single item','Monk/Champion\'s Asura Strike (MO_EXTREMITYFIST) is a deliberate hard special case — no fun-mod item may push past a 50% total bonus, regardless of tier.')}
+    ${rule('🚫','No Double Attack damage amps, anywhere','Double Attack doesn\'t get a %-damage fun-mod on any item, full stop — it isn\'t a build path on this server.')}
+    ${rule('🔒','Asura Strike is capped at +50% from any single item','Monk/Champion\'s Asura Strike is a hard special case — no single fun-mod item pushes it past +50% total, at any tier.')}
     ${rule('📈','Trans-exclusive skills get noticeably bigger amps than base-class skills','A comparable item amping a transcendent-only skill leans bigger than one amping a 1st/2nd-class skill of the same tier — rewarding the deeper class investment.')}
     ${rule('🃏','Cards stay a hard 1× — customization never means inflation','Every rebalance above changes damage or usability, never drop rate. Card rates are governed separately and never move — see the <b>Rates</b> tab for the full breakdown.')}
 
@@ -1504,7 +1550,7 @@ function renderClasses(){
     </div>
     <div class="classfilters" id="classChips"></div>
     <div id="classlist"></div>
-    <p class="homefoot">All item names, skill %s and essence costs are pulled straight from the live item database — nothing here is aspirational.</p>
+    <p class="homefoot">Every item name, skill %, and essence cost is exactly what you'll find in game.</p>
   </div>`;
   const cc=$('#classChips');
   cc.innerHTML = chips.map(t=>`<button type="button" class="ichip${classFlt===t?' active':''}">${t?ROLE_LABEL[t]:'All classes'}</button>`).join('');
@@ -1581,20 +1627,20 @@ const BOOT_BONUS_EFFECTS=[
   {name:'Lucky Day',chance:'15–16%',trigger:'any hit',buff:'5s: +200 LUK, plus a big boost to rare-drop luck',drain:'none',tax:'300 HP on unequip'},
 ];
 function bootEnchantTable(){
-  let h='<table><thead><tr><th>Family</th><th>Tier 1</th><th>Tier 2</th><th>Tier 3</th><th>Tier 4</th></tr></thead><tbody>';
+  let h='<table class="dense"><thead><tr><th>Family</th><th>Tier 1</th><th>Tier 2</th><th>Tier 3</th><th>Tier 4</th></tr></thead><tbody>';
   BOOT_ENCHANT_LADDER.forEach(f=>{
-    h+=`<tr><td><b>${esc(f.name)}</b><br><span class="mono" style="color:var(--muted);font-size:11px">${esc(f.boots)} boots</span></td>${f.tiers.map(t=>`<td style="font-size:12.5px">${esc(t)}</td>`).join('')}</tr>`;
+    h+=`<tr><td><b>${esc(f.name)}</b><br><span class="mono" style="color:var(--muted);font-size:11px">${esc(f.boots)} boots</span></td>${f.tiers.map(t=>`<td>${esc(t)}</td>`).join('')}</tr>`;
   });
   h+='</tbody></table>';
-  return h;
+  return scrollT(h);
 }
 function bootBonusTable(){
-  let h='<table><thead><tr><th>Card (3rd slot)</th><th>Proc chance</th><th>Buff while active</th><th>Drain while active</th><th>Cost to unequip</th></tr></thead><tbody>';
+  let h='<table class="dense"><thead><tr><th>Card (3rd slot)</th><th>Proc chance</th><th>Buff while active</th><th>Drain while active</th><th>Cost to unequip</th></tr></thead><tbody>';
   BOOT_BONUS_EFFECTS.forEach(b=>{
-    h+=`<tr><td><b>${esc(b.name)}</b></td><td class="mono">${esc(b.chance)} <span style="color:var(--muted);font-size:11px">on ${esc(b.trigger)}</span></td><td style="font-size:12.5px">${esc(b.buff)}</td><td style="font-size:12.5px;color:var(--warn)">${esc(b.drain)}</td><td style="font-size:12.5px;color:var(--bad)">${esc(b.tax)}</td></tr>`;
+    h+=`<tr><td><b>${esc(b.name)}</b></td><td class="mono">${esc(b.chance)} <span style="color:var(--muted);font-size:11px">on ${esc(b.trigger)}</span></td><td>${esc(b.buff)}</td><td style="color:var(--warn)">${esc(b.drain)}</td><td style="color:var(--bad)">${esc(b.tax)}</td></tr>`;
   });
   h+='</tbody></table>';
-  return h;
+  return scrollT(h);
 }
 function instStep(n,title,body){
   return `<div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:8px">
@@ -1606,24 +1652,24 @@ function shopRow(id,note){
   return `<div class="droprow"><span class="dl"><a onclick="location.hash='item/${id}'">${esc(it?it.name:('Item #'+id))}</a></span><span class="rate">${esc(note||'')}</span></div>`;
 }
 function thanosTable(){
-  let h='<table><thead><tr><th>Weapon</th><th>Subtype</th><th>Boosts</th><th>Bonus</th><th>Best on</th></tr></thead><tbody>';
+  let h='<table class="dense"><thead><tr><th>Weapon</th><th>Subtype</th><th>Boosts</th><th>Bonus</th><th>Best on</th></tr></thead><tbody>';
   THANOS_WEAPONS.forEach(w=>{
     const it=ITEM_BY_ID.get(w.id);
     h+=`<tr><td><a onclick="location.hash='item/${w.id}'">${esc(it?it.name:('#'+w.id))}</a></td><td class="mono">${esc(w.sub)}</td><td>${esc(w.skill)}</td><td class="mono">${w.pct?('+'+w.pct+'%'):'—'}</td><td>${esc(w.cls)}</td></tr>`;
   });
   h+='</tbody></table>';
-  return h;
+  return scrollT(h);
 }
 function sectionBoots(){
   const bootLinks=TEMPORAL_BOOTS.map(b=>`<a onclick="location.hash='item/${b.id}'">${b.nm}</a> (${b.fav})`).join('; ');
   let h=`<div class="sec"><h4>Temporal Boots — step-by-step crafting chain</h4>
     <div class="note">This is a multi-step item chain, not a single drop — follow it in order. Every NPC in this chain stands at Eden HQ.</div>`;
   h+=instStep(1,'Farm the material','Kill <a onclick="location.hash=\'mob/2476\'">Amdarais</a> for a chance at <a onclick="location.hash=\'item/6607\'">Temporal Crystal</a> (~1.5% per kill) — the core material for every step below.');
-  h+=instStep(2,'Buy the base boots','<b>Hugin&rsquo;s Butler</b> trades 1 Temporal Crystal for a plain <a onclick="location.hash=\'item/2499\'">Temporal Boots</a>.');
+  h+=instStep(2,'Buy the base boots',npcTag("Hugin's Butler")+' trades 1 Temporal Crystal for a plain <a onclick="location.hash=\'item/2499\'">Temporal Boots</a>.');
   h+=instStep(3,'Pick an element','Wear the base boots and bring 5 more Temporal Crystal back to Hugin&rsquo;s Butler to convert them into one of 6 stat-flavored variants (refine resets on conversion): '+bootLinks+'.');
-  h+=instStep(4,'Enchant it (4 tiers)','<b>Hugin&rsquo;s Magician</b> enchants the unslotted boots (must be worn) with <a onclick="location.hash=\'item/6608\'">Coagulated Spell</a> — pick one of 6 effect families (Fighting Spirit, Archery, Spell, Vitality, Attack Speed, Lucky) and it grows through 4 escalating tiers (1 &rarr; 4 &rarr; 15 &rarr; 30 Coagulated Spell). This step never fails.');
-  h+=instStep(5,'Optionally add a slot — real risk','<b>Hugin&rsquo;s Craftsman</b> can socket the boots for 5 more Temporal Crystal, but it is only a <span style="color:var(--bad);font-weight:700">50% success chance</span> — fail, and the boots (with everything enchanted onto them) are destroyed outright. Think carefully before rolling.');
-  h+=instStep(6,'Further-enchant the slotted boots','Once slotted, <b>Dark magic master</b> continues the same 4-tier ladder using Coagulated Spell + <a onclick="location.hash=\'item/6755\'">Contaminated Magic</a> + 100,000 zeny per attempt. The first tier always succeeds, but every tier after that (including the final bonus-effect roll) is only a <span style="color:var(--bad);font-weight:700">70% success chance</span> — a failed attempt destroys the boots.');
+  h+=instStep(4,'Enchant it (4 tiers)',npcTag("Hugin's Magician")+' enchants the unslotted boots (must be worn) with <a onclick="location.hash=\'item/6608\'">Coagulated Spell</a> — pick one of 6 effect families (Fighting Spirit, Archery, Spell, Vitality, Attack Speed, Lucky) and it grows through 4 escalating tiers (1 &rarr; 4 &rarr; 15 &rarr; 30 Coagulated Spell). This step never fails.');
+  h+=instStep(5,'Optionally add a slot — real risk',npcTag("Hugin's Craftsman")+' can socket the boots for 5 more Temporal Crystal, but it is only a <span style="color:var(--bad);font-weight:700">50% success chance</span> — fail, and the boots (with everything enchanted onto them) are destroyed outright. Think carefully before rolling.');
+  h+=instStep(6,'Further-enchant the slotted boots','Once slotted, '+npcTag('Dark magic master')+' continues the same 4-tier ladder using Coagulated Spell + <a onclick="location.hash=\'item/6755\'">Contaminated Magic</a> + 100,000 zeny per attempt. The first tier always succeeds, but every tier after that (including the final bonus-effect roll) is only a <span style="color:var(--bad);font-weight:700">70% success chance</span> — a failed attempt destroys the boots.');
   h+='</div>';
   h+=`<div class="sec"><h4>4th slot — the effect ladder (pick one family)</h4>
     <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">Whichever family you pick at step 4 grows through all 4 tiers on the same boots — you can't mix families on one pair. Matches the boots' native stat (Str boots want Fighting Spirit, Int boots want Archery, etc.) but nothing stops you picking a different family if you'd rather chase a specific effect.</p>
@@ -1637,20 +1683,20 @@ function sectionBoots(){
 }
 function sectionPortraitCollector(){
   return `<div class="sec"><h4>Portrait Collector — bulk material exchange</h4>
-    <p style="font-size:13px"><b>Portrait Collector#rz</b> stands at Eden HQ — moc_para01 (183,45) — and trades a bulk pile of Old Glast Heim currency for one of two cards. Pay with <b>either</b> currency, not both.</p>
-    <table><thead><tr><th>Card</th><th><a onclick="location.hash='item/6608'">Coagulated Spell</a></th><th>OR <a onclick="location.hash='item/6755'">Contaminated Magic</a></th><th>Effect</th></tr></thead><tbody>
-      <tr><td><a onclick="location.hash='item/4608'">White Knight Card</a></td><td class="mono">3,000</td><td class="mono">70</td><td style="font-size:12.5px">+15 ATK, +20% damage to Medium size, +20% damage to Large size</td></tr>
-      <tr><td><a onclick="location.hash='item/4609'">Khalitzburg Knight Card</a></td><td class="mono">5,000</td><td class="mono">100</td><td style="font-size:12.5px">+20 DEF, -25% damage taken from Medium size, -25% damage taken from Large size</td></tr>
-    </tbody></table>
+    <p style="font-size:13px">${npcTag('Portrait Collector#rz','Portrait Collector')} stands at Eden HQ — moc_para01 (183,45) — and trades a bulk pile of Old Glast Heim currency for one of two cards. Pay with <b>either</b> currency, not both.</p>
+    <div class="tscroll"><table class="dense"><thead><tr><th>Card</th><th><a onclick="location.hash='item/6608'">Coagulated Spell</a></th><th>OR <a onclick="location.hash='item/6755'">Contaminated Magic</a></th><th>Effect</th></tr></thead><tbody>
+      <tr><td><a onclick="location.hash='item/4608'">White Knight Card</a></td><td class="mono">3,000</td><td class="mono">70</td><td>+15 ATK, +20% damage to Medium size, +20% damage to Large size</td></tr>
+      <tr><td><a onclick="location.hash='item/4609'">Khalitzburg Knight Card</a></td><td class="mono">5,000</td><td class="mono">100</td><td>+20 DEF, -25% damage taken from Medium size, -25% damage taken from Large size</td></tr>
+    </tbody></table></div>
     <div class="note">White Knight Card is a weapon card for offense against Medium/Large enemies; Khalitzburg Knight Card is a shield card for defense against the same. Both are straightforward, no-RNG buys once you've stockpiled the material — no relation to the Temporal Boots chain above, just another sink for the same currencies.</div>
   </div>`;
 }
 function sectionShards(){
   let h=`<div class="sec"><h4>Dimension Traveler exchange</h4>
-    <p style="font-size:13px">Gray Shard now has two sources: a small chance off each <a onclick="location.hash='mob/2959'">Torturous Redeemer</a> trash-wave kill (two independent rolls, ~30% + ~10% — about 0.4 shard per kill on average, no longer a guaranteed drop), and a guaranteed lump sum from the Reliquary Warden's own kill — <b>40 (Normal) / 80 (Hard) / 150 (Nightmare)</b>. Spend it with the <b>Dimension Traveler</b>, standing right next to the Palace Keeper — no instance clear needed to browse or buy.</p>
+    <p style="font-size:13px">Gray Shard drops two ways: a small chance off each <a onclick="location.hash='mob/2959'">Torturous Redeemer</a> trash-wave kill (two rolls, ~30% + ~10% — roughly 0.4 shard per kill), and a guaranteed lump sum when the Reliquary Warden falls — <b>40 (Normal) / 80 (Hard) / 150 (Nightmare)</b>. The real haul comes from the Warden itself. Spend your shards with ${npcTag('Dimension Traveler')}, standing right next to the Palace Keeper — no clear needed to browse or buy.</p>
   </div>`;
   h+=`<div class="sec"><h4>Thanos weapons — 200 Gray Shard each</h4>
-    <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">One weapon per subtype, 14 in total, so every class has a real BiS pick. All of them share the same risk package: +6 INT / +6 VIT / -6 LUK, built-in lifesteal, 100 flat HP lost every 10 seconds while equipped, and a 1,000 HP hit the instant you unequip it (the Staff is the one exception — no lifesteal, it leans support instead).</p>
+    <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">One weapon per subtype, 14 in total, so every class has a genuine best-in-slot pick. All of them share the same risk package: +6 INT / +6 VIT / -6 LUK, built-in lifesteal, 100 flat HP lost every 10 seconds while equipped, and a 1,000 HP hit the instant you unequip it (the Staff is the one exception — no lifesteal, it leans support instead).</p>
     ${thanosTable()}
   </div>`;
   h+=`<div class="sec"><h4>Gray armor set — 100 Gray Shard each</h4>
@@ -1665,7 +1711,7 @@ function sectionShards(){
 }
 function sectionCapes(){
   return `<div class="sec"><h4>Felock Emblem exchange</h4>
-    <p style="font-size:13px">Captain Ferlock rarely drops a <a onclick="location.hash='item/40982'">Cloak Emblem</a> (~1% per kill — no Challenge Tier bonus). Bring it to <b>Sky Warden</b> and choose, for free, which cut of his cloak you want — a straight pick, no RNG on which one you get:</p>
+    <p style="font-size:13px">Captain Ferlock rarely drops a <a onclick="location.hash='item/40982'">Cloak Emblem</a> (~1% per kill — no Challenge Tier bonus). Bring it to ${npcTag('Sky Warden')} and choose, for free, which cut of his cloak you want — a straight pick, no RNG on which one you get:</p>
     ${shopRow(40980,'spellcasters — cast-time cuts, +MATK')}
     ${shopRow(40981,'melee/physical — +Flee, +ASPD')}
     ${shopRow(20744,'neutral hybrid — a bit of both, smaller of each')}
@@ -1676,10 +1722,10 @@ function sectionCapes(){
 const INSTANCES=[
   {
     slug:'amdarais', icon:'👑', name:'Old Glast Heim — Amdarais',
-    tagline:"The server's first mechanics-gated flagship boss — Old Glast Heim's undead lord, retuned to level 99.",
+    tagline:"Old Glast Heim's undead lord, and the server's premier mechanics-gated flagship boss.",
     whyFarm:'The grail-tier Amdarais Card, plus every material for the full Temporal Boots crafting chain.',
     bossLevel:99, bossHp:7500000, freeEntries:'1/day (VIP +1)',
-    entry:{npc:'Ghost of the Sovereign#rz', npcLoc:'Eden HQ — moc_para01 (174,42)', instMap:'1@gl_k — the real Old Glast Heim map', baseLevel:99,
+    entry:{npc:'Ghost of the Sovereign#rz', sprite:'4_M_JOB_KNIGHT1.gif', npcLoc:'Eden HQ — moc_para01 (174,42)', instMap:'1@gl_k — the Old Glast Heim cathedral', baseLevel:99,
       party:'Solo or party — the NPC opens whichever instance type matches who talks to it (a party leader opens a party instance).', scrollCost:1, valorCost:30, hunterCost:8},
     tiers:[
       {name:'Normal',hp:'×1',atk:'100%',def:'100%',coinExp:'100%',points:'100%'},
@@ -1704,10 +1750,10 @@ const INSTANCES=[
   },
   {
     slug:'ferlock', icon:'🐉', name:'Ferlock Ship — Captain Ferlock',
-    tagline:'The second flagship — a real MVP-flagged Dragon reused from the Airship Assault, tuned a notch below Amdarais.',
+    tagline:'The second flagship — a colossal MVP Dragon commanding his own airship, a hair easier than Amdarais.',
     whyFarm:'A choice of 3 capes (pick the one that fits your build) plus the universal Felock Card.',
     bossLevel:99, bossHp:6500000, freeEntries:'1/day (VIP +1)',
-    entry:{npc:'Sky Warden#rz', npcLoc:'Eden HQ — moc_para01 (177,45)', instMap:'1@air2 — the real Airship Assault map', baseLevel:99,
+    entry:{npc:'Sky Warden#rz', sprite:'4_M_JOB_KNIGHT1.gif', npcLoc:'Eden HQ — moc_para01 (177,45)', instMap:'1@air2 — the airship interior', baseLevel:99,
       party:'Solo or party — the NPC opens whichever instance type matches who talks to it (a party leader opens a party instance).', scrollCost:1, valorCost:30, hunterCost:8},
     tiers:[
       {name:'Normal',hp:'×1',atk:'100%',def:'100%',coinExp:'100%',points:'100%'},
@@ -1724,7 +1770,7 @@ const INSTANCES=[
       {id:15117,rate:100,note:'HP/SP/MDEF/All Stats that keeps stacking at +7/+9/+12 refine — good for any tanky build.'},
       {id:40982,rate:100,note:'redeem it with Sky Warden for a choice of cape — see below'},
       {id:22047,rate:100,note:'ASPD keeps stacking with refine, culminating in a true +1 ASPD at +12 — good for any physical attack-speed build.'},
-      {id:19144,rate:1000,note:'a filler piece — no bonus stats in stock'},
+      {id:19144,rate:1000,note:'a plain cape — no special bonus'},
       {id:12072,rate:3000,note:''},
       {id:12087,rate:3000,note:''},
       {id:12077,rate:3000,note:''},
@@ -1738,7 +1784,7 @@ const INSTANCES=[
     tagline:'The toughest of the three flagships — a fourth mechanic none of the others have, guarding the widest weapon-farm reward on the server.',
     whyFarm:'Gray Shard — spend it on a 14-weapon BiS line, a full armor set, or the Knight Sakray Card.',
     bossLevel:99, bossHp:8500000, freeEntries:'1/day (VIP +1)',
-    entry:{npc:'Palace Keeper#rz', npcLoc:'Eden HQ — moc_para01 (171,45)', instMap:'1@spa', baseLevel:99,
+    entry:{npc:'Palace Keeper#rz', sprite:'4_F_VALKYRIE.gif', npcLoc:'Eden HQ — moc_para01 (171,45)', instMap:'1@spa — the Ghost Palace', baseLevel:99,
       party:'Solo or party — the NPC opens whichever instance type matches who talks to it (a party leader opens a party instance).', scrollCost:1, valorCost:30, hunterCost:8},
     tiers:[
       {name:'Normal',hp:'×1',atk:'100%',def:'100%',coinExp:'100%',points:'100%'},
@@ -1751,7 +1797,7 @@ const INSTANCES=[
       "If the fight runs past the tier's time limit (10 min Normal / 8 min Hard / 6 min Nightmare) without a kill, the Warden enrages further (+20% ATK, stacks with the 40% enrage) — a hard stop on stalling.",
       "<b>Reliquary Ward (unique to this fight):</b> once the add-phase has started, the Warden periodically raises a Ward — a real damage-immunity window (~54s Normal / ~46s Hard / ~38s Nightmare between wards) — and summons 2 low-HP Anchor Wisps. Kill BOTH wisps fast to break the Ward early; if you don't manage it within the Ward's own timer (~14s / 12s / 10s), it completes on its own — the Warden becomes attackable again, but reclaims 3% of its max HP as a miss-penalty. Stop attacking the temporarily-unkillable boss and go kill the wisps instead.",
     ],
-    rewardText:"Every clear pays, guaranteed: EXP (45% of your next Base &amp; Job EXP bar), Valor Coin, Hunter Coin, and MVP Points — all scaled up by Challenge Tier (Hard: &times;1.5 coins/EXP, &times;2 points; Nightmare: &times;2 coins/EXP, &times;4 points) — plus a guaranteed <b>Gray Shard</b> lump sum on the kill: <b>40 (Normal) / 80 (Hard) / 150 (Nightmare)</b>. The two trash waves (Torturous Redeemers) still drop a little Gray Shard on their own, chance-based now, but the real haul comes from the Warden's fall.",
+    rewardText:"Every clear pays, guaranteed: EXP (45% of your next Base &amp; Job EXP bar), Valor Coin, Hunter Coin, and MVP Points — all scaled up by Challenge Tier (Hard: &times;1.5 coins/EXP, &times;2 points; Nightmare: &times;2 coins/EXP, &times;4 points) — plus a guaranteed <b>Gray Shard</b> lump sum on the kill: <b>40 (Normal) / 80 (Hard) / 150 (Nightmare)</b>. The trash waves (Torturous Redeemers) drop a little Gray Shard too, but the real haul comes from taking down the Warden itself.",
     drops:[],
     mvpDrops:[{id:617,rate:6000,note:''}],
     extraSection: sectionShards,
@@ -1770,7 +1816,7 @@ function sectionEnter(inst){
   const e=inst.entry;
   return `<div class="sec"><h4>How to enter</h4>
     <dl class="kv">
-      ${row('Entry NPC', esc(e.npc)+' — '+esc(e.npcLoc))}
+      ${row('Entry NPC', (e.sprite?npcAvatar(e.sprite):'')+esc(e.npc)+' — '+esc(e.npcLoc))}
       ${row('Instance map', esc(e.instMap))}
       ${row('Base Level required', e.baseLevel+'+')}
       ${row('Solo or party', esc(e.party))}
@@ -1780,10 +1826,10 @@ function sectionEnter(inst){
   </div>`;
 }
 function tierTable(inst){
-  let h='<table><thead><tr><th>Tier</th><th>Boss HP</th><th>ATK</th><th>DEF/MDEF</th><th>Coin &amp; EXP</th><th>MVP Points</th></tr></thead><tbody>';
+  let h='<table class="dense"><thead><tr><th>Tier</th><th>Boss HP</th><th>ATK</th><th>DEF/MDEF</th><th>Coin &amp; EXP</th><th>MVP Points</th></tr></thead><tbody>';
   inst.tiers.forEach(t=>{ h+=`<tr><td>${esc(t.name)}</td><td class="mono">${t.hp}</td><td class="mono">${t.atk}</td><td class="mono">${t.def}</td><td class="mono">${t.coinExp}</td><td class="mono">${t.points}</td></tr>`; });
   h+='</tbody></table>';
-  return h;
+  return scrollT(h);
 }
 function dropTagLabel(rate){
   if(rate<=10) return 'boss-exclusive';
