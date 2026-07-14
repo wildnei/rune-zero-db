@@ -1693,7 +1693,7 @@ function thanosTable(){
 function sectionBoots(){
   const bootLinks=TEMPORAL_BOOTS.map(b=>`<a onclick="location.hash='item/${b.id}'">${b.nm}</a> (${b.fav})`).join('; ');
   let h=`<div class="sec"><h4>Temporal Boots — step-by-step crafting chain</h4>
-    <div class="note">This is a multi-step item chain, not a single drop — follow it in order. Every NPC in this chain stands at Eden HQ.</div>`;
+    <div class="note">This is a multi-step item chain, not a single drop — follow it in order. Every NPC in this chain stands in the Eden HQ entrance hall, just north of where you arrive.</div>`;
   h+=instStep(1,'Farm the material','Kill <a onclick="location.hash=\'mob/2476\'">Amdarais</a> for a chance at <a onclick="location.hash=\'item/6607\'">Temporal Crystal</a> (~1.5% per kill) — the core material for every step below.');
   h+=instStep(2,'Buy the base boots',npcTag("Hugin's Butler")+' trades 1 Temporal Crystal for a plain <a onclick="location.hash=\'item/2499\'">Temporal Boots</a>.');
   h+=instStep(3,'Pick an element','Wear the base boots and bring 5 more Temporal Crystal back to Hugin&rsquo;s Butler to convert them into one of 6 stat-flavored variants (refine resets on conversion): '+bootLinks+'.');
@@ -1713,7 +1713,7 @@ function sectionBoots(){
 }
 function sectionPortraitCollector(){
   return `<div class="sec"><h4>Portrait Collector — bulk material exchange</h4>
-    <p style="font-size:13px">${npcTag('Portrait Collector')} stands at Eden HQ — moc_para01 (183,45) — and trades a bulk pile of Old Glast Heim currency for one of two cards. Pay with <b>either</b> currency, not both.</p>
+    <p style="font-size:13px">${npcTag('Portrait Collector')} stands in the Eden HQ entrance hall, just north of where you arrive — and trades a bulk pile of Old Glast Heim currency for one of two cards. Pay with <b>either</b> currency, not both.</p>
     <div class="tscroll"><table class="dense"><thead><tr><th>Card</th><th><a onclick="location.hash='item/6608'">Coagulated Spell</a></th><th>OR <a onclick="location.hash='item/6755'">Contaminated Magic</a></th><th>Effect</th></tr></thead><tbody>
       <tr><td><a onclick="location.hash='item/4608'">White Knight Card</a></td><td class="mono">3,000</td><td class="mono">70</td><td>+15 ATK, +20% damage to Medium size, +20% damage to Large size</td></tr>
       <tr><td><a onclick="location.hash='item/4609'">Khalitzburg Knight Card</a></td><td class="mono">5,000</td><td class="mono">100</td><td>+20 DEF, -25% damage taken from Medium size, -25% damage taken from Large size</td></tr>
@@ -1755,7 +1755,7 @@ const INSTANCES=[
     tagline:"The flagship mechanics fight: Old Glast Heim's undead lord, where add-phases and telegraphed AoE decide the kill — not a bigger health bar.",
     whyFarm:'The grail-tier Amdarais Card, plus every material for the full Temporal Boots crafting chain.',
     bossLevel:99, bossHp:7500000, freeEntries:'1/day (VIP +1)',
-    entry:{npc:'Ghost of the Sovereign', sprite:'4_M_JOB_KNIGHT1.gif', npcLoc:'Eden HQ — moc_para01 (174,42)', instMap:'the Old Glast Heim cathedral', baseLevel:99,
+    entry:{npc:'Ghost of the Sovereign', sprite:'4_M_JOB_KNIGHT1.gif', npcLoc:'Eden HQ entrance hall, just north of where you arrive', instMap:'the Old Glast Heim cathedral', baseLevel:99,
       party:'Solo or party — talk as party leader to bring the whole party in.', scrollCost:1, valorCost:30, hunterCost:8},
     tiers:[
       {name:'Normal',hp:'×1',atk:'100%',def:'100%',coinExp:'100%',points:'100%'},
@@ -1783,7 +1783,7 @@ const INSTANCES=[
     tagline:"The airship boss: a colossal MVP Dragon who answers Amdarais's every trick with fire — a hair easier, no pushover.",
     whyFarm:'A choice of 3 capes (pick the one that fits your build) plus the universal Felock Card.',
     bossLevel:99, bossHp:6500000, freeEntries:'1/day (VIP +1)',
-    entry:{npc:'Sky Warden', sprite:'4_M_JOB_KNIGHT1.gif', npcLoc:'Eden HQ — moc_para01 (177,45)', instMap:'the airship interior', baseLevel:99,
+    entry:{npc:'Sky Warden', sprite:'4_M_JOB_KNIGHT1.gif', npcLoc:'Eden HQ entrance hall, just north of where you arrive', instMap:'the airship interior', baseLevel:99,
       party:'Solo or party — talk as party leader to bring the whole party in.', scrollCost:1, valorCost:30, hunterCost:8},
     tiers:[
       {name:'Normal',hp:'×1',atk:'100%',def:'100%',coinExp:'100%',points:'100%'},
@@ -1814,7 +1814,7 @@ const INSTANCES=[
     tagline:'The weapon-farm raid: toughest of the three, gated by a damage-immunity Ward, guarding the widest best-in-slot reward on the server.',
     whyFarm:'Gray Shard — spend it on a 14-weapon BiS line, a full armor set, or the Knight Sakray Card.',
     bossLevel:99, bossHp:8500000, freeEntries:'1/day (VIP +1)',
-    entry:{npc:'Palace Keeper', sprite:'4_F_VALKYRIE.gif', npcLoc:'Eden HQ — moc_para01 (171,45)', instMap:'the Ghost Palace', baseLevel:99,
+    entry:{npc:'Palace Keeper', sprite:'4_F_VALKYRIE.gif', npcLoc:'Eden HQ entrance hall, just north of where you arrive', instMap:'the Ghost Palace', baseLevel:99,
       party:'Solo or party — talk as party leader to bring the whole party in.', scrollCost:1, valorCost:30, hunterCost:8},
     tiers:[
       {name:'Normal',hp:'×1',atk:'100%',def:'100%',coinExp:'100%',points:'100%'},
