@@ -1332,7 +1332,7 @@ function renderSystems(){
       <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:${col};font-size:14px;margin-bottom:4px">${n}. ${title}</div>
       <p style="font-size:12.5px;margin:0">${body}</p></div>`;
   const oghPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">👑</span>Old Glast Heim — Amdarais, the flagship boss</h4>
-    <p style="margin-bottom:12px">Old Glast Heim's undead lord, and the server's premier <b>mechanics-gated</b> fight — Amdarais changes what you have to <i>do</i>, not just how big his health bar is. Fight through two waves of guardians, then face the lord himself in the haunted cathedral. Enter via the <b>Ghost of the Sovereign</b> at Eden HQ (Base Level 99+) on Normal, Hard, or Nightmare — harder tiers never cost an extra entry or touch drop rates. In a hurry? <b>Fast Mode</b> skips both guardian waves and drops you straight into the boss room, same reward either way.</p>
+    <p style="margin-bottom:12px">Old Glast Heim's undead lord, and the server's premier <b>mechanics-gated</b> fight — Amdarais changes what you have to <i>do</i>, not just how big his health bar is. Fight through two waves of guardians, then face the lord himself in the haunted cathedral. Enter via the <b>Ghost of the Sovereign</b> at Eden HQ (Base Level 99+) on Normal, Hard, or Nightmare — harder tiers never cost an extra entry or touch drop rates. In a hurry? <b>Fast Mode</b> throws both guardian waves at you at once, then the lord himself the moment they fall — the whole fight, none of the waiting.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
       ${oghPhase(1,'Reinforcements','At ≤75% HP, two adds spawn. Leave them alive and Amdarais <b>heals</b> a slice of max HP every tick — clear them fast or lose the DPS race.','#e0655a')}
       ${oghPhase(2,'Enrage','At ≤40% HP he enrages (+ATK) and starts channeling ground-targeted attacks at a random party member\'s tile — the cast circle is your dodge window; standing still is what kills you.','#c9853a')}
@@ -1383,6 +1383,8 @@ function renderSystems(){
     card('🛍️','Cash shop — cosmetics + pay-to-fast','The <b>Rune Zero Boutique</b> is a native Cash Shop window selling <b>weekly-rotating cosmetic sets</b> (zero stats), staples, the Starter Pack, and the Premium Pass. The <b>Boutique Concierge</b> next door handles dye/name-color coupons and pay-to-fast bundles (EXP/common-drop boosts, convenience) payable in Cash Points <i>or</i> play-earned coins. <b>No power, no cards, no card/drop-on-card boosts ever sold</b>.'),
     card('🎰','Fortune Vault — zeny-sink gacha','A pure zeny sink in Prontera: <b>25,000z</b> for one pull or <b>250,000z</b> for ten. Prizes run from a guaranteed consolation Old Blue Box up to a <b>0.1% RARE costume</b> (server-wide announce) with common costumes, refine packs and booster bundles in between — no cards, no MVP loot, ever. A hidden pity counter guarantees a common costume by your 100th pull without landing one.'),
     card('🚪','Warp &amp; repair fees','Every warp works for everyone; non-VIP pays a small zeny toll — 500z for towns, 1,000z for fields/dungeons, 300z to re-warp to your last spot — and the Repair Smith charges 5,000z to fix broken gear. An active VIP sub waives every fee. See the <b>Rates</b> tab for the full VIP comparison.'),
+    card('🏪','Offline vending','Set up a Merchant vending shop, type <code>@autotrade</code> (or tick the autotrade box) and log out — your stall stays open in town, selling around the clock while you\'re away. Log back in anytime to collect your zeny. Your market never sleeps.'),
+    card('📢','Rare-drop announce','Land something genuinely rare — a card, a flagship boss weapon, MVP loot — and the whole server hears about it: <i>"Player got Baphomet\'s Baphomet Card!"</i> Everyday farm drops stay quiet; only the real trophies ring out. Purely a hype moment, zero rate impact.'),
   ].join('');
 
   const groupEvents = [
@@ -1852,7 +1854,7 @@ function sectionEnter(inst){
       ${row('Solo or party', esc(e.party))}
       ${row('Free entries', esc(inst.freeEntries))}
     </dl>
-    <div class="note">Extra entries past the daily free one cost <b>${e.scrollCost} Summon Scroll</b>, OR <b>${e.valorCost} Valor Coin</b>, OR <b>${e.hunterCost} Hunter Coin</b> — a harder Challenge Tier never costs an extra entry. <b>Fast Mode</b> is also offered on entry: skip both trash waves and go straight to the boss, same reward either way, just less lead-up.</div>
+    <div class="note">Extra entries past the daily free one cost <b>${e.scrollCost} Summon Scroll</b>, OR <b>${e.valorCost} Valor Coin</b>, OR <b>${e.hunterCost} Hunter Coin</b> — a harder Challenge Tier never costs an extra entry. <b>Fast Mode</b> is also offered on entry: both waves come at once, then the boss the moment they're cleared — the full fight, without the waiting between waves.</div>
   </div>`;
 }
 function tierTable(inst){
