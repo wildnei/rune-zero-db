@@ -1298,25 +1298,31 @@ function renderSystems(){
         <span class="beamleg" style="color:${BEAM.red}"><span class="beampill"></span>Very rare / MVP prize</span></div>
     </div>
     <p style="margin-top:10px;font-size:12.5px;color:var(--muted)">You'll see these same dots beside every drop in the Monsters &amp; Items tabs.</p></div>`;
-  const runeColor=['#e0655a','#4f8fe0','#c9853a','#b07ad6','#37b06a','#2bb3a3'];
-  const runeRow=(rune,eff,i)=>`<span class="beamleg" style="color:${runeColor[i]};font-weight:600"><span class="beampill" style="height:18px;width:14px;border-radius:50%"></span>${rune} <span style="color:var(--muted);font-weight:500">- ${eff}</span></span>`;
-  const gemPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">&#128142;</span>Rune Socketing - farm crystals, cut runes, engrave secondary stats</h4>
-    <p style="margin-bottom:12px">Steady, build-shaping power you earn by playing — farm it, craft it, engrave it. Runes give <b>secondary combat stats</b> (ATK, MATK, Crit, Crit Damage, after-cast delay, cast time) - <b>linear, build-specific power</b>, not raw stat inflation. Gated behind farming + crafting + a zeny sink; never sold for cash.</p>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
+  const gemPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">&#128142;</span>Enchant Stones - level your gear's soul, no luck required</h4>
+    <p style="margin-bottom:12px">Every armor piece can carry <b>leveled enchant stones</b> - nine stat families, each upgradable from Lv.1 to Lv.5. <b>No failure chance, ever</b>: every application and every upgrade succeeds. The climb is pure dedication - Lv.1 costs pocket change, Lv.5 demands the spoils of the endgame instances. Helmets hold <b>two</b> stones, armor two, boots/garments/accessories one each - and each slot's stone pool is different, so no two builds enchant alike.</p>
+    <div class="tscroll"><table class="dense"><thead><tr><th>Family</th><th>Where</th><th>Lv.1</th><th>Lv.2</th><th>Lv.3</th><th>Lv.4</th><th>Lv.5</th></tr></thead><tbody>
+      <tr><td><b>Warrior</b> (ATK)</td><td>Helm · Acc</td><td>+10</td><td>+15</td><td>+25</td><td>+35</td><td>+50</td></tr>
+      <tr><td><b>Sorcery</b> (MATK)</td><td>Helm · Acc</td><td>+10</td><td>+15</td><td>+25</td><td>+35</td><td>+50</td></tr>
+      <tr><td><b>Haste</b> (ASPD)</td><td>Boots · Garment</td><td>+1%</td><td>+2%</td><td>+3%</td><td>+4%</td><td>+5%</td></tr>
+      <tr><td><b>Sniper</b> (Crit)</td><td>Accessory only</td><td>+3</td><td>+5</td><td>+8</td><td>+12</td><td>+16</td></tr>
+      <tr><td><b>Phantom</b> (Flee)</td><td>Armor · Boots · Garment</td><td>+4</td><td>+6</td><td>+9</td><td>+13</td><td>+18</td></tr>
+      <tr><td><b>Guardian</b> (Max HP)</td><td>Armor · Boots · Garment</td><td>+2%</td><td>+3%</td><td>+4%</td><td>+6%</td><td>+8%</td></tr>
+      <tr><td><b>Cleric</b> (Heal)</td><td>Helm · Armor</td><td>+2%</td><td>+4%</td><td>+6%</td><td>+9%</td><td>+12%</td></tr>
+      <tr><td><b>Flow</b> (After-cast)</td><td>Helm · Armor</td><td>-3%</td><td>-6%</td><td>-10%</td><td>-15%</td><td>-20%</td></tr>
+      <tr><td><b>Focus</b> (Cast time)</td><td>Helm · Acc</td><td>-3%</td><td>-6%</td><td>-9%</td><td>-12%</td><td>-15%</td></tr>
+    </tbody></table></div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0">
       <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
         <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">1. Farm crystals</div>
-        <p style="font-size:12.5px;margin:0">Break <b>Crystal nodes</b> in the dungeons - <b>Mana Crystal</b> (mid) and <b>Prismatic Crystal</b> (deep) - for <b>Crystal Shards</b> and the rare <b>Radiant Crystal</b>. Immobile, 0 EXP.</p></div>
+        <p style="font-size:12.5px;margin:0">Break <b>Crystal nodes</b> in the dungeons - <b>Mana Crystal</b> (mid) and <b>Prismatic Crystal</b> (deep) - for <b>Crystal Shards</b> and the rare <b>Radiant Crystal</b>.</p></div>
       <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">2. Cut a rune</div>
-        <p style="font-size:12.5px;margin:0"><b>Rune Artisan</b> (Prontera): shards + zeny for a <b style="color:#13a99a">Normal rune</b>; or shards + <b>Radiant Crystals</b> + zeny for a <b style="color:#b27c1b">Greater rune</b> (stronger).</p></div>
+        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">2. Craft stones &amp; runes</div>
+        <p style="font-size:12.5px;margin:0">The <b>Rune Artisan</b> (Prontera) cuts shards into <b>runes</b> (now upgrade fuel) and forges <b>Enchant Stones</b> in four tiers - Rough, Polished, Brilliant, and the endgame <b>Zero Enchant Stone</b>.</p></div>
       <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">3. Engrave it</div>
-        <p style="font-size:12.5px;margin:0"><b>Rune Engraver</b>: fuse a rune into a <b>free option slot</b> of equipped gear. Up to <b>3 runes/item</b>, ~70% success (a failed rune shatters, gear safe). A <b>Radiant Crystal</b> = guaranteed.</p></div>
+        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">3. Enchant &amp; climb</div>
+        <p style="font-size:12.5px;margin:0">The <b>Stone Enchanter</b> sets your stone and upgrades it level by level. Lv.4-5 call for <b>Old Glast Heim and Ghost Palace materials</b> - the endgame feeds your enchants. Refine, cards and drop bonuses all survive enchanting.</p></div>
     </div>
-    <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;font-family:'DM Mono'">The six runes (Normal / Greater)</div>
-    <div style="display:flex;flex-wrap:wrap;gap:6px 16px">
-      ${runeRow('Might','+8 / +12 ATK',0)}${runeRow('Sorcery','+8 / +12 MATK',1)}${runeRow('Precision','+2 / +3 Crit',2)}${runeRow('Ferocity','+4 / +6% Crit Dmg',3)}${runeRow('Alacrity','-2 / -3% After-cast',4)}${runeRow('Focus','-2 / -3% Cast',5)}
-    </div></div>`;
+    <p style="font-size:12px;color:var(--muted);margin:0">Switching a slot to a different family resets it to Lv.1 - commitment is the cost. Gear engraved under the old rune system keeps every bonus it has.</p></div>`;
   const profBox=(ic,nm,node,where,mats,craft,col)=>`<div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
       <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:${col};font-size:14px;margin-bottom:4px">${ic} ${nm}</div>
       <p style="font-size:12.5px;margin:0 0 6px"><b>Gather:</b> break <b>${node}</b> in ${where}. Yields ${mats}.</p>
