@@ -110,7 +110,7 @@
   .detail .empty{color:var(--faint);text-align:center;padding:60px 0}
   .detail h2{font-family:'DM Sans',sans-serif;font-weight:800;font-size:clamp(18px,4.5vw,22px);margin:0 0 2px;color:var(--ink);line-height:1.25;overflow-wrap:anywhere}
   .detail .sub{color:var(--muted);font-size:12.5px;margin-bottom:14px}
-  .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:13.5px;margin:12px 0}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:14.5px;margin:14px 0}
   .kv dt{color:var(--muted)}
   .kv dd{margin:0;font-weight:500}
   .sec{margin-top:16px;border-top:1px solid var(--border);padding-top:13px}
@@ -126,7 +126,7 @@
      want to stay on one line opt in via .rate.num instead. */
   .rate{font-family:'DM Mono';color:var(--muted);font-size:12px;white-space:normal;overflow-wrap:anywhere}
   .rate.num{white-space:nowrap}
-  .note{border-left:3px solid var(--rune);background:linear-gradient(90deg,rgba(226,72,63,.07),transparent);border-radius:0 8px 8px 0;padding:10px 13px;font-size:13px;margin:12px 0;color:var(--text)}
+  .note{border-left:3px solid var(--rune);background:linear-gradient(90deg,rgba(226,72,63,.07),transparent);border-radius:0 8px 8px 0;padding:12px 15px;font-size:14px;line-height:1.55;margin:14px 0;color:var(--text)}
   .pill{display:inline-block;font-family:'DM Mono';font-size:11px;background:var(--panel-2);border:1px solid var(--border-2);color:var(--muted);padding:3px 9px;border-radius:999px;margin:2px 4px 2px 0}
 
   .loading,.errbox{max-width:680px;margin:80px auto;text-align:center;color:var(--muted)}
@@ -135,13 +135,24 @@
   .systems h2{font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:26px}
   .syscards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media(max-width:760px){.syscards{grid-template-columns:1fr}}
-  .systems .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .systems .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow);position:relative;overflow:hidden}
   .systems .card:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--rune),#ff8178)}
   .systems .card.g:before{background:linear-gradient(180deg,#e7a93a,#d6891b)}
-  .systems .card h4{margin:0 0 7px;color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:800;font-size:16px;display:flex;align-items:center;gap:9px}
+  .systems .card h4{margin:0 0 9px;color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:800;font-size:16.5px;display:flex;align-items:center;gap:9px}
   .systems .card h4 .si{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:16px;background:var(--panel-2);border:1px solid var(--border);flex:none}
-  .systems .card p{margin:0;font-size:13.5px;color:var(--text)}
+  .systems .card p{margin:0;font-size:14.5px;color:var(--text)}
   .hide{display:none}
+  /* shared step/phase mini-cards used inside wide feature cards (instance
+     walkthrough phases, profession/enchant steps). ROOT-CAUSE FIX: these used
+     to be one-off inline `style="display:grid;grid-template-columns:repeat(3,1fr)"`
+     blocks with zero mobile handling — on a 360-400px phone that squeezed 3
+     text-heavy cards into ~100px columns ("sideways" cards). auto-fit/minmax
+     means it reflows to 1 column on narrow phones with no breakpoint needed,
+     same fluid pattern as .rewardgrid/.ratesgrid. */
+  .stepgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:14px 0 4px}
+  .stepcard{background:var(--panel-2);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+  .stepcard .st-t{font-family:'DM Sans',sans-serif;font-weight:800;font-size:15px;margin-bottom:6px}
+  .stepcard p{font-size:14px;line-height:1.55;margin:0;color:var(--text)}
   .ihead{display:flex;gap:14px;align-items:flex-start;margin-bottom:6px}
   .iimg{width:62px;height:62px;flex:none;border:1px solid var(--border-2);border-radius:11px;background:var(--panel-2);object-fit:contain;padding:4px;image-rendering:pixelated}
   .iimg.hide{display:none}
@@ -180,6 +191,7 @@
   .ratebar i{display:block;height:100%;border-radius:3px}
   /* monster stat mini-bars */
   .stats6{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 16px;margin:10px 0}
+  @media(max-width:420px){.stats6{grid-template-columns:repeat(2,1fr)}}
   .statb{font-size:12px}
   .statb .lab{display:flex;justify-content:space-between;color:var(--muted);font-family:'DM Mono';font-size:10.5px;letter-spacing:.04em}
   .statb .bar{height:5px;border-radius:3px;background:var(--panel-3);margin-top:2px;overflow:hidden}
@@ -203,14 +215,14 @@
 
   /* reward card grid — real item art, name, and one line of context. Fluid via
      auto-fill/minmax so it reflows on any width with zero breakpoints. */
-  .rewardgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:10px 0}
-  .rewardcard{display:flex;gap:11px;align-items:center;background:var(--panel-2);border:1px solid var(--border);
-    border-radius:12px;padding:10px 12px;min-width:0}
-  .rewardcard .rcico{width:44px;height:44px;flex:none;border:1px solid var(--border-2);border-radius:10px;
+  .rewardgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:12px 0}
+  .rewardcard{display:flex;gap:12px;align-items:center;background:var(--panel-2);border:1px solid var(--border);
+    border-radius:12px;padding:13px 15px;min-width:0}
+  .rewardcard .rcico{width:48px;height:48px;flex:none;border:1px solid var(--border-2);border-radius:10px;
     background:var(--panel);object-fit:contain;padding:4px;image-rendering:pixelated}
   .rewardcard .rcbody{min-width:0;flex:1}
-  .rewardcard .rcname{font-weight:700;color:var(--ink);font-size:13.5px;overflow-wrap:anywhere}
-  .rewardcard .rcnote{font-size:11.5px;color:var(--muted);margin-top:2px;overflow-wrap:anywhere}
+  .rewardcard .rcname{font-weight:700;color:var(--ink);font-size:14.5px;overflow-wrap:anywhere}
+  .rewardcard .rcnote{font-size:12.5px;line-height:1.5;color:var(--muted);margin-top:3px;overflow-wrap:anywhere}
   .rewardcard .rctag{margin-top:4px}
   /* before -> after comparison */
   .cmp{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
@@ -262,6 +274,7 @@
   .homeh{font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:20px;margin:28px 0 12px}
   .hlinks{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   @media(max-width:700px){.hlinks{grid-template-columns:1fr 1fr}}
+  @media(max-width:420px){.hlinks{grid-template-columns:1fr}}
   .hlink{display:flex;align-items:center;gap:11px;text-align:left;background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:13px 15px;cursor:pointer;box-shadow:var(--shadow);transition:.12s;font:inherit;color:inherit}
   .hlink:hover{border-color:var(--rune);transform:translateY(-1px);box-shadow:var(--shadow-lg)}
   .hlink .si{width:36px;height:36px;border-radius:9px;display:grid;place-items:center;font-size:18px;background:var(--panel-2);border:1px solid var(--border);flex:none}
@@ -271,7 +284,7 @@
   /* hunting log */
   .huntgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   @media(max-width:700px){.huntgrid{grid-template-columns:1fr}}
-  .huntcard{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:14px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .huntcard{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:17px 19px;box-shadow:var(--shadow);position:relative;overflow:hidden}
   .huntcard:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#e7a93a,#d6891b)}
   .huntcard.reg:before{background:linear-gradient(180deg,var(--rune),#ff8178)}
   .huntcard.mvp:before{background:linear-gradient(180deg,#e0655a,#c23b30)}
@@ -283,7 +296,7 @@
   .huntcard .htn{font-family:'DM Sans',sans-serif;font-weight:800;font-size:16px;color:var(--ink);font-weight:700}
   .huntcard .htbadge{margin-left:auto;font-family:'DM Mono';font-size:9px;letter-spacing:.1em;color:var(--gold-deep);background:var(--gold-soft);border-radius:5px;padding:2px 7px}
   .huntcard.reg .htbadge{color:var(--rune-deep);background:rgba(226,72,63,.12)}
-  .huntcard .hobj{font-size:13.5px;color:var(--text);margin-bottom:10px}
+  .huntcard .hobj{font-size:14.5px;line-height:1.5;color:var(--text);margin-bottom:11px}
   .huntcard .hobj b{color:var(--ink)}
   .hmono{font-family:'DM Mono';color:var(--muted);font-size:12px}
   .huntcard .hrwd{display:flex;flex-wrap:wrap;gap:6px}
@@ -291,11 +304,11 @@
   /* fun builds */
   .buildgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   @media(max-width:820px){.buildgrid{grid-template-columns:1fr}}
-  .buildcard{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:13px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .buildcard{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:16px 19px;box-shadow:var(--shadow);position:relative;overflow:hidden}
   .buildcard:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#d6891b,#b27c1b)}
   .buildcard .bt{display:flex;align-items:center;gap:9px;margin-bottom:6px;flex-wrap:wrap}
   .buildcard .btn{font-family:'DM Sans',sans-serif;font-weight:800;font-size:15.5px;color:var(--ink);font-weight:700}
-  .buildcard .bitems{font-size:12.5px;color:var(--muted);margin-bottom:8px}
+  .buildcard .bitems{font-size:13.5px;line-height:1.5;color:var(--muted);margin-bottom:9px}
   .buildcard .bitems a{font-weight:600}
   .amppill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--rune-deep);background:rgba(226,72,63,.09);border:1px solid rgba(226,72,63,.3);border-radius:999px;padding:2px 10px;margin:2px 4px 0 0}
   .amppill b{font-family:'DM Mono';color:var(--gold-deep)}
@@ -311,7 +324,7 @@
   .newbanner:hover{transform:translateY(-1px);box-shadow:var(--shadow-lg)}
   .newbanner .nbtag{font-family:'DM Mono';font-size:10px;font-weight:700;letter-spacing:.1em;color:#fff;background:linear-gradient(135deg,#e7a93a,#d6891b);border-radius:6px;padding:3px 8px;flex:none}
   .newbanner .nbt{font-family:'DM Sans',sans-serif;font-weight:800;font-size:16px;color:var(--gold-deep);flex:1}
-  .newbanner .nbt small{display:block;font-family:'Inter';font-weight:500;font-size:12.5px;color:var(--text);margin-top:2px}
+  .newbanner .nbt small{display:block;font-weight:500;font-size:12.5px;color:var(--text);margin-top:2px}
   .newbanner .nbarrow{font-size:20px;color:var(--gold-deep);flex:none}
   /* rates — "at a glance" table */
   .ratesgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin:14px 0 26px}
@@ -336,16 +349,16 @@
   .vipcol.yes h4{color:var(--good)}
   .vipcol.no h4{color:var(--bad)}
   .vipcol ul{margin:0;padding-left:0;list-style:none}
-  .vipcol li{font-size:13px;padding:5px 0 5px 22px;position:relative;border-bottom:1px dashed var(--border)}
+  .vipcol li{font-size:14px;line-height:1.5;padding:7px 0 7px 22px;position:relative;border-bottom:1px dashed var(--border)}
   .vipcol li:last-child{border-bottom:none}
   .vipcol.yes li:before{content:'✓';position:absolute;left:0;color:var(--good);font-weight:700}
   .vipcol.no li:before{content:'✕';position:absolute;left:0;color:var(--bad);font-weight:700}
   .cmdgrid{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 4px}
   .cmdpill{font-family:'DM Mono';font-size:12px;background:var(--panel-2);border:1px solid var(--border-2);color:var(--rune-deep);border-radius:7px;padding:4px 10px}
-  .rulebox{display:flex;gap:12px;background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:13px 16px;margin-bottom:10px;box-shadow:var(--shadow);align-items:flex-start}
+  .rulebox{display:flex;gap:12px;background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:15px 18px;margin-bottom:11px;box-shadow:var(--shadow);align-items:flex-start}
   .rulebox .ri{font-size:20px;flex:none;margin-top:1px}
   .rulebox b{color:var(--ink)}
-  .rulebox p{margin:2px 0 0;font-size:13px;color:var(--text)}
+  .rulebox p{margin:3px 0 0;font-size:14px;line-height:1.5;color:var(--text)}
 
   /* ---- accordions (progressive disclosure — group cards under a fold) ---- */
   .acc{background:var(--panel);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;box-shadow:var(--shadow);overflow:hidden}
@@ -374,23 +387,23 @@
   .roletag.dex{color:#b8851f;background:rgba(184,133,31,.12);border:1px solid rgba(184,133,31,.32)}
   .roletag.vit{color:#8b5cf6;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3)}
   .roletag.sup{color:var(--muted);background:var(--panel-2);border:1px solid var(--border-2)}
-  .classcard .ccbody{padding:0 16px 15px;border-top:1px solid var(--border)}
-  .classcard .ccbody p{font-size:13px;margin:10px 0 0;color:var(--text)}
+  .classcard .ccbody{padding:0 18px 18px;border-top:1px solid var(--border)}
+  .classcard .ccbody p{font-size:14.5px;line-height:1.55;margin:11px 0 0;color:var(--text)}
   .classcard .ccbody p b{color:var(--gold-deep)}
   .classfilters{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 16px}
 
   /* ---- instances tab ------------------------------------------------------ */
   .instgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
   @media(max-width:900px){.instgrid{grid-template-columns:1fr}}
-  .instcard{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px 18px;
+  .instcard{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px 20px;
     box-shadow:var(--shadow);position:relative;overflow:hidden;cursor:pointer;transition:.12s;text-align:left;
-    font:inherit;color:inherit;display:block;width:100%}
+    font:inherit;color:inherit;display:block;width:100%;max-width:100%}
   .instcard:hover{border-color:var(--rune);transform:translateY(-2px);box-shadow:var(--shadow-lg)}
   .instcard:before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--rune),#ff8178)}
-  .instcard .ict{font-family:'DM Sans',sans-serif;font-weight:800;font-size:16px;color:var(--ink);margin-bottom:6px}
-  .instcard .ictag{font-size:12.5px;color:var(--muted);margin-bottom:10px;min-height:34px}
-  .instcard .icstats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-  .instcard .icwhy{font-size:12px;color:var(--text);border-top:1px dashed var(--border);padding-top:8px}
+  .instcard .ict{font-family:'DM Sans',sans-serif;font-weight:800;font-size:16.5px;color:var(--ink);margin-bottom:7px;line-height:1.3}
+  .instcard .ictag{font-size:13.5px;line-height:1.5;color:var(--muted);margin-bottom:11px;min-height:0}
+  .instcard .icstats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px}
+  .instcard .icwhy{font-size:13px;line-height:1.5;color:var(--text);border-top:1px dashed var(--border);padding-top:9px}
   .instcard .icwhy b{color:var(--gold-deep)}
   /* horizontal-scroll wrapper so wide tables never force the page wider on
      narrow phones; dense = the shared slightly-smaller instance-table sizing */
@@ -1223,11 +1236,11 @@ function renderHunting(){
       <p>Permanent kill milestones. Each grants a <b>permanent stat</b> and a <b>wearable title</b> shown above your name. Progress tracks live in your in-game <b>Quest Window</b>; manage titles at the <b>Hall of Titles</b> NPC (Prontera) or with <code>@hunting</code>. Rewards survive death &amp; relog — play-earned, long-haul progression.</p></div>
     <h3 class="homeh">⚔️ Monster milestones</h3>
     <div class="huntgrid">${HUNT.monster.filter(q=>!q.mvp).map(mcard).join('')}</div>
-    <h3 class="homeh">👑 MVP milestones <span style="font-size:12px;color:var(--muted);font-family:Inter">— the ultimate grind, the biggest rewards</span></h3>
+    <h3 class="homeh">👑 MVP milestones <span style="font-size:12px;color:var(--muted)">— the ultimate grind, the biggest rewards</span></h3>
     <div class="huntgrid">${HUNT.monster.filter(q=>q.mvp).map(mcard).join('')}</div>
     <h3 class="homeh">🗺️ Region milestones</h3>
     <div class="huntgrid">${HUNT.region.map(rcard).join('')}</div>
-    <h3 class="homeh">🌟 Dedication <span style="font-size:12px;color:var(--muted);font-family:Inter">— total kills across your whole career</span></h3>
+    <h3 class="homeh">🌟 Dedication <span style="font-size:12px;color:var(--muted)">— total kills across your whole career</span></h3>
     <div class="huntgrid">${ded.map(dcard).join('')}</div>
     <div class="card g" style="grid-column:1/-1;margin-top:16px"><h4><span class="si">🏅</span>Grandmaster Hunter — the capstone</h4>
       <p>Complete <b>every</b> monster, MVP and region milestone to claim the prestige title <b>&lt;Grandmaster Hunter&gt;</b> and a <span class="rwd" style="display:inline-block">+3 All Stats</span> reward. The ultimate badge of a Rune Zero veteran.</p></div>
@@ -1279,7 +1292,7 @@ function renderBuilds(){
     h+=`<div class="buildgrouphead"><span class="gn">${esc(g.group)}</span><span class="gl"></span><span class="gc">${g.builds.length} build${g.builds.length!==1?'s':''}</span></div>`;
     h+=`<div class="buildgrid">${g.builds.map(buildCard).join('')}</div>`;
   });
-  h+=`<h3 class="homeh">🎯 Set Combos <span style="font-size:12px;color:var(--muted);font-family:Inter">— wear both pieces for a bonus amp stacked on top</span></h3>`;
+  h+=`<h3 class="homeh">🎯 Set Combos <span style="font-size:12px;color:var(--muted)">— wear both pieces for a bonus amp stacked on top</span></h3>`;
   h+=`<div class="buildgrid">${(BUILDS.combos||[]).map(comboCard).join('')}</div>`;
   h+=`<p class="homefoot">${totalItems} fun-mod items across ${totalBuilds} builds · generated from the live item database.</p>
   </div>`;
@@ -1311,76 +1324,65 @@ function renderSystems(){
       <tr><td><b>Flow</b> (After-cast)</td><td>Helm · Armor</td><td>-3%</td><td>-6%</td><td>-10%</td><td>-15%</td><td>-20%</td></tr>
       <tr><td><b>Focus</b> (Cast time)</td><td>Helm · Acc</td><td>-3%</td><td>-6%</td><td>-9%</td><td>-12%</td><td>-15%</td></tr>
     </tbody></table></div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0">
-      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">1. Farm crystals</div>
-        <p style="font-size:12.5px;margin:0">Break <b>Crystal nodes</b> in the dungeons - <b>Mana Crystal</b> (mid) and <b>Prismatic Crystal</b> (deep) - for <b>Crystal Shards</b> and the rare <b>Radiant Crystal</b>.</p></div>
-      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">2. Craft stones &amp; runes</div>
-        <p style="font-size:12.5px;margin:0">The <b>Rune Artisan</b> (Prontera) cuts shards into <b>runes</b> (now upgrade fuel) and forges <b>Enchant Stones</b> in four tiers - Rough, Polished, Brilliant, and the endgame <b>Zero Enchant Stone</b>.</p></div>
-      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">3. Enchant &amp; climb</div>
-        <p style="font-size:12.5px;margin:0">The <b>Stone Enchanter</b> sets your stone and upgrades it level by level. Lv.4-5 call for <b>Old Glast Heim and Ghost Palace materials</b> - the endgame feeds your enchants. Refine, cards and drop bonuses all survive enchanting.</p></div>
+    <div class="stepgrid">
+      <div class="stepcard"><div class="st-t" style="color:var(--gold-deep)">1. Farm crystals</div>
+        <p>Break <b>Crystal nodes</b> in the dungeons - <b>Mana Crystal</b> (mid) and <b>Prismatic Crystal</b> (deep) - for <b>Crystal Shards</b> and the rare <b>Radiant Crystal</b>.</p></div>
+      <div class="stepcard"><div class="st-t" style="color:var(--gold-deep)">2. Craft stones &amp; runes</div>
+        <p>The <b>Rune Artisan</b> (Prontera) cuts shards into <b>runes</b> (now upgrade fuel) and forges <b>Enchant Stones</b> in four tiers - Rough, Polished, Brilliant, and the endgame <b>Zero Enchant Stone</b>.</p></div>
+      <div class="stepcard"><div class="st-t" style="color:var(--gold-deep)">3. Enchant &amp; climb</div>
+        <p>The <b>Stone Enchanter</b> sets your stone and upgrades it level by level. Lv.4-5 call for <b>Old Glast Heim and Ghost Palace materials</b> - the endgame feeds your enchants. Refine, cards and drop bonuses all survive enchanting.</p></div>
     </div>
-    <p style="font-size:12px;color:var(--muted);margin:0">Switching a slot to a different family resets it to Lv.1 - commitment is the cost. <b style="color:var(--ink)">Stones are yours to move and to sell:</b> the Enchanter extracts any stone back into your bag for a small zeny fee (scaled by level), and stones are fully tradeable - a hard-built Lv.5 is a market commodity. A stone from your bag sets straight into another piece for a flat fee, no re-climb. Gear engraved under the old rune system keeps every bonus it has.</p></div>`;
-  const profBox=(ic,nm,node,where,mats,craft,col)=>`<div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-      <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:${col};font-size:14px;margin-bottom:4px">${ic} ${nm}</div>
-      <p style="font-size:12.5px;margin:0 0 6px"><b>Gather:</b> break <b>${node}</b> in ${where}. Yields ${mats}.</p>
-      <p style="font-size:12.5px;margin:0;color:var(--muted)"><b style="color:var(--ink)">Craft (level-gated):</b> ${craft}</p></div>`;
+    <p style="font-size:13px;line-height:1.55;color:var(--muted);margin:0">Switching a slot to a different family resets it to Lv.1 - commitment is the cost. <b style="color:var(--ink)">Stones are yours to move and to sell:</b> the Enchanter extracts any stone back into your bag for a small zeny fee (scaled by level), and stones are fully tradeable - a hard-built Lv.5 is a market commodity. A stone from your bag sets straight into another piece for a flat fee, no re-climb. Gear engraved under the old rune system keeps every bonus it has.</p></div>`;
+  const profBox=(ic,nm,node,where,mats,craft,col)=>`<div class="stepcard"><div class="st-t" style="color:${col}">${ic} ${nm}</div>
+      <p style="margin-bottom:6px"><b>Gather:</b> break <b>${node}</b> in ${where}. Yields ${mats}.</p>
+      <p style="color:var(--muted)"><b style="color:var(--ink)">Craft (level-gated):</b> ${craft}</p></div>`;
   const profPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">⛏️</span>Professions — gather, level up, craft</h4>
     <p style="margin-bottom:12px">Three gathering trades that level <b>1 → 100</b> per character. <b>Break gathering nodes</b> for materials + profession XP + a level-scaled bonus yield — then spend that level: the <b>Profession Master</b> (Prontera) unlocks <b>crafting recipes</b> as each trade grows. Mats also feed refining, forging &amp; alchemy. Open it all with <code>@prof</code> (includes an in-game guide). <b>Master a trade (Lv 100)</b> for a <b>wearable title</b> + a permanent stat in the <b>Hall of Titles</b>; master all three for <span class="rwd" style="display:inline-block">Grandmaster Artisan</span>.</p>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+    <div class="stepgrid">
       ${profBox('⛏️','Mining','Ore Veins','mines &amp; caves (Mjolnir, Einbroch, Payon, Ant Hell)','Iron Ore, Coal, Steel, rare Oridecon/Elunium','smelt ores — Iron → Steel → Elunium / Oridecon','#b27c1b')}
       ${profBox('🌿','Herbalism','Herb Clusters','fields (Prontera, Geffen, Payon, Morocc)','Yellow/Green/White/Blue/Red Herbs','brew potions — Red / Yellow / White / Blue (great with @autopot)','#1f9d57')}
       ${profBox('🎣','Fishing','Fishing Spots','ports &amp; beaches (Izlude, Alberta, Comodo)','Sharp Scale, Gill, Fish, Tendon','cook stat foods — +3 / +5 STR/AGI/VIT buff dishes','#2f7fd6')}
     </div></div>`;
-  const oghPhase=(n,title,body,col)=>`<div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-      <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:${col};font-size:14px;margin-bottom:4px">${n}. ${title}</div>
-      <p style="font-size:12.5px;margin:0">${body}</p></div>`;
+  const oghPhase=(n,title,body,col)=>`<div class="stepcard"><div class="st-t" style="color:${col}">${n}. ${title}</div>
+      <p>${body}</p></div>`;
   const oghPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">👑</span>Old Glast Heim — Amdarais, the flagship boss</h4>
     <p style="margin-bottom:12px">The server's premier story raid, played straight through: report to the gate, help clear three besieged sectors of the castle (rescuing an altar boy and talking down a grieving smith along the way), face down Old Glast Heim's first true boss guarding the stairs up, then clear both wings of the second floor — each ending in its own Commander of Destruction — before the gate to Amdarais himself finally opens. Enter via <b>Hugin</b> at Eden HQ (Base Level 99+) on Normal, Hard, or Nightmare — harder tiers never cost an extra entry or touch drop rates. <b>Fast Mode</b> trims the cutscene dialogue at every story beat, but every sector, every rescue, and both Commanders still happen exactly as above.</p>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
+    <div class="stepgrid" style="margin-bottom:12px">
       ${oghPhase(1,'Reinforcements','Every 10% of his health Amdarais drops, he calls a fresh wave of Khalitzburg Knights, Abysmal Knights, Bloody Knights, or archers to his side — and <b>heals</b> while any of them are alive. Clear the wave fast or watch his bar climb back up.','#e0655a')}
       ${oghPhase(2,"Varmundt's Ghost","Four buff stations light up around the arena as the fight goes on — a shield, an opening to strike, a heal-and-resource surge, a defensive ward. Which one is lit tracks Amdarais's health, so check all four.",'#c9853a')}
       ${oghPhase(3,'Challenge Tier scaling','Hard and Nightmare multiply his HP/ATK/DEF (and, on Nightmare, his speed) — plus the coin, EXP, and MVP Point payout on the kill. Drop rates and the card never move.','#b07ad6')}
     </div>
-    <p style="font-size:12.5px;color:var(--muted);margin:0">Every clear pays Valor Coin, Hunter Coin and MVP Points, scaled up by Challenge Tier — plus a shot at the grail-tier <b>Amdarais Card</b>: +15% damage on every class and +15% MATK, at the cost of 666 HP every 4 seconds while worn. Your first-ever clear also opens a hidden treasure room. Hard and Nightmare clears earn their own titles.</p></div>`;
+    <p style="font-size:13px;line-height:1.55;color:var(--muted);margin:0">Every clear pays Valor Coin, Hunter Coin and MVP Points, scaled up by Challenge Tier — plus a shot at the grail-tier <b>Amdarais Card</b>: +15% damage on every class and +15% MATK, at the cost of 666 HP every 4 seconds while worn. Your first-ever clear also opens a hidden treasure room. Hard and Nightmare clears earn their own titles.</p></div>`;
 
   const ferlockPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">🐉</span>Assault on the Airship — Captain Ferlock, the 2nd flagship boss</h4>
     <p style="margin-bottom:12px">A full two-deck raid, not just a boss room: storm the top deck and hold the engine room against wave after wave of Gremlins and Beholders, cross paths with three self-styled "Guardian Heroines" mid-brawl with Ferlock's sorceress rival, cut down a Wyvern gatekeeper, then corner Captain Ferlock himself — a colossal MVP Dragon who commands the ship and answers every trick with fire. Enter via the <b>Sky Warden</b> at Eden HQ (Base Level 99+), with the same Normal/Hard/Nightmare tiers as Old Glast Heim. The full scenario plays every time — no Fast Mode here.</p>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
+    <div class="stepgrid" style="margin-bottom:12px">
       ${oghPhase(1,'Reinforcements','At ≤75% HP, two Sky Sentinels spawn. Leave them alive and Ferlock <b>heals</b> a slice of max HP every tick.','#4f8fe0')}
       ${oghPhase(2,'Airborne fury','At ≤40% HP he takes to the air (+30% ATK) and starts breathing fire at a random party member\'s exact tile every ~10 seconds — the cast bar is your dodge window; standing still is what kills you.','#e0655a')}
       ${oghPhase(3,'Enrage timer','Run past the tier\'s time limit (10/8/6 min Normal/Hard/Nightmare) without a kill and his patience runs out for good — another +20% ATK, stacking with the 40% enrage.','#c9853a')}
     </div>
-    <p style="font-size:12.5px;color:var(--muted);margin:0">Defeat Ferlock for a full reward set — <b>Felrock's Armor, Cloak, Boots, and Hat</b> — plus the grail-tier <b>Felock Card</b>: a universal +30 ATK, +30 MATK, and +15% damage against Dragons, useful on any class. Seeing the closing scene through pays a flat EXP bonus on top of the kill itself. Hard and Nightmare clears earn their own titles.</p></div>`;
+    <p style="font-size:13px;line-height:1.55;color:var(--muted);margin:0">Defeat Ferlock for a full reward set — <b>Felrock's Armor, Cloak, Boots, and Hat</b> — plus the grail-tier <b>Felock Card</b>: a universal +30 ATK, +30 MATK, and +15% damage against Dragons, useful on any class. Seeing the closing scene through pays a flat EXP bonus on top of the kill itself. Hard and Nightmare clears earn their own titles.</p></div>`;
 
   const ghostPalacePage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">⚔️</span>Ghost Palace — Sakray's story, and the weapon-farm dungeon</h4>
     <p style="margin-bottom:12px">Five floors of a single tragic story: guard Princess Tiara, watch the King turn on his own guard, meet the bound voice of Magic Sword Tartanos, and follow it to the only ending it was ever going to have. Every floor is a real wave fight — trash undead, two mid-bosses — with the story beats stitched between them. <b>Fast Mode</b> plays every fight exactly as written and only skips the dialogue. Enter via the <b>Palace Keeper</b> at Eden HQ (Base Level 99+, 1 free entry/day, VIP +1). Once the story ends, an optional true final boss — the <b>Reliquary Warden</b> — rises to guard the last reliquary; skip it and the exit still pays its own reward, or fight it for the real haul of <b>Gray Shard</b>, the currency behind the widest best-in-slot weapon line on the server. Spend it with the King in the throne room or the <b>Dimension Traveler</b> back at Eden HQ — no clear needed there, just to browse and buy.</p>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🗡️ Thanos weapons — 200 shards</div>
-        <p style="font-size:12.5px;margin:0">One weapon per subtype — <b>14 types</b>, from sword to whip — so every class has a genuine best-in-slot pick. Each brings solid flat ATK/MATK and built-in lifesteal, balanced by a steep drawback: 100 HP lost every 10 seconds while equipped.</p></div>
-      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🛡️ Gray armor set — 100 shards</div>
-        <p style="font-size:12.5px;margin:0">Shield, body, garment, shoes, headgear — a full 5-piece refine-scaling set (Holy resist that grows with refine), open to every class.</p></div>
-      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🃏 Knight Sakray Card — 10,000 shards</div>
-        <p style="font-size:12.5px;margin:0">The special-tab grail: +20 ATK and +30% damage to Demon &amp; Undead. A true long-term chase at 10,000 shards — not a quick pickup.</p></div>
+    <div class="stepgrid">
+      <div class="stepcard"><div class="st-t" style="color:var(--gold-deep)">🗡️ Thanos weapons — 200 shards</div>
+        <p>One weapon per subtype — <b>14 types</b>, from sword to whip — so every class has a genuine best-in-slot pick. Each brings solid flat ATK/MATK and built-in lifesteal, balanced by a steep drawback: 100 HP lost every 10 seconds while equipped.</p></div>
+      <div class="stepcard"><div class="st-t" style="color:var(--gold-deep)">🛡️ Gray armor set — 100 shards</div>
+        <p>Shield, body, garment, shoes, headgear — a full 5-piece refine-scaling set (Holy resist that grows with refine), open to every class.</p></div>
+      <div class="stepcard"><div class="st-t" style="color:var(--gold-deep)">🃏 Knight Sakray Card — 10,000 shards</div>
+        <p>The special-tab grail: +20 ATK and +30% damage to Demon &amp; Undead. A true long-term chase at 10,000 shards — not a quick pickup.</p></div>
     </div></div>`;
 
   const malayaPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">🌏</span>The Malaya trio — shorter variety hunts</h4>
     <p style="margin-bottom:12px">A tier below the three flagships: three shorter, self-contained hunts, each level 85+, solo-friendly, no coin cost, and a straight ~24-hour cooldown between clears — no Challenge Tier, no Fast Mode, just one difficulty played straight through. Their recruiters stand right next to the flagship row at Eden HQ. Every clear pays a guaranteed pile of <b>Ancient Grudge</b> plus a shot at that hunt's own card.</p>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🌙 Bakonawa Lake</div>
-        <p style="font-size:12.5px;margin:0">A three-phase fight against a moon-eating dragon. Silence his rage by smashing four caldrons and gongs on the lakeshore before he slips back under the water for good.</p></div>
-      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🏥 Bangungot Hospital</div>
-        <p style="font-size:12.5px;margin:0">Six wards of undead guard a haunted hospital floor, ending in a heal-race against Bangungot's own Pillar of Spirit — drop it fast or he fully recovers.</p></div>
-      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
-        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🐊 Buwaya Cave</div>
-        <p style="font-size:12.5px;margin:0">The crocodile god's cave — break his armor-plated Weakness by hit count alone, and don't let his decoys fool you.</p></div>
+    <div class="stepgrid">
+      <div class="stepcard"><div class="st-t" style="color:var(--gold-deep)">🌙 Bakonawa Lake</div>
+        <p>A three-phase fight against a moon-eating dragon. Silence his rage by smashing four caldrons and gongs on the lakeshore before he slips back under the water for good.</p></div>
+      <div class="stepcard"><div class="st-t" style="color:var(--gold-deep)">🏥 Bangungot Hospital</div>
+        <p>Six wards of undead guard a haunted hospital floor, ending in a heal-race against Bangungot's own Pillar of Spirit — drop it fast or he fully recovers.</p></div>
+      <div class="stepcard"><div class="st-t" style="color:var(--gold-deep)">🐊 Buwaya Cave</div>
+        <p>The crocodile god's cave — break his armor-plated Weakness by hit count alone, and don't let his decoys fool you.</p></div>
     </div></div>`;
 
   const acc=(icon,title,count,body,openByDefault)=>`<details class="acc"${openByDefault?' open':''}><summary><span class="accicon">${icon}</span>${title}<span class="acccount">${count} systems</span><span class="accarrow">▸</span></summary><div class="accbody"><div class="syscards">${body}</div></div></details>`;
@@ -1689,9 +1691,9 @@ function bootBonusTable(){
   return scrollT(h);
 }
 function instStep(n,title,body){
-  return `<div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:8px">
-    <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">${n}. ${title}</div>
-    <p style="font-size:12.5px;margin:0">${body}</p></div>`;
+  return `<div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:10px">
+    <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14.5px;margin-bottom:5px">${n}. ${title}</div>
+    <p style="font-size:14px;line-height:1.55;margin:0">${body}</p></div>`;
 }
 // shared reward-card: real item art (with donor/fallback handling from
 // itemIcoTag's NO_ART_ITEM_IDS/ICON_DONOR) + name + one line of context.
@@ -1728,18 +1730,18 @@ function sectionBoots(){
   h+=instStep(6,'Further-enchant the slotted boots','Once slotted, '+npcTag('Dark magic master')+' continues the same 4-tier ladder using Coagulated Spell + <a onclick="location.hash=\'item/6755\'">Contaminated Magic</a> + 100,000 zeny per attempt. The first tier always succeeds, but every tier after that (including the final bonus-effect roll) is only a <span style="color:var(--bad);font-weight:700">70% success chance</span> — a failed attempt destroys the boots.');
   h+='</div>';
   h+=`<div class="sec"><h4>4th slot — the effect ladder (pick one family)</h4>
-    <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">Whichever family you pick at step 4 grows through all 4 tiers on the same boots — you can't mix families on one pair. Match the family to your build — Str boots pair naturally with Fighting Spirit, Dex with Archery, Int with Spell — but nothing stops you picking a different family if you'd rather chase a specific effect.</p>
+    <p style="font-size:14px;line-height:1.55;color:var(--muted);margin:0 0 10px">Whichever family you pick at step 4 grows through all 4 tiers on the same boots — you can't mix families on one pair. Match the family to your build — Str boots pair naturally with Fighting Spirit, Dex with Archery, Int with Spell — but nothing stops you picking a different family if you'd rather chase a specific effect.</p>
     ${bootEnchantTable()}
   </div>`;
   h+=`<div class="sec"><h4>3rd slot — bonus-effect card (one random pick)</h4>
-    <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">Rolled once the 4th slot hits its final tier (costs more Coagulated Spell) — a single random pick from the 6 below, not a choice. Every one is an on-hit <b>proc</b>, not an always-on stat — it only fires (and only drains) while its short buff window is active. Read the drain and the unequip tax before deciding if the buff is worth chasing; they're costs, not fine print.</p>
+    <p style="font-size:14px;line-height:1.55;color:var(--muted);margin:0 0 10px">Rolled once the 4th slot hits its final tier (costs more Coagulated Spell) — a single random pick from the 6 below, not a choice. Every one is an on-hit <b>proc</b>, not an always-on stat — it only fires (and only drains) while its short buff window is active. Read the drain and the unequip tax before deciding if the buff is worth chasing; they're costs, not fine print.</p>
     ${bootBonusTable()}
   </div>`;
   return h;
 }
 function sectionPortraitCollector(){
   return `<div class="sec"><h4>Portrait Collector — bulk material exchange</h4>
-    <p style="font-size:13px">${npcTag('Portrait Collector')} stands in the Eden HQ entrance hall, just north of where you arrive — and trades a bulk pile of Old Glast Heim currency for one of two cards. Pay with <b>either</b> currency, not both.</p>
+    <p style="font-size:14px;line-height:1.55">${npcTag('Portrait Collector')} stands in the Eden HQ entrance hall, just north of where you arrive — and trades a bulk pile of Old Glast Heim currency for one of two cards. Pay with <b>either</b> currency, not both.</p>
     <div class="tscroll"><table class="dense"><thead><tr><th>Card</th><th><a onclick="location.hash='item/6608'">Coagulated Spell</a></th><th>OR <a onclick="location.hash='item/6755'">Contaminated Magic</a></th><th>Effect</th></tr></thead><tbody>
       <tr><td><a onclick="location.hash='item/4608'">White Knight Card</a></td><td class="mono">3,000</td><td class="mono">70</td><td>+15 ATK, +20% damage to Medium size, +20% damage to Large size</td></tr>
       <tr><td><a onclick="location.hash='item/4609'">Khalitzburg Knight Card</a></td><td class="mono">5,000</td><td class="mono">100</td><td>+20 DEF, -25% damage taken from Medium size, -25% damage taken from Large size</td></tr>
@@ -1748,29 +1750,32 @@ function sectionPortraitCollector(){
   </div>`;
 }
 function sectionShards(){
-  let h=`<div class="sec"><h4>Dimension Traveler exchange</h4>
-    <p style="font-size:13px">Gray Shard has three sources: the floor-4 mid-boss <a onclick="location.hash='mob/2959'">Torturous Redeemer</a> trickles a little on the way (two rolls, ~30% + ~10% — roughly 0.4 shard on average), reaching the exit for the first time ever pays a 2-shard bonus (1 shard on every repeat clear after that), and a guaranteed lump sum lands when the Reliquary Warden falls — <b>40 (Normal) / 80 (Hard) / 150 (Nightmare)</b>. The real haul comes from the Warden itself. Spend your shards with ${npcTag('Dimension Traveler')}, standing right next to the Palace Keeper — no clear needed to browse or buy.</p>
+  let h=`<div class="sec"><h4>Gray Shard — the currency behind everything below</h4>
+    <div class="rewardgrid">${rewardCard(6672,'guaranteed on every Reliquary Warden kill — 40 (Normal) / 80 (Hard) / 150 (Nightmare)','boss reward')}</div>
+    <p style="font-size:14px;line-height:1.55;margin-top:10px">Gray Shard has three sources: the floor-4 mid-boss <a onclick="location.hash='mob/2959'">Torturous Redeemer</a> trickles a little on the way (two rolls, ~30% + ~10% — roughly 0.4 shard on average), reaching the exit for the first time ever pays a 2-shard bonus (1 shard on every repeat clear after that), and a guaranteed lump sum lands when the Reliquary Warden falls. The real haul comes from the Warden itself. Spend your shards with ${npcTag('Dimension Traveler')}, standing right next to the Palace Keeper — no clear needed to browse or buy.</p>
   </div>`;
   h+=`<div class="sec"><h4>Thanos weapons — 200 Gray Shard each</h4>
-    <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">One weapon per subtype, 14 in total, so every class has a genuine best-in-slot pick. All of them share the same risk package: +6 INT / +6 VIT / -6 LUK, built-in lifesteal, 100 flat HP lost every 10 seconds while equipped, and a 1,000 HP hit the instant you unequip it (the two staves are the exception — no lifesteal, they lean caster/support instead).</p>
+    <p style="font-size:14px;line-height:1.55;color:var(--muted);margin:0 0 10px">One weapon per subtype, 14 in total, so every class has a genuine best-in-slot pick. All of them share the same risk package: +6 INT / +6 VIT / -6 LUK, built-in lifesteal, 100 flat HP lost every 10 seconds while equipped, and a 1,000 HP hit the instant you unequip it (the two staves are the exception — no lifesteal, they lean caster/support instead).</p>
     ${thanosTable()}
   </div>`;
   h+=`<div class="sec"><h4>Gray armor set — 100 Gray Shard each</h4>
-    <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">Six pieces across five equip slots (two body-armor options to pick from) — a full Holy-resist set that grows stronger with refine, open to every class.</p>
-    ${GRAY_ARMOR.map(a=>shopRow(a.id,a.note)).join('')}
+    <p style="font-size:14px;line-height:1.55;color:var(--muted);margin:0 0 10px">Six pieces across five equip slots (two body-armor options to pick from) — a full Holy-resist set that grows stronger with refine, open to every class.</p>
+    <div class="rewardgrid">${GRAY_ARMOR.map(a=>shopRow(a.id,a.note)).join('')}</div>
   </div>`;
   h+=`<div class="sec"><h4>Special — 10,000 Gray Shard</h4>
-    ${shopRow(27184,'+20 ATK, +30% damage to Demon & Undead')}
-    <div class="rate" style="margin-top:4px">The special-tab grail — a genuine long-term grind, not a quick pickup.</div>
+    <div class="rewardgrid">${shopRow(27184,'+20 ATK, +30% damage to Demon & Undead')}</div>
+    <div class="rate" style="margin-top:6px">The special-tab grail — a genuine long-term grind, not a quick pickup.</div>
   </div>`;
   return h;
 }
 function sectionCapes(){
-  return `<div class="sec"><h4>Felock Emblem exchange</h4>
-    <p style="font-size:13px">Captain Ferlock rarely drops a <a onclick="location.hash='item/40982'">Cloak Emblem</a> (~1% per kill — no Challenge Tier bonus). Bring it to ${npcTag('Sky Warden')} and choose, for free, which cut of his cloak you want — a straight pick, no RNG on which one you get:</p>
-    ${shopRow(40980,'spellcasters — cast-time cuts, +MATK')}
-    ${shopRow(40981,'melee/physical — +Flee, +ASPD')}
-    ${shopRow(20744,'neutral hybrid — a bit of both, smaller of each')}
+  return `<div class="sec"><h4>Felock Emblem exchange — pick your cut</h4>
+    <p style="font-size:14px;line-height:1.55">Captain Ferlock rarely drops a <a onclick="location.hash='item/40982'">Cloak Emblem</a> (~1% per kill — no Challenge Tier bonus). Bring it to ${npcTag('Sky Warden')} and choose, for free, which cut of his cloak you want — a straight pick, no RNG on which one you get:</p>
+    <div class="rewardgrid">
+      ${shopRow(40980,'spellcasters — cast-time cuts, +MATK')}
+      ${shopRow(40981,'melee/physical — +Flee, +ASPD')}
+      ${shopRow(20744,'neutral hybrid — a bit of both, smaller of each')}
+    </div>
     <div class="note">All three share the same base — Neutral element resistance +10%, 1 card slot, Level 99 requirement — only the growth-path stats differ.</div>
   </div>`;
 }
@@ -1806,12 +1811,12 @@ const INSTANCES=[
     rewardText:"Every clear pays, guaranteed: EXP (45% of your next Base &amp; Job EXP bar), Valor Coin, Hunter Coin, and MVP Points — all scaled up by Challenge Tier (Hard: &times;1.5 coins/EXP, &times;2 points; Nightmare: &times;2 coins/EXP, &times;4 points). Drops themselves roll at the server's normal fixed rates — only Amdarais's card stays a hard 1&times; drop, same as every card, always.",
     drops:[
       {id:4601,rate:1,tag:'boss-exclusive',note:'the grail: +15% damage all classes, +15% MATK, but drains 666 flat HP every 4 seconds while worn'},
-      {id:617,rate:3000,note:''},
+      {id:617,rate:3000,note:'a classic loot box — a random pull from equipment, cards, and consumables, plus a shot at bonus treasure'},
       {id:6607,rate:150,tag:'material',note:'the core material for the Temporal Boots chain below'},
       {id:6608,rate:300,tag:'material',note:'used to enchant Temporal Boots'},
       {id:6755,rate:50,tag:'material',note:'used only for the deeper Dark magic master enchant tier'},
     ],
-    mvpDrops:[{id:617,rate:5000,note:''}],
+    mvpDrops:[{id:617,rate:5000,note:'a classic loot box — random equipment, cards, and consumables'}],
     extraSection: ()=>sectionBoots()+sectionPortraitCollector(),
   },
   {
@@ -1846,12 +1851,12 @@ const INSTANCES=[
       {id:40982,rate:100,note:'redeem it with Sky Warden for a choice of cape — see below'},
       {id:22047,rate:100,note:'ASPD keeps stacking with refine, culminating in a true +1 ASPD at +10 — good for any physical attack-speed build.'},
       {id:19144,rate:1000,note:'a plain headgear slot filler, no bonus, 1 card slot'},
-      {id:12072,rate:3000,note:''},
-      {id:12087,rate:3000,note:''},
-      {id:12077,rate:3000,note:''},
+      {id:12072,rate:3000,note:'a 20-minute STR food buff with a bite of instant healing'},
+      {id:12087,rate:3000,note:'a 20-minute AGI food buff with a bite of instant healing'},
+      {id:12077,rate:3000,note:'a 20-minute INT food buff with a bite of instant healing'},
       {id:27182,rate:1,tag:'boss-exclusive',note:'+30 ATK, +30 MATK, +15% damage to Dragon race (physical and magic) — a universal grail pick for any class, especially strong against Dragon-race content.'},
     ],
-    mvpDrops:[{id:607,rate:5000,note:''},{id:608,rate:5000,note:''}],
+    mvpDrops:[{id:607,rate:5000,note:'full HP &amp; SP restore, on the spot'},{id:608,rate:5000,note:'half HP &amp; SP restore, on the spot'}],
     extraSection: sectionCapes,
   },
   {
@@ -1881,7 +1886,7 @@ const INSTANCES=[
     ],
     rewardText:"Reaching the exit for the first time ever pays a one-time 900,000 Base / 500,000 Job EXP plus 2 Gray Shard; every repeat clear after that still pays 1 Gray Shard, whether or not you fight the Warden. Beating the Warden itself pays the real haul, guaranteed: EXP (45% of your next Base &amp; Job EXP bar), Valor Coin, Hunter Coin, and MVP Points — all scaled up by Challenge Tier (Hard: &times;1.5 coins/EXP, &times;2 points; Nightmare: &times;2 coins/EXP, &times;4 points) — plus a <b>Gray Shard</b> lump sum: <b>40 (Normal) / 80 (Hard) / 150 (Nightmare)</b>.",
     drops:[],
-    mvpDrops:[{id:617,rate:6000,note:''}],
+    mvpDrops:[{id:617,rate:6000,note:'a classic loot box — random equipment, cards, and consumables'}],
     extraSection: sectionShards,
   },
   {
@@ -1907,7 +1912,7 @@ const INSTANCES=[
       {id:969,rate:1,note:'a rare zeny jackpot, from the same treasure box'},
       {id:4591,rate:1,tag:'boss-exclusive',note:'+4 STR and a bleeding proc on hit'},
     ],
-    mvpDrops:[{id:617,rate:3000,note:''}],
+    mvpDrops:[{id:617,rate:3000,note:'a classic loot box — random equipment, cards, and consumables'}],
   },
   {
     slug:'bangungot', icon:'🏥', name:'Bangungot Hospital', kind:'variety',
@@ -1935,7 +1940,7 @@ const INSTANCES=[
       {id:2169,rate:100,note:'Kalasag — a shield with anti-Boss resistance that scales with refine'},
       {id:4590,rate:1,tag:'boss-exclusive',note:'+4 INT and a sleep proc on hit'},
     ],
-    mvpDrops:[{id:617,rate:3000,note:''}],
+    mvpDrops:[{id:617,rate:3000,note:'a classic loot box — random equipment, cards, and consumables'}],
   },
   {
     slug:'buwaya', icon:'🐊', name:'Buwaya Cave', kind:'variety',
@@ -1961,7 +1966,7 @@ const INSTANCES=[
       {id:2169,rate:100,note:'Kalasag — a shield with anti-Boss resistance that scales with refine'},
       {id:4592,rate:1,tag:'boss-exclusive',note:'+4 VIT and a stone curse proc on hit'},
     ],
-    mvpDrops:[{id:617,rate:5500,note:''}],
+    mvpDrops:[{id:617,rate:5500,note:'a classic loot box — random equipment, cards, and consumables'}],
   },
 ];
 
@@ -2047,8 +2052,8 @@ function renderInstanceDetail(slug){
   if(inst.tiers&&inst.tiers.length){
     h+=`<div class="sec"><h4>Challenge Tiers</h4>${tierTable(inst)}<div class="rate" style="margin-top:6px">Harder tiers scale the guaranteed reward layer — never drop rates, never the card. Same guardrail as every MVP fight on the server.</div></div>`;
   }
-  h+=`<div class="sec"><h4>The fight</h4><ol style="padding-left:20px;margin:8px 0">${inst.mechanics.map(m=>`<li style="margin:8px 0;font-size:13.5px">${m}</li>`).join('')}</ol></div>`;
-  h+=`<div class="sec"><h4>What you take home</h4><p style="font-size:13px">${inst.rewardText}</p>`;
+  h+=`<div class="sec"><h4>The fight</h4><ol style="padding-left:20px;margin:9px 0">${inst.mechanics.map(m=>`<li style="margin:10px 0;font-size:14.5px;line-height:1.55">${m}</li>`).join('')}</ol></div>`;
+  h+=`<div class="sec"><h4>What you take home</h4><p style="font-size:14px;line-height:1.55">${inst.rewardText}</p>`;
   if(inst.drops&&inst.drops.length){
     h+='<div style="margin-top:8px"><div style="font-family:\'DM Mono\';font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Full drop table</div>'+inst.drops.map(instDropRow).join('')+'</div>';
   }
