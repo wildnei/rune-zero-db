@@ -9,6 +9,9 @@
   .feature-story { grid-template-columns: 4rem minmax(230px, .8fr) minmax(250px, 1fr); }
   .entity-browser { grid-template-columns: minmax(280px, .8fr) minmax(360px, 1.2fr); width: min(100% - 1rem, var(--content)); }
   .entity-stats { grid-template-columns: repeat(2, 1fr); }
+  .rate-grid, .metric-grid { grid-template-columns: repeat(2, 1fr); }
+  .milestone-grid, .reference-grid { grid-template-columns: repeat(2, 1fr); }
+  .class-guide-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 600px) {
@@ -58,6 +61,17 @@
   .entity-detail { padding: 1.25rem; }
   .entity-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .spawn-grid { grid-template-columns: 1fr; }
+  .editorial-feature { grid-template-columns: 2.5rem minmax(0, 1fr); gap: 1rem; padding-block: 2rem; }
+  .rate-grid, .metric-grid, .vip-split, .build-grid, .milestone-grid, .reference-grid, .class-guide-grid, .instance-grid { grid-template-columns: 1fr; }
+  .class-guide-grid article { grid-template-columns: 100px 1fr; padding: 1rem; }
+  .class-guide-sprite { height: 150px; }
+  .class-guide-sprite img { max-width: 95px; max-height: 140px; }
+  .instance-grid > a { min-height: 360px; padding: 1.4rem; }
+  .instance-grid > a > :not(.instance-npc) { max-width: calc(100% - 40px); }
+  .instance-npc { right: .5rem; opacity: .55; }
+  .instance-article { grid-template-columns: 1fr; }
+  .instance-article aside { display: grid; grid-template-columns: 100px 1fr; align-items: center; text-align: left; }
+  .instance-article aside img { grid-row: span 3; max-height: 120px; margin: 0 1rem 0 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
