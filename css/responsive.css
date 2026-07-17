@@ -7,6 +7,8 @@
   .archive-heading { grid-row: auto; }
   .class-path-grid { grid-template-columns: repeat(3, 1fr); }
   .feature-story { grid-template-columns: 4rem minmax(230px, .8fr) minmax(250px, 1fr); }
+  .entity-browser { grid-template-columns: minmax(280px, .8fr) minmax(360px, 1.2fr); width: min(100% - 1rem, var(--content)); }
+  .entity-stats { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 600px) {
@@ -46,6 +48,16 @@
   .home-footer .container { align-items: flex-start; flex-wrap: wrap; }
   .home-footer p { min-width: calc(100% - 5rem); }
   .home-footer .button { width: 100%; }
+  .wiki-masthead { padding-block: 3rem 2rem; }
+  .entity-browser { grid-template-columns: 1fr; padding-top: .75rem; }
+  .entity-results { max-height: 390px; }
+  .entity-header { align-items: flex-start; gap: 1rem; }
+  .entity-art { width: 86px; height: 86px; }
+  .entity-art img { width: 78px; height: 78px; }
+  .monster-sigil { width: 76px; height: 76px; }
+  .entity-detail { padding: 1.25rem; }
+  .entity-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .spawn-grid { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -2,6 +2,7 @@ import { loadWikiData } from './core/data.mjs';
 import { parseRoute } from './core/routes.mjs';
 import { createNavigation, syncNavigation } from './ui/navigation.mjs';
 import { renderHome } from './render/home.mjs';
+import { renderDatabase } from './render/database.mjs';
 
 const app = document.querySelector('#app');
 const status = document.querySelector('[data-site-status]');
@@ -50,6 +51,7 @@ function renderRoute() {
   const route = parseRoute(window.location.hash);
   syncNavigation(route.view);
   if (route.view === 'home') app.replaceChildren(renderHome({ data: wikiData }));
+  else if (route.view === 'items' || route.view === 'mobs') app.replaceChildren(renderDatabase({ view: route.view, data: wikiData, route }));
   else renderTemporaryRoute(route);
   document.title = route.view === 'home' ? 'RuneZero — A classic adventure, thoughtfully reimagined' : `${route.view[0].toUpperCase()}${route.view.slice(1)} — RuneZero Wiki`;
   app.focus({ preventScroll: true });
