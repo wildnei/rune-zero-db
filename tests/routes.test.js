@@ -7,6 +7,7 @@ test('legacy hashes resolve to stable views and entity ids', async () => {
   assert.deepEqual(parseRoute('#items'), { view: 'items', entity: null, id: null });
   assert.deepEqual(parseRoute('#item/501'), { view: 'items', entity: 'item', id: 501 });
   assert.deepEqual(parseRoute('#mob/1002'), { view: 'mobs', entity: 'mob', id: 1002 });
+  assert.deepEqual(parseRoute('#group/3010'), { view: 'enchants', entity: 'group', id: 3010 });
   assert.deepEqual(parseRoute('#instance/amdarais'), { view: 'instances', entity: 'instance', id: 'amdarais' });
   assert.deepEqual(parseRoute('#promise'), { view: 'home', entity: 'section', id: 'promise' });
 });

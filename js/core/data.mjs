@@ -12,14 +12,15 @@ export async function loadWikiData(fetcher = fetch) {
   );
   const warnings = [];
 
-  for (const name of optional) {
-    try {
-      entries.push([name, await loadJson(`data/${name}.json`, fetcher)]);
-    } catch (error) {
-      warnings.push({ name, message: error.message });
+  const optionalResults = await Promise.allSettled(optional.map(name => loadJson(`data/${name}.json`, fetcher)));
+  optionalResults.forEach((result, index) => {
+    const name = optional[index];
+    if (result.status === 'fulfilled') entries.push([name, result.value]);
+    else {
+      warnings.push({ name, message: result.reason.message });
       entries.push([name, name === 'elements' || name === 'options' ? {} : []]);
     }
-  }
+  });
 
   return { values: Object.fromEntries(entries), warnings };
 }

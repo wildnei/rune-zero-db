@@ -16,10 +16,39 @@ test('instances preserve all six current dungeon names', () => {
   }
 });
 
+test('instance guides retain requirements, tiers, mechanics, and concrete rewards', () => {
+  const source = fs.readFileSync('js/render/instances.mjs', 'utf8');
+  for (const fact of ['30 Valor Coin', '10/8/6 min', '40 (Normal) / 80 (Hard) / 150 (Nightmare)', '1,600,000 Base EXP', '20 solid hits apiece', '1 / 4 / 15 / 30 Coagulated Spell', '50% success', '100,000 zeny', '3,000 Coagulated Spell OR 70']) {
+    assert.match(source, new RegExp(fact.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+  }
+});
+
+test('class guides retain progression, early gear, essence costs, and next steps', () => {
+  const source = fs.readFileSync('js/render/classes.mjs', 'utf8');
+  for (const fact of ['Best early grabs', '60 / 150 Hunter Coins', 'Build Librarian', 'Monster Hunter']) assert.match(source, new RegExp(fact));
+});
+
+test('fun builds compare every item variant and retain the shared damage estimator', () => {
+  const source = fs.readFileSync('js/render/guides.mjs', 'utf8');
+  assert.match(source, /build\.items \|\| \[\]/);
+  assert.match(source, /Slotted counterpart/);
+  assert.match(source, /data-build-damage/);
+  assert.match(source, /estimateDamage/);
+});
+
 test('classes are represented with existing repository sprites', () => {
   const source = fs.readFileSync('js/render/classes.mjs', 'utf8');
   assert.match(source, /assets\/classes/);
   assert.match(source, /Lord Knight/);
   assert.match(source, /High Wizard/);
   assert.match(source, /Professor/);
+});
+
+test('enchant option formatting uses the committed option schema', async () => {
+  const { formatEnchantOption } = await import('../js/render/guides.mjs');
+  const result = formatEnchantOption(
+    { name: 'VAR_STRAMOUNT', min: 1, max: 4, chance: 104 },
+    { VAR_STRAMOUNT: { desc: 'STR +N' } },
+  );
+  assert.deepEqual(result, { description: 'STR +N', value: '1–4', chance: '1.04%' });
 });

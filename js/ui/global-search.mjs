@@ -1,5 +1,17 @@
 import { searchEntities } from '../core/search.mjs';
 
+const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+function trapFocus(event, container) {
+  if (event.key !== 'Tab') return;
+  const focusable = [...container.querySelectorAll(FOCUSABLE)].filter(element => !element.hidden);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable.at(-1);
+  if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+  else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+}
+
 function escapeHtml(value) {
   return String(value ?? '')
     .replaceAll('&', '&amp;')
@@ -35,6 +47,9 @@ export function createGlobalSearch({ data }) {
 
   function open() {
     overlay.hidden = false;
+    [...document.body.children].filter(element => element !== overlay).forEach(element => {
+      if (!element.inert) { element.dataset.searchInert = ''; element.inert = true; }
+    });
     document.body.classList.add('drawer-open');
     trigger.setAttribute('aria-expanded', 'true');
     requestAnimationFrame(() => input.focus());
@@ -43,6 +58,10 @@ export function createGlobalSearch({ data }) {
   function close() {
     if (overlay.hidden) return;
     overlay.hidden = true;
+    document.querySelectorAll('[data-search-inert]').forEach(element => {
+      element.inert = false;
+      delete element.dataset.searchInert;
+    });
     document.body.classList.remove('drawer-open');
     trigger.setAttribute('aria-expanded', 'false');
     trigger.focus();
@@ -89,6 +108,7 @@ export function createGlobalSearch({ data }) {
   trigger.addEventListener('click', open);
   overlay.querySelector('[data-search-close]').addEventListener('click', close);
   overlay.addEventListener('mousedown', event => { if (event.target === overlay) close(); });
+  overlay.addEventListener('keydown', event => trapFocus(event, overlay));
   input.addEventListener('input', render);
   input.addEventListener('keydown', event => {
     if (event.key === 'ArrowDown') { event.preventDefault(); setActive(activeIndex + 1); }

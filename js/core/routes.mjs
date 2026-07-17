@@ -12,8 +12,10 @@ export function parseRoute(hash = '') {
   if (VIEW_SET.has(value)) return { view: value, entity: null, id: null };
 
   const match = /^(item|mob)\/(\d+)$/.exec(value);
+  const group = /^group\/(\d+)$/.exec(value);
   const instance = /^instance\/([a-z0-9-]+)$/.exec(value);
   if (instance) return { view: 'instances', entity: 'instance', id: instance[1] };
+  if (group) return { view: 'enchants', entity: 'group', id: Number(group[1]) };
   if (!match) return { view: 'home', entity: null, id: null };
 
   return {
@@ -24,6 +26,7 @@ export function parseRoute(hash = '') {
 }
 
 export function routeHash({ view, entity = null, id = null }) {
+  if (entity === 'group' && Number.isInteger(id)) return `#group/${id}`;
   if (entity && Number.isInteger(id)) return `#${entity}/${id}`;
   return `#${VIEW_SET.has(view) ? view : 'home'}`;
 }

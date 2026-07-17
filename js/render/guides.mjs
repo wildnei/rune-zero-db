@@ -1,4 +1,4 @@
-import { escapeHtml } from './entities.mjs';
+import { escapeHtml, estimateDamage } from './entities.mjs';
 
 const staticGuides = {
   systems: {
@@ -11,6 +11,24 @@ const staticGuides = {
       ['Refining', 'Safe refinement', 'Protected refine options let players plan progression without erasing the value of materials and zeny.'],
       ['Convenience', 'Quality-of-life for everyone', 'Account storage, stylist access, offline vending, practical commands, and clear onboarding reduce friction without inflating rewards.'],
       ['Long-term', 'Hunting milestones', 'Permanent monster, MVP, region, and dedication goals award stats and wearable titles over a character’s full career.'],
+      ['Crafting', 'Enchant Stone lifecycle', 'Salvage custom gear into shards, have the Rune Artisan cut runes and four stone tiers, then use the Stone Enchanter to set or level a family. Levels 4–5 consume Old Glast Heim and Ghost Palace materials. Switching families resets that slot to level 1; extraction returns a tradeable stone for a level-scaled zeny fee.'],
+      ['Professions', 'Mining, Herbalism & Fishing', 'Each gathering trade levels from 1–100 per character. Mining smelts ores, Herbalism brews potions, and Fishing cooks +3/+5 stat foods. Use @prof for nodes, recipes, and progress; mastering a trade earns a permanent stat and wearable Hall of Titles title.'],
+      ['Loot', 'Random options on equipment drops', 'Dropped weapons, armor, shields, garments, shoes, accessories, and headgear roll slot-specific RO Zero options. A second beam reports option count: three green, four purple, five gold.'],
+      ['Economy', 'Valor & Hunter Coins', 'Valor Coin is the universal play-earned crafting currency and drops from almost every monster. Hunter Coin comes from Hunter’s Guild contracts. Refining, forging, entries, and signature gear use these currencies.'],
+      ['Bounties', 'Monster Hunter weapons', 'Personal marked-target boards unlock signature pieces such as Lord Knight’s Warbreaker, Falcon’s Wing, and Vulcan’s Fanfare that cannot be obtained elsewhere.'],
+      ['Growing gear', 'Memorial progression', 'The five-piece Memorial set grows at +3/+6/+9, supports non-destructive option enchanting, and uses level-gated Normal/Hard materials from Orc’s Memory and Nidhoggur’s Nest.'],
+      ['Hub', 'Eden HQ services', 'Register for the Eden badge, collect bounty missions, and reach forge, refine, enchant, instance, Monster Hunter, stylist, storage, and other services from one map. Use @go eden.'],
+      ['Forging', 'Five properties and an element', 'Forge any weapon with five random properties and a chosen element. Success is approximately 70%; failure consumes the mostly-ore, low-coin material cost.'],
+      ['Eden', 'Per-class growing weapons', 'Every class can buy an account-bound Eden weapon with the badge. It arrives with five options, grows at +3/+6/+9, and can reroll its options.'],
+      ['Routine', 'Daily and weekly loops', 'Three rotating Daily Tasks reset at server midnight with a day-seven login-streak jackpot. Weekly Hunt rotates a featured MVP, cross-player leaderboard, and tiered rewards.'],
+      ['Boutique', 'Pay-to-fast, never pay-to-win', 'The RuneZero Boutique rotates zero-stat cosmetics and convenience. Cash Point or play-earned coin bundles may accelerate EXP or common drops, but never sell stats, cards, MVP loot, or card-rate boosts.'],
+      ['Zeny sink', 'Fortune Vault', 'Pull once for 25,000z or ten times for 250,000z. Rewards range from an Old Blue Box to a 0.1% announced costume; a hidden pity counter guarantees a common costume by the 100th miss. No cards or MVP loot appear.'],
+      ['World', 'Champion, Lucky & Frenzy monsters', 'About 1.5% of normal kills can create aura-lit special monsters. Champions are roughly 3× threats with top-roll loot, Frenzy variants burst EXP, and Lucky variants are loot piñatas. One to three affixes add modest Valor and EXP.'],
+      ['Companions', 'Adventurer Allies', 'Per-class Bond levels 1–10 grow from kills, improve ally buffs, and award Loyal, Devoted, and Sworn titles at levels 4/7/10. A dead ally can be resummoned within five minutes for half price.'],
+      ['Competition', 'MVP speedrun boards', 'Normal, Hard, and Nightmare each keep an all-time top five. Only a genuine personal best can earn a leaderboard position; view it through @mvprank.'],
+      ['Events', 'A world that moves', 'Find the Mushroom, Speed Quiz, Fever Field, and Disguise rotate through the Event Herald. Fever Field opens a 25-minute hot zone with a guaranteed +3 Valor Coin per kill.'],
+      ['Fishing', 'Streaks & Golden Fish', 'Five catches without changing maps or idling for two minutes unlock a bonus-yield roll. Golden Fish have a 2% base chance and 4% at a streak of 10+; trade five to the Profession Master for Valor Coins and Fishing XP.'],
+      ['Commands', 'Player tools', '@go and @go eden handle travel; @storage opens account storage; @autotrade keeps a Merchant shop online; @autopot manages consumables; @allies recruits companions; @prof opens profession progress; and @mvprank shows MVP and speedrun boards.'],
     ],
   },
   rates: {
@@ -27,16 +45,16 @@ const rateGroups = [
   ['Experience', [['Base EXP', '5×'], ['Job EXP', '5×'], ['MVP EXP', '5×'], ['Quest EXP', '1×']]],
   ['Drop rates', [['Common drops', '3×'], ['Consumables', '3×'], ['Equipment', '3×'], ['MVP-exclusive loot', '3×'], ['Cards', '1× · always'], ['Treasure boxes', '1×']]],
   ['Death & party', [['Death penalty', '3% · VIP 0%'], ['Party share range', '15 levels'], ['Even-share bonus', '+40% per extra member'], ['Multi-level kills', 'Off']]],
-  ['Combat & economy', [['Max ASPD', '190'], ['NPC sell prices', '50%'], ['Sitting recovery', '+3% HP/SP per sec'], ['Town warp', '500z'], ['Field warp', '1,000z'], ['Repair', '5,000z']]],
+  ['Combat & economy', [['Max ASPD', '190'], ['NPC sell prices', '50%'], ['Sitting recovery', '+3% HP/SP per sec'], ['Town warp', '500z'], ['Field warp', '1,000z'], ['Return to last warp', '300z'], ['Repair', '5,000z']]],
 ];
 
-export function renderGuide({ view, data }) {
+export function renderGuide({ view, data, route = {} }) {
   if (view === 'rates') return renderRates();
   if (view === 'balance') return renderBalance(data.skillchanges || []);
   if (view === 'builds') return renderBuilds(data.builds || {});
   if (view === 'hunting') return renderHunting(data.hunting || {});
   if (view === 'skills') return renderSkillItems(data.items || []);
-  if (view === 'enchants') return renderEnchants(data.options || {});
+  if (view === 'enchants') return renderEnchants(data.options || {}, route.entity === 'group' ? route.id : null);
   if (view === 'customizations') return renderCustomizations(data.meta || {});
   return renderStaticGuide(staticGuides[view] || staticGuides.systems);
 }
@@ -70,7 +88,8 @@ function renderCustomizations(meta) {
   const page = document.createElement('section');
   page.className = 'wiki-page editorial-page';
   page.innerHTML = `${pageHeader(staticGuides.customizations)}<div class="container article-stack"><div class="metric-grid">${cards.map(([label, value, body]) => `<article><strong>${value}</strong><h2>${label}</h2><p>${body}</p></article>`).join('')}</div>
-  <section class="article-section"><p class="eyebrow">Design guardrails</p><h2>Rules the customization never breaks</h2><div class="rule-list"><article><h3>Asura Strike caps at +50% per item</h3><p>No single fun-mod piece pushes it beyond that special-case ceiling.</p></article><article><h3>Transcendent skills earn larger amplifiers</h3><p>Deeper class investment receives stronger item support than comparable early-class skills.</p></article><article><h3>Customization never means rate inflation</h3><p>Damage and usability may change. Card rates never do.</p></article></div></section></div>`;
+  <section class="article-section"><p class="eyebrow">Balance philosophy</p><h2>More routes, worthy enemies</h2><p>52 overlooked skills were made cheaper or more usable and 15 received meaningful damage; 26 MVPs were strengthened to roughly 2.5–3× HP so the broader build ceiling still has opponents worth mastering. Eighteen usability-only changes include party-wide Impositio Manus and Suffragium, reliable Sage endows, a 5×5 Bowling Bash, and compatible Kyrie Eleison and Assumptio.</p></section>
+  <section class="article-section"><p class="eyebrow">Design guardrails</p><h2>Rules the customization never breaks</h2><div class="rule-list"><article><h3>Asura Strike caps at +50% per item</h3><p>No single fun-mod piece pushes it beyond that special-case ceiling.</p></article><article><h3>Transcendent skills earn larger amplifiers</h3><p>Deeper class investment receives stronger item support than comparable early-class skills.</p></article><article><h3>Customization never means rate inflation</h3><p>Damage and usability may change. Card rates never do.</p></article><article><h3>Every supported skill has card coverage</h3><p>95 fun-mod cards prevent an off-meta route from depending on one exact base item.</p></article></div></section></div>`;
   return page;
 }
 
@@ -87,7 +106,14 @@ function renderBuilds(buildData) {
   const total = groups.reduce((sum, group) => sum + (group.builds || []).length, 0);
   const page = document.createElement('section');
   page.className = 'wiki-page editorial-page';
-  page.innerHTML = `${pageHeader({ eyebrow: 'Off-meta, fully supported', title: 'Fun builds', intro: `${total} build fantasies turn familiar gear into a reason to play skills the classic meta left behind.` })}<div class="container build-groups">${groups.map(group => `<section><header><p class="eyebrow">Class family</p><h2>${escapeHtml(group.group)}</h2></header><div class="build-grid">${(group.builds || []).map(build => `<article><h3>${escapeHtml(build.fantasy)}</h3><p>${(build.items || []).map(item => `<a href="#item/${item.id}">${escapeHtml(item.name)}${item.slots ? ` [${item.slots}]` : ''}</a>`).join(' / ')}</p><div class="amp-list">${(build.items?.[0]?.amps || []).map(amp => `<span>${escapeHtml(amp.name)} <b>+${escapeHtml(amp.pct)}%</b></span>`).join('')}</div></article>`).join('')}</div></section>`).join('')}</div>`;
+  page.innerHTML = `${pageHeader({ eyebrow: 'Off-meta, fully supported', title: 'Fun builds', intro: `${total} build fantasies turn familiar gear into a reason to play skills the classic meta left behind.` })}<div class="container build-groups">${groups.map(group => `<section><header><p class="eyebrow">Class family</p><h2>${escapeHtml(group.group)}</h2></header><div class="build-grid">${(group.builds || []).map(build => { const skillAmps = (build.items || []).flatMap(item => (item.amps || []).filter(amp => amp.kind === 'skill').map(amp => ({ ...amp, item: item.name, slots: item.slots }))); return `<article><h3>${escapeHtml(build.fantasy)}</h3><div class="build-variants">${(build.items || []).map(item => `<section><h4><a href="#item/${Number(item.id)}">${escapeHtml(item.name)}${item.slots ? ` [${Number(item.slots)}]` : ''}</a>${item.slotted ? '<small>Slotted counterpart</small>' : ''}</h4><div class="amp-list">${(item.amps || []).map(amp => `<span>${escapeHtml(amp.name)} <b>+${Number(amp.pct)}%</b></span>`).join('')}</div></section>`).join('')}</div>${skillAmps.length ? `<div class="build-estimator"><label>Current average hit <input type="number" min="0" step="1" value="1000" data-build-damage></label>${skillAmps.map(amp => { const estimate = estimateDamage(1000, amp.pct); return `<p><span>${escapeHtml(amp.name)} · ${escapeHtml(amp.item)}${amp.slots ? ` [${Number(amp.slots)}]` : ''}</span><b data-build-result data-percent="${Number(amp.pct)}">${estimate.before.toLocaleString()} → ${estimate.after.toLocaleString()}</b></p>`; }).join('')}</div>` : ''}</article>`; }).join('')}</div></section>`).join('')}</div>`;
+  page.querySelectorAll('[data-build-damage]').forEach(input => input.addEventListener('input', () => {
+    const card = input.closest('article');
+    card.querySelectorAll('[data-build-result]').forEach(result => {
+      const estimate = estimateDamage(input.value, result.dataset.percent);
+      result.textContent = `${estimate.before.toLocaleString()} → ${estimate.after.toLocaleString()}`;
+    });
+  }));
   return page;
 }
 
@@ -95,7 +121,7 @@ function renderHunting(hunting) {
   const quests = [...(hunting.monster || []), ...(hunting.region || []), ...(hunting.dedication || [])];
   const page = document.createElement('section');
   page.className = 'wiki-page editorial-page';
-  page.innerHTML = `${pageHeader({ eyebrow: 'Permanent progression', title: 'Hunting log', intro: `${quests.length} long-term milestones award permanent stats and wearable titles earned across your whole career.` })}<div class="container milestone-grid">${quests.map(quest => { const target = quest.targets?.[0] || {}; return `<article class="milestone${quest.mvp ? ' is-mvp' : ''}"><span>${quest.mvp ? 'MVP' : target.map ? 'Region' : 'Milestone'}</span><h2>${escapeHtml(quest.title)}</h2><p>${target.mob ? `Defeat ${Number(target.count || 0).toLocaleString()} × ${target.mob}` : target.mapName || 'Career-wide objective'}</p><strong>${escapeHtml(quest.reward)}</strong></article>`; }).join('')}</div>`;
+  page.innerHTML = `${pageHeader({ eyebrow: 'Permanent progression', title: 'Hunting log', intro: `${quests.length} long-term milestones award permanent stats and wearable titles earned across your whole career.` })}<div class="container milestone-grid">${quests.map(quest => `<article class="milestone${quest.mvp ? ' is-mvp' : ''}"><span>${quest.mvp ? 'MVP' : quest.targets?.some(target => target.map) ? 'Region' : 'Milestone'}</span><h2>${escapeHtml(quest.title)}</h2><ul>${(quest.targets || []).map(target => `<li>${target.mob ? `Defeat ${Number(target.count || 0).toLocaleString()} × ${escapeHtml(target.mob)}` : escapeHtml(target.mapName || target.map || 'Career-wide objective')}</li>`).join('')}</ul><strong>${escapeHtml(quest.reward)}</strong></article>`).join('')}</div>`;
   return page;
 }
 
@@ -107,12 +133,25 @@ function renderSkillItems(items) {
   return page;
 }
 
-function renderEnchants(options) {
+export function formatEnchantOption(option, types) {
+  const type = types[option.name] || {};
+  const min = option.min ?? option.value ?? '';
+  const max = option.max ?? min;
+  return {
+    description: type.desc || option.name,
+    value: min === '' ? '' : String(min === max ? min : `${min}–${max}`),
+    chance: option.chance == null ? '' : `${(option.chance / 100).toFixed(2).replace(/\.00$/, '')}%`,
+  };
+}
+
+function renderEnchants(options, selectedId = null) {
   const groups = options.groups || [];
   const types = options.types || {};
+  const selected = groups.find(group => Number(group.id) === Number(selectedId));
   const page = document.createElement('section');
   page.className = 'wiki-page editorial-page';
-  page.innerHTML = `${pageHeader({ eyebrow: 'Equipment possibilities', title: 'Enchants & random options', intro: `${groups.length} option pools define the bonuses equipment can roll. Values and chances below come from the committed server data.` })}<div class="container enchant-grid">${groups.map(group => `<details><summary><strong>${escapeHtml(group.name?.replaceAll('_', ' ') || `Group ${group.id}`)}</strong><span>${group.options?.length || 0} options</span></summary><div>${(group.options || []).map(option => { const type = types[option.option] || {}; return `<p><strong>${escapeHtml(type.desc || option.option)}</strong><span>${option.minValue ?? option.value ?? ''}${option.maxValue != null ? `–${option.maxValue}` : ''}${option.chance != null ? ` · ${(option.chance / 100).toFixed(2)}%` : ''}</span></p>`; }).join('')}</div></details>`).join('')}</div>`;
+  const groupCard = (group, open = false) => `<details${open ? ' open' : ''}><summary><strong><a href="#group/${Number(group.id)}">${escapeHtml(group.name?.replaceAll('_', ' ') || `Group ${group.id}`)}</a></strong><span>${group.options?.length || 0} options · up to ${Number(group.maxRandom || 0)} random</span></summary><div>${['Guaranteed slot', 'Random extras'].map((label, fixed) => { const choices = (group.options || []).filter(option => Boolean(option.fixed) === (fixed === 0)); return choices.length ? `<h3>${label}</h3>${choices.map(option => { const formatted = formatEnchantOption(option, types); const description = formatted.description.replace('+N', formatted.value ? `+${formatted.value}` : '').replace('-N', formatted.value ? `-${formatted.value}` : ''); return `<p><strong>${escapeHtml(description)}</strong><span>${formatted.chance ? escapeHtml(formatted.chance) : ''}</span></p>`; }).join('')}` : ''; }).join('')}${String(group.name).startsWith('RZ_DROP_') ? '<p class="muted-copy">Auto-applied to dropped equipment. Option count controls the second floor beam: 3 green · 4 purple · 5 gold.</p>' : ''}</div></details>`;
+  page.innerHTML = `${pageHeader({ eyebrow: 'Equipment possibilities', title: selected ? selected.name.replaceAll('_', ' ') : 'Enchants & random options', intro: selected ? `Group ${selected.id} · ${selected.options?.length || 0} possible bonuses · up to ${selected.maxRandom || 0} random extras.` : `${groups.length} option pools define the bonuses equipment can roll. Values and chances below come from the committed server data.` })}<div class="container enchant-grid">${selected ? `<p><a class="back-link" href="#enchants">← All option pools</a></p>${groupCard(selected, true)}` : groups.map(group => groupCard(group)).join('')}</div>`;
   return page;
 }
 

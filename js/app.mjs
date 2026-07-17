@@ -11,6 +11,7 @@ import { createGlobalSearch } from './ui/global-search.mjs';
 const app = document.querySelector('#app');
 const status = document.querySelector('[data-site-status]');
 let wikiData = null;
+const DATASET_BY_VIEW = { balance: 'skillchanges', builds: 'builds', hunting: 'hunting', enchants: 'options', skills: 'skills' };
 
 function announce(message) {
   if (!status) return;
@@ -58,8 +59,16 @@ function renderRoute() {
   else if (route.view === 'items' || route.view === 'mobs') app.replaceChildren(renderDatabase({ view: route.view, data: wikiData, route }));
   else if (route.view === 'classes') app.replaceChildren(renderClasses());
   else if (route.view === 'instances') app.replaceChildren(renderInstances(route.entity === 'instance' ? route.id : null));
-  else if (GUIDE_VIEWS.has(route.view)) app.replaceChildren(renderGuide({ view: route.view, data: wikiData }));
+  else if (GUIDE_VIEWS.has(route.view)) app.replaceChildren(renderGuide({ view: route.view, data: wikiData, route }));
   else renderTemporaryRoute(route);
+  const unavailable = DATASET_BY_VIEW[route.view];
+  if (unavailable && wikiData.unavailable?.has(unavailable)) {
+    const warning = document.createElement('aside');
+    warning.className = 'route-data-warning';
+    warning.setAttribute('role', 'status');
+    warning.innerHTML = `<strong>This archive section is temporarily unavailable.</strong><span>The ${unavailable} dataset could not be loaded. Refresh the page to try again.</span>`;
+    app.firstElementChild?.prepend(warning);
+  }
   document.title = route.view === 'home' ? 'RuneZero — A classic adventure, thoughtfully reimagined' : `${route.view[0].toUpperCase()}${route.view.slice(1)} — RuneZero Wiki`;
   if (route.entity === 'section') requestAnimationFrame(() => document.getElementById(route.id)?.scrollIntoView());
   else app.focus({ preventScroll: true });
@@ -70,6 +79,7 @@ async function bootstrap() {
   try {
     const result = await loadWikiData();
     wikiData = result.values;
+    wikiData.unavailable = new Set(result.warnings.map(warning => warning.name));
     createGlobalSearch({ data: wikiData });
     renderRoute();
     if (result.warnings.length) announce(`${result.warnings.length} optional archive sections are unavailable.`);

@@ -18,3 +18,22 @@ test('monster filtering matches common combat traits', async () => {
   assert.equal(filterMonsters(mobs, { query: 'water' }).length, 1);
   assert.equal(filterMonsters(mobs, { query: 'plant' }).length, 1);
 });
+
+test('item archive preserves source, subtype, slot, and sort controls', async () => {
+  const { filterItems } = await import('../js/render/database.mjs');
+  const items = [
+    { id: 2, name: 'Zeta Blade', type: 'Weapon', sub: '1hSword', custom: true, funmod: true, atk: 20, loc: ['Right_Hand'] },
+    { id: 1, name: 'Alpha Mail', type: 'Armor', custom: false, funmod: false, def: 8, loc: ['Armor'] },
+  ];
+  assert.deepEqual(filterItems(items, { source: 'funmod' }).map(item => item.id), [2]);
+  assert.deepEqual(filterItems(items, { type: 'Weapon', subtype: '1hSword' }).map(item => item.id), [2]);
+  assert.deepEqual(filterItems(items, { type: 'Armor', slot: 'Armor' }).map(item => item.id), [1]);
+  assert.deepEqual(filterItems(items, { sort: 'name', direction: 'asc' }).map(item => item.id), [1, 2]);
+});
+
+test('monster archive preserves MVP and normal filters', async () => {
+  const { filterMonsters } = await import('../js/render/database.mjs');
+  const mobs = [{ id: 1, name: 'Poring', mvp: false }, { id: 2, name: 'Baphomet', mvp: true }];
+  assert.deepEqual(filterMonsters(mobs, { kind: 'mvp' }).map(mob => mob.id), [2]);
+  assert.deepEqual(filterMonsters(mobs, { kind: 'normal' }).map(mob => mob.id), [1]);
+});

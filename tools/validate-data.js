@@ -26,6 +26,25 @@ function validateDataDirectory(directory) {
   if (values.meta && (typeof values.meta !== 'object' || Array.isArray(values.meta))) {
     errors.push('meta.json must contain an object');
   }
+  if (Array.isArray(values.items)) {
+    values.items.forEach((item, index) => {
+      if (!Number.isInteger(Number(item.id)) || typeof item.name !== 'string') errors.push(`items.json record ${index} needs a numeric id and string name`);
+    });
+  }
+  if (Array.isArray(values.mobs)) {
+    values.mobs.forEach((mob, index) => {
+      if (!Number.isInteger(Number(mob.id)) || typeof mob.name !== 'string') errors.push(`mobs.json record ${index} needs a numeric id and string name`);
+    });
+  }
+  if (values.options) {
+    if (!values.options.types || !Array.isArray(values.options.groups)) errors.push('options.json needs types and groups');
+    else values.options.groups.forEach((group, groupIndex) => {
+      if (!Number.isInteger(Number(group.id)) || typeof group.name !== 'string' || !Array.isArray(group.options)) errors.push(`options.json group ${groupIndex} has an invalid shape`);
+      else group.options.forEach((option, optionIndex) => {
+        if (typeof option.name !== 'string' || !Number.isFinite(Number(option.min)) || !Number.isFinite(Number(option.max))) errors.push(`options.json group ${group.id} option ${optionIndex} has an invalid shape`);
+      });
+    });
+  }
 
   const counts = {
     items: Array.isArray(values.items) ? values.items.length : 0,

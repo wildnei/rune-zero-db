@@ -25,4 +25,13 @@ test('global search supports its keyboard interaction contract', () => {
   assert.match(source, /Escape/);
   assert.match(source, /event\.key === '\/'/);
   assert.match(source, /aria-activedescendant/);
+  assert.match(source, /trapFocus/);
+  assert.match(source, /\.inert = true/);
+});
+
+test('mobile drawer traps focus and makes the page inert while open', () => {
+  const source = fs.readFileSync('js/ui/navigation.mjs', 'utf8');
+  assert.match(source, /trapFocus/);
+  assert.match(source, /setPageInert\(true\)/);
+  assert.match(source, /setPageInert\(false\)/);
 });
