@@ -1091,7 +1091,7 @@ function clsIcon(cls){
 const NPC_SPRITE={
   "Hugin's Butler":'1_F_04.gif', "Hugin's Magician":'1_F_01.gif', 'Dark magic master':'1_F_01.gif',
   "Hugin's Craftsman":'4_F_JOB_BLACKSMITH.gif', 'Portrait Collector':'4_M_OILMAN.gif',
-  'Ghost of the Sovereign':'4_M_JOB_KNIGHT1.gif', 'Sky Warden':'4_M_JOB_KNIGHT1.gif',
+  'Hugin':'4_M_SAGE_C.gif', 'Sky Warden':'4_M_JOB_KNIGHT1.gif',
   'Palace Keeper':'4_F_VALKYRIE.gif', 'Dimension Traveler':'4_M_SAGE_C.gif',
 };
 function npcAvatar(file){
@@ -1170,7 +1170,7 @@ function renderHome(){
       <p>A slow, meaningful Ragnarok Online server where rare drops feel rare — episode-13 / transcendent-2nd content with modern quality-of-life and a high-damage, multi-build combat rework. <b>Pay-to-fast, never pay-to-win</b>: card rates stay a hard 1×, always.</p>
       <div class="statline">${stat((META.items||0).toLocaleString(),'Items')}${stat((META.mobs||0).toLocaleString(),'Monsters')}${stat(META.customItems||0,'Custom items')}${stat('119','Skills rebalanced')}${stat(META.optionGroups||'—','Enchant pools')}</div>
     </div>
-    <div class="newbanner" onclick="setView('systems');location.hash='systems'"><span class="nbtag">NEW</span><span class="nbt">Three new endgame dungeons<small>Two mechanics-gated flagship bosses — Old Glast Heim's Amdarais and Ferlock Ship's Captain Ferlock, both with real add-phases, enrage, and telegraphed attacks — plus Ghost Palace, a repeatable weapon-farm dungeon feeding a 14-weapon BiS line. See Features for the full breakdown.</small></span><span class="nbarrow">→</span></div>
+    <div class="newbanner" onclick="setView('systems');location.hash='systems'"><span class="nbtag">NEW</span><span class="nbt">Six endgame dungeons<small>Three flagship raids — Old Glast Heim's full staged assault on Amdarais, the two-deck Assault on the Airship against Captain Ferlock, and Ghost Palace's five-floor Sakray story with an optional Reliquary Warden finale — plus a trio of shorter Malaya hunts: Bakonawa Lake, Bangungot Hospital, and Buwaya Cave. See Features for the full breakdown.</small></span><span class="nbarrow">→</span></div>
     <h3 class="homeh">What makes Rune Zero different</h3>
     <div class="syscards">
       ${card('🐢','Low-rate identity','Slow, deliberate progression — rare loot stays rare. QoL is for convenience, never for inflating rewards. <b>Card rates are a hard 1×, always</b> — MVP hunting itself runs at the same 3× as everything else.')}
@@ -1185,7 +1185,7 @@ function renderHome(){
       ${link('rates','📈','Rates','EXP, drops, death penalty, VIP — the real numbers')}
       ${link('customizations','🧩','Customizations','Every skill rebalance &amp; fun-mod build')}
       ${link('classes','🎓','Classes','What to grab &amp; save for, all 14 classes')}
-      ${link('instances','⚔️','Instances','3 endgame dungeons — how to beat them &amp; what they pay')}
+      ${link('instances','⚔️','Instances','6 endgame dungeons — how to beat them &amp; what they pay')}
     </div>
     <h3 class="homeh">Explore the database</h3>
     <div class="hlinks">
@@ -1338,25 +1338,25 @@ function renderSystems(){
       <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:${col};font-size:14px;margin-bottom:4px">${n}. ${title}</div>
       <p style="font-size:12.5px;margin:0">${body}</p></div>`;
   const oghPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">👑</span>Old Glast Heim — Amdarais, the flagship boss</h4>
-    <p style="margin-bottom:12px">Old Glast Heim's undead lord, and the server's premier <b>mechanics-gated</b> fight — Amdarais changes what you have to <i>do</i>, not just how big his health bar is. Fight through two waves of guardians, then face the lord himself in the haunted cathedral. Enter via the <b>Ghost of the Sovereign</b> at Eden HQ (Base Level 99+) on Normal, Hard, or Nightmare — harder tiers never cost an extra entry or touch drop rates. In a hurry? <b>Fast Mode</b> throws both guardian waves at you at once, then the lord himself the moment they fall — the whole fight, none of the waiting.</p>
+    <p style="margin-bottom:12px">The server's premier story raid, played straight through: report to the gate, help clear three besieged sectors of the castle (rescuing an altar boy and talking down a grieving smith along the way), face down Old Glast Heim's first true boss guarding the stairs up, then clear both wings of the second floor — each ending in its own Commander of Destruction — before the gate to Amdarais himself finally opens. Enter via <b>Hugin</b> at Eden HQ (Base Level 99+) on Normal, Hard, or Nightmare — harder tiers never cost an extra entry or touch drop rates. <b>Fast Mode</b> trims the cutscene dialogue at every story beat, but every sector, every rescue, and both Commanders still happen exactly as above.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
-      ${oghPhase(1,'Reinforcements','At ≤75% HP, two adds spawn. Leave them alive and Amdarais <b>heals</b> a slice of max HP every tick — clear them fast or lose the DPS race.','#e0655a')}
-      ${oghPhase(2,'Enrage','At ≤40% HP he enrages (+ATK) and starts channeling ground-targeted attacks at a random party member\'s tile — the cast circle is your dodge window; standing still is what kills you.','#c9853a')}
-      ${oghPhase(3,'Enrage timer','Run past the Challenge-Tier time limit (10/8/6 min Normal/Hard/Nightmare) and he gets meaner again — a DPS and coordination check, not just a bigger health bar.','#b07ad6')}
+      ${oghPhase(1,'Reinforcements','Every 10% of his health Amdarais drops, he calls a fresh wave of Khalitzburg Knights, Abysmal Knights, Bloody Knights, or archers to his side — and <b>heals</b> while any of them are alive. Clear the wave fast or watch his bar climb back up.','#e0655a')}
+      ${oghPhase(2,"Varmundt's Ghost","Four buff stations light up around the arena as the fight goes on — a shield, an opening to strike, a heal-and-resource surge, a defensive ward. Which one is lit tracks Amdarais's health, so check all four.",'#c9853a')}
+      ${oghPhase(3,'Challenge Tier scaling','Hard and Nightmare multiply his HP/ATK/DEF (and, on Nightmare, his speed) — plus the coin, EXP, and MVP Point payout on the kill. Drop rates and the card never move.','#b07ad6')}
     </div>
-    <p style="font-size:12.5px;color:var(--muted);margin:0">Every clear pays Valor Coin, Hunter Coin and MVP Points, scaled up by Challenge Tier — plus a shot at the grail-tier <b>Amdarais Card</b>: +15% damage on every class and +15% MATK, at the cost of 666 HP every 4 seconds while worn. Hard and Nightmare clears earn their own titles.</p></div>`;
+    <p style="font-size:12.5px;color:var(--muted);margin:0">Every clear pays Valor Coin, Hunter Coin and MVP Points, scaled up by Challenge Tier — plus a shot at the grail-tier <b>Amdarais Card</b>: +15% damage on every class and +15% MATK, at the cost of 666 HP every 4 seconds while worn. Your first-ever clear also opens a hidden treasure room. Hard and Nightmare clears earn their own titles.</p></div>`;
 
-  const ferlockPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">🐉</span>Ferlock Ship — Captain Ferlock, the 2nd flagship boss</h4>
-    <p style="margin-bottom:12px">A second mechanics-gated flagship: Captain Ferlock, a colossal MVP Dragon who commands his own airship. Every trick Amdarais pulls, Ferlock answers with fire — a hair easier than Old Glast Heim, but a serious fight in its own right. Enter via the <b>Sky Warden</b> at Eden HQ (Base Level 99+), with the same Normal/Hard/Nightmare tiers and Fast Mode as Old Glast Heim.</p>
+  const ferlockPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">🐉</span>Assault on the Airship — Captain Ferlock, the 2nd flagship boss</h4>
+    <p style="margin-bottom:12px">A full two-deck raid, not just a boss room: storm the top deck and hold the engine room against wave after wave of Gremlins and Beholders, cross paths with three self-styled "Guardian Heroines" mid-brawl with Ferlock's sorceress rival, cut down a Wyvern gatekeeper, then corner Captain Ferlock himself — a colossal MVP Dragon who commands the ship and answers every trick with fire. Enter via the <b>Sky Warden</b> at Eden HQ (Base Level 99+), with the same Normal/Hard/Nightmare tiers as Old Glast Heim. The full scenario plays every time — no Fast Mode here.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px">
       ${oghPhase(1,'Reinforcements','At ≤75% HP, two Sky Sentinels spawn. Leave them alive and Ferlock <b>heals</b> a slice of max HP every tick.','#4f8fe0')}
-      ${oghPhase(2,'Airborne fury','At ≤40% HP he takes to the air (+ATK) and starts breathing fire at your feet — the cast bar is your dodge window; standing still is what kills you.','#e0655a')}
-      ${oghPhase(3,'Enrage timer','Run past the Challenge-Tier time limit and the ship groans under his fury — a DPS and coordination check.','#c9853a')}
+      ${oghPhase(2,'Airborne fury','At ≤40% HP he takes to the air (+30% ATK) and starts breathing fire at a random party member\'s exact tile every ~10 seconds — the cast bar is your dodge window; standing still is what kills you.','#e0655a')}
+      ${oghPhase(3,'Enrage timer','Run past the tier\'s time limit (10/8/6 min Normal/Hard/Nightmare) without a kill and his patience runs out for good — another +20% ATK, stacking with the 40% enrage.','#c9853a')}
     </div>
-    <p style="font-size:12.5px;color:var(--muted);margin:0">Defeat Ferlock for a full reward set — <b>Felrock's Armor, Cloak, Boots, and Hat</b> — plus the grail-tier <b>Felock Card</b>: a universal +30 ATK, +30 MATK, and +15% damage against Dragons, useful on any class. Hard and Nightmare clears earn their own titles.</p></div>`;
+    <p style="font-size:12.5px;color:var(--muted);margin:0">Defeat Ferlock for a full reward set — <b>Felrock's Armor, Cloak, Boots, and Hat</b> — plus the grail-tier <b>Felock Card</b>: a universal +30 ATK, +30 MATK, and +15% damage against Dragons, useful on any class. Seeing the closing scene through pays a flat EXP bonus on top of the kill itself. Hard and Nightmare clears earn their own titles.</p></div>`;
 
-  const ghostPalacePage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">⚔️</span>Ghost Palace — the weapon-farm dungeon</h4>
-    <p style="margin-bottom:12px">The server's great weapon-farm dungeon — clear it for <b>Gray Shard</b>, the currency behind the widest best-in-slot weapon line on the server. Fight two waves of Torturous Redeemers, then bring down the <b>Reliquary Warden</b> itself for a guaranteed lump sum of shards. Enter via the <b>Palace Keeper</b> at Eden HQ (Base Level 99+, 1 free entry/day, VIP +1), then spend your haul with the <b>Dimension Traveler</b> next door — no clear needed just to browse and buy.</p>
+  const ghostPalacePage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">⚔️</span>Ghost Palace — Sakray's story, and the weapon-farm dungeon</h4>
+    <p style="margin-bottom:12px">Five floors of a single tragic story: guard Princess Tiara, watch the King turn on his own guard, meet the bound voice of Magic Sword Tartanos, and follow it to the only ending it was ever going to have. Every floor is a real wave fight — trash undead, two mid-bosses — with the story beats stitched between them. <b>Fast Mode</b> plays every fight exactly as written and only skips the dialogue. Enter via the <b>Palace Keeper</b> at Eden HQ (Base Level 99+, 1 free entry/day, VIP +1). Once the story ends, an optional true final boss — the <b>Reliquary Warden</b> — rises to guard the last reliquary; skip it and the exit still pays its own reward, or fight it for the real haul of <b>Gray Shard</b>, the currency behind the widest best-in-slot weapon line on the server. Spend it with the King in the throne room or the <b>Dimension Traveler</b> back at Eden HQ — no clear needed there, just to browse and buy.</p>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
       <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
         <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🗡️ Thanos weapons — 200 shards</div>
@@ -1367,6 +1367,20 @@ function renderSystems(){
       <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
         <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🃏 Knight Sakray Card — 10,000 shards</div>
         <p style="font-size:12.5px;margin:0">The special-tab grail: +20 ATK and +30% damage to Demon &amp; Undead. A true long-term chase at 10,000 shards — not a quick pickup.</p></div>
+    </div></div>`;
+
+  const malayaPage=`<div class="card" style="grid-column:1/-1"><h4><span class="si">🌏</span>The Malaya trio — shorter variety hunts</h4>
+    <p style="margin-bottom:12px">A tier below the three flagships: three shorter, self-contained hunts, each level 85+, solo-friendly, no coin cost, and a straight ~24-hour cooldown between clears — no Challenge Tier, no Fast Mode, just one difficulty played straight through. Their recruiters stand right next to the flagship row at Eden HQ. Every clear pays a guaranteed pile of <b>Ancient Grudge</b> plus a shot at that hunt's own card.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
+        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🌙 Bakonawa Lake</div>
+        <p style="font-size:12.5px;margin:0">A three-phase fight against a moon-eating dragon. Silence his rage by smashing four caldrons and gongs on the lakeshore before he slips back under the water for good.</p></div>
+      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
+        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🏥 Bangungot Hospital</div>
+        <p style="font-size:12.5px;margin:0">Six wards of undead guard a haunted hospital floor, ending in a heal-race against Bangungot's own Pillar of Spirit — drop it fast or he fully recovers.</p></div>
+      <div style="background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px">
+        <div style="font-family:'DM Sans',sans-serif;font-weight:800;color:var(--gold-deep);font-size:14px;margin-bottom:4px">🐊 Buwaya Cave</div>
+        <p style="font-size:12.5px;margin:0">The crocodile god's cave — break his armor-plated Weakness by hit count alone, and don't let his decoys fool you.</p></div>
     </div></div>`;
 
   const acc=(icon,title,count,body,openByDefault)=>`<details class="acc"${openByDefault?' open':''}><summary><span class="accicon">${icon}</span>${title}<span class="acccount">${count} systems</span><span class="accarrow">▸</span></summary><div class="accbody"><div class="syscards">${body}</div></div></details>`;
@@ -1408,6 +1422,7 @@ function renderSystems(){
   ${oghPage}
   ${ferlockPage}
   ${ghostPalacePage}
+  ${malayaPage}
   ${beamLeg}
   ${gemPage}
   ${profPage}
@@ -1587,17 +1602,20 @@ function renderClasses(){
 }
 
 // ===========================================================================
-//  INSTANCES — the 3 endgame flagship dungeons (Old Glast Heim/Amdarais,
-//  Ferlock Ship/Captain Ferlock, Ghost Palace/Reliquary Warden). Data-driven:
-//  one INSTANCES array below, one shared renderInstanceDetail() reading it,
-//  plus a small instance-specific "extra" section function appended per slug
-//  (sectionBoots/sectionCapes/sectionShards). Every number here is pulled
-//  straight from custom/npc/oldglastheim_instance.txt / ferlock_instance.txt /
-//  ghostpalace_instance.txt / temporal_boots.txt + custom/db-import/mob_db.yml
-//  + item_db_oldglastheim/ferlock/ghostpalace.yml — keep in lockstep if those
-//  change (Challenge Tier tables are currently identical across all 3, but
-//  are listed per-instance since the source scripts define them separately
-//  and Ghost Palace's is documented as having been retuned independently).
+//  INSTANCES — 3 flagship raids (Old Glast Heim/Amdarais, Assault on the
+//  Airship/Captain Ferlock, Ghost Palace/Reliquary Warden) + the 3-instance
+//  Malaya variety trio (Bakonawa Lake, Bangungot Hospital, Buwaya Cave).
+//  Data-driven: one INSTANCES array below, one shared renderInstanceDetail()
+//  reading it, plus a small instance-specific "extra" section function
+//  appended per slug (sectionBoots/sectionCapes/sectionShards). Every number
+//  here is pulled straight from custom/npc/oldglastheim_instance.txt /
+//  ferlock_instance.txt / ghostpalace_instance.txt / instance_bakonawa.txt /
+//  instance_bangungot.txt / instance_buwaya.txt / temporal_boots.txt +
+//  custom/db-import/mob_db.yml + item_db_oldglastheim/ferlock/ghostpalace/
+//  bakonawa/bangungot/buwaya.yml — keep in lockstep if those change. The 3
+//  flagships share an identical Challenge Tier table (Normal/Hard/Nightmare);
+//  the Malaya trio has no Challenge Tier or Fast Mode at all — `tiers:[]` and
+//  `entry.cooldownNote` signal that to the shared render functions below.
 // ===========================================================================
 const THANOS_WEAPONS=[
   {id:13441,sub:'1H Sword',skills:'Grand Cross +200%, Sacrifice +160%, Acid Terror +180%',cls:'Paladin / Creator'},
@@ -1731,7 +1749,7 @@ function sectionPortraitCollector(){
 }
 function sectionShards(){
   let h=`<div class="sec"><h4>Dimension Traveler exchange</h4>
-    <p style="font-size:13px">Gray Shard drops two ways: a small chance off each <a onclick="location.hash='mob/2959'">Torturous Redeemer</a> trash-wave kill (two rolls, ~30% + ~10% — roughly 0.4 shard per kill), and a guaranteed lump sum when the Reliquary Warden falls — <b>40 (Normal) / 80 (Hard) / 150 (Nightmare)</b>. The real haul comes from the Warden itself. Spend your shards with ${npcTag('Dimension Traveler')}, standing right next to the Palace Keeper — no clear needed to browse or buy.</p>
+    <p style="font-size:13px">Gray Shard has three sources: the floor-4 mid-boss <a onclick="location.hash='mob/2959'">Torturous Redeemer</a> trickles a little on the way (two rolls, ~30% + ~10% — roughly 0.4 shard on average), reaching the exit for the first time ever pays a 2-shard bonus (1 shard on every repeat clear after that), and a guaranteed lump sum lands when the Reliquary Warden falls — <b>40 (Normal) / 80 (Hard) / 150 (Nightmare)</b>. The real haul comes from the Warden itself. Spend your shards with ${npcTag('Dimension Traveler')}, standing right next to the Palace Keeper — no clear needed to browse or buy.</p>
   </div>`;
   h+=`<div class="sec"><h4>Thanos weapons — 200 Gray Shard each</h4>
     <p style="font-size:12.5px;color:var(--muted);margin:0 0 8px">One weapon per subtype, 14 in total, so every class has a genuine best-in-slot pick. All of them share the same risk package: +6 INT / +6 VIT / -6 LUK, built-in lifesteal, 100 flat HP lost every 10 seconds while equipped, and a 1,000 HP hit the instant you unequip it (the two staves are the exception — no lifesteal, they lean caster/support instead).</p>
@@ -1759,21 +1777,31 @@ function sectionCapes(){
 
 const INSTANCES=[
   {
-    slug:'amdarais', icon:'👑', name:'Old Glast Heim — Amdarais',
-    tagline:"The flagship mechanics fight: Old Glast Heim's undead lord, where add-phases and telegraphed AoE decide the kill — not a bigger health bar.",
+    slug:'amdarais', icon:'👑', name:'Old Glast Heim — Amdarais', kind:'flagship',
+    tagline:"The server's full story raid: three besieged sectors, a first MVP, and twin guardian wings — all before you ever reach Amdarais himself.",
     whyFarm:'The grail-tier Amdarais Card, plus every material for the full Temporal Boots crafting chain.',
     bossLevel:99, bossHp:7500000, freeEntries:'1/day (VIP +1)',
-    entry:{npc:'Ghost of the Sovereign', sprite:'4_M_JOB_KNIGHT1.gif', npcLoc:'Eden HQ entrance hall, just north of where you arrive', instMap:'the Old Glast Heim cathedral', baseLevel:99,
-      party:'Solo or party — talk as party leader to bring the whole party in.', scrollCost:1, valorCost:30, hunterCost:8},
+    entry:{npc:'Hugin', sprite:'4_M_SAGE_C.gif', npcLoc:'Eden HQ entrance hall, just north of where you arrive', instMap:'Old Glast Heim — the castle, then its second floor', baseLevel:99,
+      party:'Solo or party — soloing just means organizing a party of one first; the party leader brings everyone else in.', scrollCost:1, valorCost:30, hunterCost:8,
+      fastModeText:"<b>Fast Mode</b> is also offered on entry: it trims the cutscene dialogue at every story beat, but every sector, every rescue, and both Commanders of Destruction still happen exactly as described below — nothing is skipped but the talking."},
     tiers:[
       {name:'Normal',hp:'×1',atk:'100%',def:'100%',coinExp:'100%',points:'100%'},
       {name:'Hard',hp:'×2',atk:'130%',def:'120%',coinExp:'150%',points:'200%'},
       {name:'Nightmare',hp:'×3',atk:'165%',def:'145%',coinExp:'200%',points:'400%'},
     ],
     mechanics:[
-      "At 75% HP or below, Amdarais calls two reinforcements (a Wraith and an Abysmal Guardian). While either is alive, he heals about 2% of his max HP every ~2 seconds — kill the adds fast, or you'll lose the DPS race.",
-      "At 40% HP or below, Amdarais enrages (+30% ATK, permanent) and begins channeling Darkness Breath at a random party member's exact tile every ~10 seconds — the visible cast bar is the telegraph. Move off the tile before the cast finishes, or eat the AoE hit.",
-      "If the fight runs past the tier's time limit (10 min Normal / 8 min Hard / 6 min Nightmare) without a kill, Amdarais enrages further (+20% ATK, stacks with the 40% enrage) — a hard stop on stalling.",
+      "Report to Sir Varmundt at the gate — Himelmez has broken into Old Glast Heim, and the knight hall itself is about to turn on you.",
+      "Convince Sir Heinrich inside, and the corrupted honor guard he's still trying to purify — Khalitzburg and Abysmal Knights — comes to life around you.",
+      "Sector 1, the west chapel: clear enough of the corrupted monks and stewards to break the curse's hold, then find Altar boy Domun hiding among the pews and get him to safety.",
+      "Sector 2, the east refinery: cut through outraged refiners and decomposed blacksmiths — the bodies underfoot spawn maggot swarms on touch — until Holgren the Destroyer, more grieving than hostile once you reach her, stands down.",
+      "Sector 3, the north courtyard: break the last garrison of palace guards and archers of death. Himelmez taunts that she'll be waiting at the north end of the castle.",
+      "Chase her north and the ground erupts — the Root of Corruption, Old Glast Heim's first true boss, guards the stairs up.",
+      "On the second floor, clear the west wing's garrison — its guardian can answer the call at any point mid-fight as the 1st Commander of Destruction, not on a fixed cue.",
+      "The east wing plays out the same way, ending in the 2nd Commander of Destruction.",
+      "Both wings down, the way to Himelmez's sanctum opens — and reveals the trap. Gerhalt, Sir Varmundt's own ally, has already been turned.",
+      "Amdarais is what Gerhalt became. Every 10% of his health he drops, he calls a fresh wave of Khalitzburg Knights, Abysmal Knights, Bloody Knights, or archers to his side — and heals while any of them are alive. Clear the wave fast or watch his bar climb back up.",
+      "Four Varmundt's Ghost stations light up around the arena as the fight goes on, each handing out a different buff — a shield, an opening to strike, a heal-and-resource surge, a defensive ward. Which one is lit tracks Amdarais's health, so keep an eye on all four.",
+      "Defeat him and Hugin is waiting with your reward — and on your very first clear, the way into a hidden treasure room, stacked with gemstone caches and bonus enchanting material.",
     ],
     rewardText:"Every clear pays, guaranteed: EXP (45% of your next Base &amp; Job EXP bar), Valor Coin, Hunter Coin, and MVP Points — all scaled up by Challenge Tier (Hard: &times;1.5 coins/EXP, &times;2 points; Nightmare: &times;2 coins/EXP, &times;4 points). Drops themselves roll at the server's normal fixed rates — only Amdarais's card stays a hard 1&times; drop, same as every card, always.",
     drops:[
@@ -1787,28 +1815,37 @@ const INSTANCES=[
     extraSection: ()=>sectionBoots()+sectionPortraitCollector(),
   },
   {
-    slug:'ferlock', icon:'🐉', name:'Ferlock Ship — Captain Ferlock',
-    tagline:"The airship boss: a colossal MVP Dragon who answers Amdarais's every trick with fire — a hair easier, no pushover.",
+    slug:'ferlock', icon:'🐉', name:'Assault on the Airship — Captain Ferlock', kind:'flagship',
+    tagline:"A full two-deck raid: hold the deck and engine room, cut down a Wyvern gatekeeper, then corner the colossal MVP Dragon who commands the ship.",
     whyFarm:'A choice of 3 capes (pick the one that fits your build) plus the universal Felock Card.',
     bossLevel:99, bossHp:6500000, freeEntries:'1/day (VIP +1)',
-    entry:{npc:'Sky Warden', sprite:'4_M_JOB_KNIGHT1.gif', npcLoc:'Eden HQ entrance hall, just north of where you arrive', instMap:'the airship interior', baseLevel:99,
-      party:'Solo or party — talk as party leader to bring the whole party in.', scrollCost:1, valorCost:30, hunterCost:8},
+    entry:{npc:'Sky Warden', sprite:'4_M_JOB_KNIGHT1.gif', npcLoc:'Eden HQ entrance hall, just north of where you arrive', instMap:"the airship's upper deck and engine room", baseLevel:99,
+      party:'Solo or party — solo play works with no extra steps.', scrollCost:1, valorCost:30, hunterCost:8},
     tiers:[
       {name:'Normal',hp:'×1',atk:'100%',def:'100%',coinExp:'100%',points:'100%'},
       {name:'Hard',hp:'×2',atk:'130%',def:'120%',coinExp:'150%',points:'200%'},
       {name:'Nightmare',hp:'×3',atk:'165%',def:'145%',coinExp:'200%',points:'400%'},
     ],
     mechanics:[
-      "At 75% HP or below, Ferlock signals for reinforcements — two Sky Sentinels. While either is alive, he heals about 2% of his max HP every ~2 seconds — kill the adds fast, or you'll lose the DPS race.",
-      "At 40% HP or below, Ferlock takes to the air in a rage (+30% ATK, permanent) and begins breathing fire at a random party member's exact tile every ~10 seconds — the visible cast bar is the telegraph. Move off the tile before the cast finishes, or eat the AoE hit.",
-      "If the fight runs past the tier's time limit (10 min Normal / 8 min Hard / 6 min Nightmare) without a kill, Ferlock enrages further (+20% ATK, stacks with the 40% enrage) — a hard stop on stalling.",
+      "Report to Sky Warden, then Loki and Fenrir wave you aboard — Ferlock's crew already suspects sabotage.",
+      "Ferlock greets you on deck and explains what's powering his ship: a fragment called the Tear of Ymir, feeding his engine. Mid-conversation, Gremlins storm the ship from a Wyvern raider.",
+      "Top deck, first wave: clear the Rotar Zairo and Beholders swarming the deck.",
+      "Top deck, second wave: more Gremlins and Acidus try to reach the Rune Engine — hold them off.",
+      "The engine takes a hit anyway. Head down while the fire-suppression crew works the blaze.",
+      "Lower deck: two more waves, Beholders and Acidus, guard the way back up.",
+      "Three self-styled \"Guardian Heroines\" — Shiva, Basara, and Laksmi — crash the fight against Ferlock's sorceress rival, Arcana. In the chaos, a Wyvern miniboss blocks your path; drop it to move on.",
+      "More Gremlins swarm in behind it. Clear them, and Ferlock reappears — newly armed with his prized rifle, and accidentally blowing up his own crew trying to use it.",
+      "Captain Ferlock — the fight itself. At 75% HP he calls two Sky Sentinels; while either lives, he heals a slice of his max HP every couple of seconds, so drop them fast.",
+      "At 40% HP he takes to the air in a rage (+30% ATK, permanent) and starts breathing fire at a random party member's exact tile every ~10 seconds — the cast bar is your dodge window.",
+      "Run past the tier's time limit (10/8/6 min Normal/Hard/Nightmare) without a kill and his patience runs out for good — another +20% ATK, stacking with the 40% enrage.",
+      "Beat him and he escapes with the ship still airborne — but not before the whole crew, and you, walk away with a real haul.",
     ],
-    rewardText:"Every clear pays, guaranteed: EXP (45% of your next Base &amp; Job EXP bar), Valor Coin, Hunter Coin, and MVP Points — all scaled up by Challenge Tier (Hard: &times;1.5 coins/EXP, &times;2 points; Nightmare: &times;2 coins/EXP, &times;4 points). Drops themselves roll at the server's normal fixed rates — only Ferlock's card stays a hard 1&times; drop, same as every card, always.",
+    rewardText:"Every clear pays, guaranteed: EXP (45% of your next Base &amp; Job EXP bar), Valor Coin, Hunter Coin, and MVP Points — all scaled up by Challenge Tier (Hard: &times;1.5 coins/EXP, &times;2 points; Nightmare: &times;2 coins/EXP, &times;4 points). Drops themselves roll at the server's normal fixed rates — only Ferlock's card stays a hard 1&times; drop, same as every card, always. Seeing the closing scene through with the crew pays a flat 100,000 Base / 65,000 Job EXP on top of the kill itself.",
     drops:[
       {id:15117,rate:100,note:'HP/SP/MDEF/All Stats that keeps stacking at +7/+9/+10 refine — good for any tanky build.'},
       {id:40982,rate:100,note:'redeem it with Sky Warden for a choice of cape — see below'},
       {id:22047,rate:100,note:'ASPD keeps stacking with refine, culminating in a true +1 ASPD at +10 — good for any physical attack-speed build.'},
-      {id:19144,rate:1000,note:'a plain cape — no special bonus'},
+      {id:19144,rate:1000,note:'a plain headgear slot filler, no bonus, 1 card slot'},
       {id:12072,rate:3000,note:''},
       {id:12087,rate:3000,note:''},
       {id:12077,rate:3000,note:''},
@@ -1818,27 +1855,113 @@ const INSTANCES=[
     extraSection: sectionCapes,
   },
   {
-    slug:'ghostpalace', icon:'⚱️', name:'Ghost Palace — Reliquary Warden',
-    tagline:'The weapon-farm raid: toughest of the three, gated by a damage-immunity Ward, guarding the widest best-in-slot reward on the server.',
+    slug:'ghostpalace', icon:'⚱️', name:'Ghost Palace — Reliquary Warden', kind:'flagship',
+    tagline:"Sakray's five-floor story, ending the only way it can — then an optional true final boss waiting where the credits would roll.",
     whyFarm:'Gray Shard — spend it on a 14-weapon BiS line, a full armor set, or the Knight Sakray Card.',
     bossLevel:99, bossHp:8500000, freeEntries:'1/day (VIP +1)',
-    entry:{npc:'Palace Keeper', sprite:'4_F_VALKYRIE.gif', npcLoc:'Eden HQ entrance hall, just north of where you arrive', instMap:'the Ghost Palace', baseLevel:99,
-      party:'Solo or party — talk as party leader to bring the whole party in.', scrollCost:1, valorCost:30, hunterCost:8},
+    entry:{npc:'Palace Keeper', sprite:'4_F_VALKYRIE.gif', npcLoc:'Eden HQ entrance hall, just north of where you arrive', instMap:'the Ghost Palace — five floors, then the reliquary depths', baseLevel:99,
+      party:'Solo or party — anyone in the party can start it, not just the leader.', scrollCost:1, valorCost:30, hunterCost:8,
+      fastModeText:"<b>Fast Mode</b> is also offered on entry: every floor's fights play out exactly as described below — Fast Mode only skips the dialogue and cutscene waits between them."},
     tiers:[
       {name:'Normal',hp:'×1',atk:'100%',def:'100%',coinExp:'100%',points:'100%'},
       {name:'Hard',hp:'×2',atk:'130%',def:'120%',coinExp:'150%',points:'200%'},
       {name:'Nightmare',hp:'×3',atk:'165%',def:'145%',coinExp:'200%',points:'400%'},
     ],
     mechanics:[
-      "At 75% HP or below, the Warden binds two reinforcements to its will (Reliquary Bound). While either is alive, it heals about 2% of its max HP every ~2 seconds — kill the adds fast, or you'll lose the DPS race.",
-      "At 40% HP or below, the Warden turns cold (+30% ATK, permanent) and begins breathing frost at a random party member's exact tile every ~10 seconds — the visible cast bar is the telegraph. Move off the tile before the cast finishes, or eat the AoE hit (with a chance to Freeze).",
-      "If the fight runs past the tier's time limit (10 min Normal / 8 min Hard / 6 min Nightmare) without a kill, the Warden enrages further (+20% ATK, stacks with the 40% enrage) — a hard stop on stalling.",
-      "<b>Reliquary Ward (unique to this fight):</b> once the add-phase has started, the Warden periodically raises a Ward — a real damage-immunity window (~54s Normal / ~46s Hard / ~38s Nightmare between wards) — and summons 2 low-HP Anchor Wisps. Kill BOTH wisps fast to break the Ward early; if you don't manage it within the Ward's own timer (~14s / 12s / 10s), it completes on its own — the Warden becomes attackable again, but reclaims 3% of its max HP as a miss-penalty. Stop attacking the temporarily-unkillable boss and go kill the wisps instead.",
+      "The King asks you to guard Princess Tiara — monsters interrupt almost immediately. Floor 1: three waves of Cursed Soldiers and Gatekeepers.",
+      "Floor 2: the royal guard confides that Tiara is being married off against her will. Three waves of heartbreak-themed undead — Broken Promise, Floating Sorrow, Unfulfilled Love — follow.",
+      "Floor 3: the King turns on his own guard, accusing him of treason — and a bound, betrayed voice answers back. Magic Sword Tartanos reveals itself mid-conversation. Two more waves, then a 35-strong swarm floods the floor as floor 4 opens beneath it.",
+      "Floor 4: two waves of Sweet Slaughter and Gatekeepers, then a grim scene — the King and his captain are already dead, and a Visiting Prince offers himself as Tartanos's new host.",
+      "A real mid-boss follows: the Torturous Redeemer, alongside one more Sweet Slaughter.",
+      "Floor 5: Princess Tiara says her goodbyes and is lost for good. Three more waves of grief-and-guilt undead close out the floor.",
+      "A decoy Torturous Redeemer appears and vanishes on its own — one last gut-punch, not a real fight.",
+      "The story closes with Sakray himself, and the palace's ghosts speak one final time before the exit opens.",
+      "Once the ending plays, the palace's last ward stirs: the Reliquary Warden, a true optional final boss, rises where the last scene ended. Skip it and the exit still pays its own reward; fight it for the real haul.",
+      "Reliquary Warden — reinforcements at 75% HP (it heals while they live), a cold enrage with an ice-breath telegraph at 40%, and its own Reliquary Ward: periodic damage immunity broken only by killing two Anchor Wisps fast, or it reclaims 3% of its health when the Ward completes on its own.",
     ],
-    rewardText:"Every clear pays, guaranteed: EXP (45% of your next Base &amp; Job EXP bar), Valor Coin, Hunter Coin, and MVP Points — all scaled up by Challenge Tier (Hard: &times;1.5 coins/EXP, &times;2 points; Nightmare: &times;2 coins/EXP, &times;4 points) — plus a guaranteed <b>Gray Shard</b> lump sum on the kill: <b>40 (Normal) / 80 (Hard) / 150 (Nightmare)</b>. The trash waves (Torturous Redeemers) drop a little Gray Shard too, but the real haul comes from taking down the Warden itself.",
+    rewardText:"Reaching the exit for the first time ever pays a one-time 900,000 Base / 500,000 Job EXP plus 2 Gray Shard; every repeat clear after that still pays 1 Gray Shard, whether or not you fight the Warden. Beating the Warden itself pays the real haul, guaranteed: EXP (45% of your next Base &amp; Job EXP bar), Valor Coin, Hunter Coin, and MVP Points — all scaled up by Challenge Tier (Hard: &times;1.5 coins/EXP, &times;2 points; Nightmare: &times;2 coins/EXP, &times;4 points) — plus a <b>Gray Shard</b> lump sum: <b>40 (Normal) / 80 (Hard) / 150 (Nightmare)</b>.",
     drops:[],
     mvpDrops:[{id:617,rate:6000,note:''}],
     extraSection: sectionShards,
+  },
+  {
+    slug:'bakonawa', icon:'🌙', name:'Bakonawa Lake', kind:'variety',
+    tagline:"A three-phase drum-ritual fight against a moon-eating dragon — silence his rage by smashing caldrons and gongs before he slips back under the lake.",
+    whyFarm:'A guaranteed pile of Ancient Grudge on every clear, plus a shot at the Bakonawa Card and a rare zeny jackpot.',
+    bossLevel:92, bossHp:2900000, freeEntries:'1 (24h cooldown)',
+    entry:{npc:'Taho', sprite:'4_M_OILMAN.gif', npcLoc:'Eden HQ entrance hall, next to the flagship recruiters', instMap:'Bakonawa Lake', baseLevel:85,
+      party:"Solo or party — solo play works, you're automatically your own party leader.",
+      cooldownNote:"No coin cost and no daily cap — just a flat 24-hour cooldown before you can re-enter. One difficulty, no Challenge Tier, no Fast Mode — every fight plays out exactly as described below, every time."},
+    tiers:[],
+    mechanics:[
+      "Talk to Taho at the water's edge — the fight begins the moment the party leader confirms.",
+      "Phase 1: Bakonawa surfaces in the open lake. A 10-minute clock is running, with ghostly \"Bakonawa's Will\" hazards spawning as it ticks — bring him low before time runs out, or he slips back into the depths and you'll need to try again.",
+      "Phase 2: he dives, and the drums take over. Two Caldrons and two Gongs sit on opposite shores — smash all four within 5 minutes to interrupt his rage, while an Enraged Bakonawa harasses the party in the meantime.",
+      "Phase 3: the real fight. Enraged Bakonawa returns for a final 10-minute stand, backed by a swarm of Wakwak puppets that grows from 10 to 50 as the clock runs down.",
+      "Drop him and he coughs up a treasure box — open it for a guaranteed cut of Ancient Grudge, plus a shot at his card and a rare zeny jackpot.",
+      "Report back to Taho at the top of the hill for a bonus haul on top of whatever the fight dropped.",
+    ],
+    rewardText:"The final phase alone pays a flat 1,600,000 Base EXP / 1,750,000 Job EXP on the kill — no Challenge Tier here, these numbers don't scale. Talk to Taho again afterward for a bonus haul — 7 Ancient Grudge with an active VIP subscription, 5 without — plus a flat 100,000 EXP on top.",
+    drops:[
+      {id:6499,rate:10000,tag:'guaranteed',note:'from the treasure box the fight leaves behind — always drops'},
+      {id:969,rate:1,note:'a rare zeny jackpot, from the same treasure box'},
+      {id:4591,rate:1,tag:'boss-exclusive',note:'+4 STR and a bleeding proc on hit'},
+    ],
+    mvpDrops:[{id:617,rate:3000,note:''}],
+  },
+  {
+    slug:'bangungot', icon:'🏥', name:'Bangungot Hospital', kind:'variety',
+    tagline:"A haunted hospital, six wards of undead deep — ending in a heal-race against Bangungot's own Pillar of Spirit.",
+    whyFarm:"A guaranteed pile of Ancient Grudge, a real shot at Bangungot Boots of Nightmare or the Kalasag shield, plus the Bangungot Card.",
+    bossLevel:93, bossHp:2500000, freeEntries:'1 (24h cooldown)',
+    entry:{npc:'Nurse Maenne', sprite:'1_F_04.gif', npcLoc:'Eden HQ entrance hall, next to the flagship recruiters', instMap:'Bangungot Hospital, second floor', baseLevel:85,
+      party:"Solo or party — solo play works, you're automatically your own party leader.",
+      cooldownNote:"No coin cost and no daily cap — just a flat 24-hour cooldown before you can re-enter. One difficulty, no Challenge Tier, no Fast Mode — every fight plays out exactly as described below, every time."},
+    tiers:[],
+    mechanics:[
+      "Nurse Maenne opens the door — the moment you step inside, Bangungot's Mangkukulam ambushes you as a warning.",
+      "Six wards of undead — Mangkukulam, and a Manananggal on the last one — bar the way to the boss room. Clear each in turn.",
+      "Bangungot himself appears. Bring him low and he cries out that he \"cannot finish like this\" — that's not the kill, it's the start of a maze of shifting warp tiles and a curse spreading to the hospital's other patients.",
+      "Clear the curse-touched ward it opens up, and the way to Bangungot's healing source clears too.",
+      "His Pillar of Spirit appears — a fast, low-HP target with one job: heal him back to full. You have about 30 seconds to drop it before he fully recovers and the fight restarts from the top.",
+      "Kill the Pillar in time and Bangungot is finished for good.",
+    ],
+    rewardText:"Dropping the Pillar of Spirit in time pays a flat 1,200,000 Base EXP / 1,300,000 Job EXP / 500,000 MVP EXP — no Challenge Tier here, these numbers don't scale. Every clear drops a guaranteed pile of Ancient Grudge alongside a real shot at his gear and his card.",
+    drops:[
+      {id:6499,rate:10000,tag:'guaranteed',note:'always drops on a clear'},
+      {id:6517,rate:2000,note:'Bangungot Doll'},
+      {id:6524,rate:2000,note:"a piece of Bangungot's spirit"},
+      {id:2491,rate:1000,note:'MDEF that scales with refine, plus a speed kicker at +14'},
+      {id:2169,rate:100,note:'Kalasag — a shield with anti-Boss resistance that scales with refine'},
+      {id:4590,rate:1,tag:'boss-exclusive',note:'+4 INT and a sleep proc on hit'},
+    ],
+    mvpDrops:[{id:617,rate:3000,note:''}],
+  },
+  {
+    slug:'buwaya', icon:'🐊', name:'Buwaya Cave', kind:'variety',
+    tagline:"The crocodile god's cave: break his armor-plated Weakness by hit count alone, and don't let his decoys fool you.",
+    whyFarm:"A guaranteed pile of Ancient Grudge, a shot at Buwaya Sack Cloth or the Kalasag shield, plus the Buwaya Card.",
+    bossLevel:99, bossHp:2500000, freeEntries:'1 (23h cooldown)',
+    entry:{npc:'Buwaya Cave Warden', sprite:'4_M_JOB_KNIGHT1.gif', npcLoc:'Eden HQ entrance hall, next to the flagship recruiters', instMap:"Buwaya's cave", baseLevel:85,
+      party:"Solo or party — solo play works, you're automatically your own party leader.",
+      cooldownNote:"No coin cost and no daily cap — just a flat 23-hour cooldown before you can re-enter. One difficulty, no Challenge Tier, no Fast Mode — every fight plays out exactly as described below, every time."},
+    tiers:[],
+    mechanics:[
+      "Step into the cave and Buwaya is already there, guarding a cage of kidnapped villagers.",
+      "Every so often he threatens to trap the party. When the warning hits, rush his Weakness — two exposed, armor-plated points that only fall to hit count, not damage (20 solid hits apiece) — before the timer runs out. Break it in time and you also get a moment to talk to the captives for a buff.",
+      "About a minute in — and again every so often after — four decoy Buwayas rush in from the corners. They're real fights, but only the original counts toward the kill.",
+      "Bring the real Buwaya down and the villagers are freed; a guard waves you toward the exit.",
+    ],
+    rewardText:"Bringing down the real Buwaya pays a flat 1,100,000 Base EXP / 1,150,000 Job EXP / 600,000 MVP EXP — no Challenge Tier here, these numbers don't scale. Every clear drops a guaranteed pile of Ancient Grudge alongside a real shot at his gear and his card.",
+    drops:[
+      {id:6499,rate:10000,tag:'guaranteed',note:'always drops on a clear'},
+      {id:6518,rate:2000,note:'Buwaya Doll'},
+      {id:6525,rate:2000,note:"a piece of Buwaya's spirit"},
+      {id:2590,rate:1000,note:'heal power and a flat resist to Water/Wind/Earth/Fire that scale with refine'},
+      {id:2169,rate:100,note:'Kalasag — a shield with anti-Boss resistance that scales with refine'},
+      {id:4592,rate:1,tag:'boss-exclusive',note:'+4 VIT and a stone curse proc on hit'},
+    ],
+    mvpDrops:[{id:617,rate:5500,note:''}],
   },
 ];
 
@@ -1847,11 +1970,17 @@ function instHero(inst){
     <div class="statline">
       <div class="statbox"><b>${inst.bossLevel}</b><small>Boss Level</small></div>
       <div class="statbox"><b>${(inst.bossHp/1000000).toFixed(1)}M</b><small>Boss HP</small></div>
-      <div class="statbox"><b>${esc(inst.freeEntries.split(' ')[0])}</b><small>Free entries/day</small></div>
+      <div class="statbox"><b>${esc(inst.freeEntries.split(' ')[0])}</b><small>Entries</small></div>
     </div></div>`;
 }
 function sectionEnter(inst){
   const e=inst.entry;
+  let note='';
+  if(e.scrollCost!=null){
+    note += `Extra entries past the daily free one cost <b>${e.scrollCost} Summon Scroll</b>, OR <b>${e.valorCost} Valor Coin</b>, OR <b>${e.hunterCost} Hunter Coin</b>`+(inst.tiers&&inst.tiers.length?' — a harder Challenge Tier never costs an extra entry.':'.');
+  }
+  if(e.fastModeText) note += (note?' ':'')+e.fastModeText;
+  else if(e.cooldownNote) note += (note?' ':'')+e.cooldownNote;
   return `<div class="sec"><h4>How to enter</h4>
     <dl class="kv">
       ${row('Entry NPC', (e.sprite?npcAvatar(e.sprite):'')+esc(e.npc)+' — '+esc(e.npcLoc))}
@@ -1860,7 +1989,7 @@ function sectionEnter(inst){
       ${row('Solo or party', esc(e.party))}
       ${row('Free entries', esc(inst.freeEntries))}
     </dl>
-    <div class="note">Extra entries past the daily free one cost <b>${e.scrollCost} Summon Scroll</b>, OR <b>${e.valorCost} Valor Coin</b>, OR <b>${e.hunterCost} Hunter Coin</b> — a harder Challenge Tier never costs an extra entry. <b>Fast Mode</b> is also offered on entry: both waves come at once, then the boss the moment they're cleared — the full fight, without the waiting between waves.</div>
+    ${note?`<div class="note">${note}</div>`:''}
   </div>`;
 }
 function tierTable(inst){
@@ -1882,8 +2011,11 @@ function instDropRow(d){
   return h;
 }
 function instCard(inst){
+  const kindBadge = inst.kind==='variety'
+    ? '<span class="badge" style="margin-left:8px;vertical-align:middle">VARIETY HUNT</span>'
+    : '<span class="badge mvp" style="margin-left:8px;vertical-align:middle">FLAGSHIP</span>';
   return `<button class="instcard" onclick="location.hash='instance/${inst.slug}'">
-    <div class="ict">${inst.icon} ${esc(inst.name)}</div>
+    <div class="ict">${inst.icon} ${esc(inst.name)}${kindBadge}</div>
     <div class="ictag">${esc(inst.tagline)}</div>
     <div class="icstats"><span class="pill">Lv ${inst.bossLevel}</span><span class="pill">${inst.bossHp.toLocaleString()} HP</span><span class="pill">${esc(inst.freeEntries)}</span></div>
     <div class="icwhy"><b>Why farm this:</b> ${esc(inst.whyFarm)}</div>
@@ -1891,10 +2023,16 @@ function instCard(inst){
 }
 function renderInstances(){
   const el=$('#instances'); if(!el) return;
+  const flagships=INSTANCES.filter(i=>i.kind!=='variety');
+  const variety=INSTANCES.filter(i=>i.kind==='variety');
   el.innerHTML=`<div class="homewrap">
-    <div class="hero homehero"><div class="kicker">ENDGAME · MECHANICS-GATED</div><h1 style="font-size:30px">Instances</h1>
-      <p>Three level-99 flagship fights, each with real mechanics — add-phases, enrage, telegraphed attacks — instead of just a bigger health bar. Pick one for the full walkthrough: how to enter, every mechanic explained in plain language, and the complete reward list.</p></div>
-    <div class="instgrid">${INSTANCES.map(instCard).join('')}</div>
+    <div class="hero homehero"><div class="kicker">ENDGAME</div><h1 style="font-size:30px">Instances</h1>
+      <p>Three level-99 flagship raids, each a full staged scenario — real story beats, real wave fights, real boss mechanics — instead of just a bigger health bar. Below them, three shorter level-85+ Malaya hunts add variety without the flagship commitment. Pick one for the full walkthrough: how to enter, every beat of the fight in plain language, and the complete reward list.</p></div>
+    <div class="sectionhead"><span class="sn">Flagship raids</span><span class="sl"></span></div>
+    <div class="instgrid">${flagships.map(instCard).join('')}</div>
+    <div class="sectionhead"><span class="sn">Malaya trio — variety hunts</span><span class="sl"></span></div>
+    <div class="sectionsub">A tier below the flagships: shorter, solo-friendly, no coin cost, one difficulty played straight through.</div>
+    <div class="instgrid">${variety.map(instCard).join('')}</div>
     <p class="homefoot">Boss stats, drop rates and NPC costs pulled straight from the live instance scripts &amp; database · built ${META.built||''}.</p>
   </div>`;
 }
@@ -1906,7 +2044,9 @@ function renderInstanceDetail(slug){
   h+=`<div style="margin-bottom:14px"><a onclick="location.hash='instances'">← Back to Instances</a></div>`;
   h+=instHero(inst);
   h+=sectionEnter(inst);
-  h+=`<div class="sec"><h4>Challenge Tiers</h4>${tierTable(inst)}<div class="rate" style="margin-top:6px">Harder tiers scale the guaranteed reward layer — never drop rates, never the card. Same guardrail as every MVP fight on the server.</div></div>`;
+  if(inst.tiers&&inst.tiers.length){
+    h+=`<div class="sec"><h4>Challenge Tiers</h4>${tierTable(inst)}<div class="rate" style="margin-top:6px">Harder tiers scale the guaranteed reward layer — never drop rates, never the card. Same guardrail as every MVP fight on the server.</div></div>`;
+  }
   h+=`<div class="sec"><h4>The fight</h4><ol style="padding-left:20px;margin:8px 0">${inst.mechanics.map(m=>`<li style="margin:8px 0;font-size:13.5px">${m}</li>`).join('')}</ol></div>`;
   h+=`<div class="sec"><h4>What you take home</h4><p style="font-size:13px">${inst.rewardText}</p>`;
   if(inst.drops&&inst.drops.length){

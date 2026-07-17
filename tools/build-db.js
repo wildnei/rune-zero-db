@@ -50,6 +50,9 @@ const itemFiles = [
   path.join(CUSTOM, 'item_db_oldglastheim.yml'),     // 2026-07-13: Amdarais_Card (4601) rescue — Old Glast Heim flagship boss reward
   path.join(CUSTOM, 'item_db_ghostpalace.yml'),      // 2026-07-13: Thanos_* weapon line (13) + Gray armor set + Knight_Sakray_Card + Gray_Shard rescue — Ghost Palace exchange
   path.join(CUSTOM, 'item_db_ferlock.yml'),          // 2026-07-13: Felock_Armor/Cape/Boots/Cap_/Card rescue — Ferlock Ship flagship boss reward
+  path.join(CUSTOM, 'item_db_bakonawa.yml'),         // 2026-07-17: Bakonawa_Card rescue - Bakonawa Lake official port
+  path.join(CUSTOM, 'item_db_bangungot.yml'),        // 2026-07-17: Bangungot gear/card/mats rescue - Bangungot Hospital official port
+  path.join(CUSTOM, 'item_db_buwaya.yml'),           // 2026-07-17: Buwaya gear/card/mats rescue - Buwaya Cave official port
   path.join(CUSTOM, 'item_db_funmods.yml'),         // fun-mod skill-amp overrides (accessories/armor)
   path.join(CUSTOM, 'item_db_funmods_weapons.yml'), // fun-mod skill-amp overrides (weapons, batch 2)
   path.join(CUSTOM, 'item_db_funmods2.yml'),        // fun-mod skill-amp overrides, batch 3: elemental garments/shields + headgear wave 2
