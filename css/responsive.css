@@ -1,0 +1,18 @@
+@media (max-width: 960px) {
+  .primary-nav, .search-button span:nth-child(2), .search-button kbd { display: none; }
+  .search-button { min-width: 44px; width: 44px; justify-content: center; padding: 0; }
+  .menu-button { display: grid; }
+}
+
+@media (max-width: 600px) {
+  :root { --header-height: 66px; }
+  .site-header { padding-inline: .9rem; }
+  .brand-mark { width: 33px; }
+  .brand-name { font-size: 1.1rem; }
+  .container { width: min(100% - 1.25rem, var(--content)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
