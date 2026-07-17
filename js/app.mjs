@@ -6,6 +6,7 @@ import { renderDatabase } from './render/database.mjs';
 import { GUIDE_VIEWS, renderGuide } from './render/guides.mjs';
 import { renderClasses } from './render/classes.mjs';
 import { renderInstances } from './render/instances.mjs';
+import { createGlobalSearch } from './ui/global-search.mjs';
 
 const app = document.querySelector('#app');
 const status = document.querySelector('[data-site-status]');
@@ -60,7 +61,8 @@ function renderRoute() {
   else if (GUIDE_VIEWS.has(route.view)) app.replaceChildren(renderGuide({ view: route.view, data: wikiData }));
   else renderTemporaryRoute(route);
   document.title = route.view === 'home' ? 'RuneZero — A classic adventure, thoughtfully reimagined' : `${route.view[0].toUpperCase()}${route.view.slice(1)} — RuneZero Wiki`;
-  app.focus({ preventScroll: true });
+  if (route.entity === 'section') requestAnimationFrame(() => document.getElementById(route.id)?.scrollIntoView());
+  else app.focus({ preventScroll: true });
 }
 
 async function bootstrap() {
@@ -68,6 +70,7 @@ async function bootstrap() {
   try {
     const result = await loadWikiData();
     wikiData = result.values;
+    createGlobalSearch({ data: wikiData });
     renderRoute();
     if (result.warnings.length) announce(`${result.warnings.length} optional archive sections are unavailable.`);
   } catch (error) {

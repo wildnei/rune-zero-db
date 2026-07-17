@@ -8,6 +8,7 @@ const VIEW_SET = new Set(VIEWS);
 export function parseRoute(hash = '') {
   const value = String(hash).replace(/^#/, '').replace(/^\//, '');
   if (!value || value === 'home') return { view: 'home', entity: null, id: null };
+  if (value === 'promise') return { view: 'home', entity: 'section', id: 'promise' };
   if (VIEW_SET.has(value)) return { view: value, entity: null, id: null };
 
   const match = /^(item|mob)\/(\d+)$/.exec(value);

@@ -72,6 +72,10 @@
   .instance-article { grid-template-columns: 1fr; }
   .instance-article aside { display: grid; grid-template-columns: 100px 1fr; align-items: center; text-align: left; }
   .instance-article aside img { grid-row: span 3; max-height: 120px; margin: 0 1rem 0 0; }
+  .global-search-overlay { padding: 0; }
+  .global-search { min-height: 100%; border: 0; border-radius: 0; }
+  .global-search-results { max-height: calc(100vh - 260px); }
+  .global-search footer { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

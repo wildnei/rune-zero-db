@@ -1,56 +1,48 @@
-# Rune Zero — Game Database (website)
+# RuneZero player wiki
 
-A searchable item & monster database for the live server: search any item, see its stats and
-script effect, **what drops it** (cross-linked to the monster), and what each monster drops —
-built straight from the server's own rAthena DBs, **including our custom items**.
+RuneZero’s public server introduction, player guides, item database, and monster bestiary. The site is a dependency-light static application designed for GitHub Pages.
 
-## Run it locally
+## Local preview
+
 ```bash
-cd wiki
-node tools/build-db.js     # parse the rAthena DBs -> data/*.json (re-run after DB changes)
-node tools/serve.js        # serve at http://localhost:8731
+npm install
+npm start
 ```
-Open <http://localhost:8731>. (It must be served over http — browsers block `fetch()` of local
-files when you double-click the HTML. `npx serve` or `python -m http.server` also work.)
 
-## Host it publicly
-It's a static site — drop `index.html` + the `data/` folder on any static host (GitHub Pages,
-Netlify, Cloudflare Pages, S3). No backend, no database server.
+Open <http://localhost:8731>. `npm start` validates the committed JSON datasets before serving the site; it does not regenerate them.
 
-## How it's built
-- `tools/build-db.js` — parses `server/rathena/db/re/item_db_*.yml` + `mob_db.yml` **and** our
-  `custom/db-import/*.yml` (merged last, so overrides + custom items are included), then writes
-  lean `data/items.json`, `data/mobs.json`, `data/meta.json`. It builds the **drop cross-reference
-  both ways** (item ↔ monster). Uses the `yaml` package with `uniqueKeys:false` to tolerate
-  rAthena's duplicate keys.
-- `index.html` — a single self-contained page (search, filters, detail panel, item↔monster
-  cross-links, a Systems wiki tab). Matches the Server Codex aesthetic.
+## Checks
 
-## What it shows
-- **Items:** id, aegis, type, slot, jobs, ATK/MATK/DEF, weight, refineable, the full script effect,
-  a **"Dropped by"** list (click a monster to jump to it), and the **possible random options** this
-  gear can roll on drop (links to its enchant pool). Custom items are tagged `RZ`.
-- **Monsters:** level, HP, element/race/size, EXP, stats, **drops**, **MVP rewards**, and
-  **spawn locations** (which maps + how many).
-- **Enchants:** browse every **random-option pool** (132 groups) — our Zero-native drop groups and
-  the F9 themed pools — each showing its options, value ranges, and chances. Filter to **Rune Zero**.
-- **Systems:** a short wiki of Rune Zero's customizations (random options on drops, refine,
-  currencies, variable rates), linking back to the full Server Codex.
+```bash
+npm test
+npm run validate:data
+```
 
-## Deploy (pick one)
-- **Netlify (easiest):** drag the whole `wiki/` folder onto <https://app.netlify.com/drop> → instant URL.
-- **GitHub Pages:** push the `wiki/` contents to a repo, enable Pages on the branch/root.
-- **Cloudflare Pages / S3 / any static host:** upload `index.html` + `data/` (+ `tools/` optional).
-No backend needed. Re-run `node tools/build-db.js` and re-upload `data/` to refresh.
+The test suite covers legacy routes, data loading, search and filtering, entity safety, page coverage, local module serving, accessibility contracts, and GitHub Pages-safe asset paths.
 
-## Refresh the data
-Re-run `node tools/build-db.js` whenever the server DBs or `custom/db-import/` change. Counts and
-the build date show on the Systems tab.
+## Project structure
 
-## Roadmap (next iterations)
-- [x] Enchant/random-option browser (our drop + F9 groups, with value ranges & chances)
-- [x] Spawn locations (parsed from `npc/re/mobs/`)
-- [ ] Skill-item reference (wire in the `SKILL_ITEMS_*` lists as a "skill boosters" view)
-- [ ] Readable map names + `/navi`-style links
-- [ ] Card → "completes set" and combo info
-- [ ] Trim `items.json` (lazy-load scripts) if load time matters on mobile
+- `index.html` — semantic application shell and metadata.
+- `css/` — design tokens, base rules, components, and responsive behavior.
+- `js/core/` — routing, resilient data loading, and search.
+- `js/render/` — homepage, database, entity, guide, class, and instance renderers.
+- `js/ui/` — navigation and global keyboard search.
+- `assets/brand/` — original RuneZero hero artwork and rune/sun mark.
+- `assets/classes/`, `assets/npcs/` — in-game sprite references used by guides.
+- `data/` — committed player-facing datasets.
+- `tools/build-db.js` — full extractor for the parent RuneZero server workspace.
+- `tools/validate-data.js` — safe standalone validation for this repository.
+
+## Database refresh
+
+The full data builder expects this website to be located as `wiki/` inside the larger RuneZero server workspace, alongside `server/rathena/` and `custom/db-import/`. Run it only in that environment:
+
+```bash
+npm run build
+```
+
+In the standalone website repository, use `npm run validate:data`. This prevents absent server sources from replacing the committed data with empty output.
+
+## Deployment
+
+GitHub Pages serves the repository as a static site. All application and asset URLs are relative so they work beneath `/rune-zero-db/`. Registration, download, Discord, status, and Play Now actions are intentionally omitted until authoritative destinations are added.
