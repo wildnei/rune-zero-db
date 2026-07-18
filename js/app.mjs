@@ -11,7 +11,7 @@ import { createGlobalSearch } from './ui/global-search.mjs';
 const app = document.querySelector('#app');
 const status = document.querySelector('[data-site-status]');
 let wikiData = null;
-const DATASET_BY_VIEW = { balance: 'skillchanges', builds: 'builds', hunting: 'hunting', enchants: 'options', skills: 'skills' };
+const DATASET_BY_VIEW = { balance: 'skillchanges', builds: 'skills', hunting: 'hunting', enchants: 'options', skills: 'skills' };
 
 function announce(message) {
   if (!status) return;

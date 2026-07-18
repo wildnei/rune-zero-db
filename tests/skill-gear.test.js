@@ -33,3 +33,9 @@ test('filters by class, readable skill name, internal id, item name, category, a
   assert.equal(filterSkillGear(index, { query: 'warbreaker' })[0].items.length, 1);
   assert.equal(filterSkillGear(index, { category: 'Card', rebalancedOnly: true })[0].items[0].id, 2);
 });
+
+test('mercenary-only skill aliases are not promoted as player class skills', async () => {
+  const { buildSkillGearIndex } = await import('../js/core/skill-gear.mjs');
+  const items = [{ id: 1, name: 'Mercenary Gear', boosts: [{ skill: 'MA_LANDMINE', t3: false }], script: 'bonus2 bSkillAtk,"MA_LANDMINE",100;' }];
+  assert.deepEqual(buildSkillGearIndex(items, { MA_LANDMINE: 'Land_Mine' }), []);
+});

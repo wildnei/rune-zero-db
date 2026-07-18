@@ -19,6 +19,7 @@ export const CLASS_FAMILIES = [
 ];
 
 const CREATOR_CR_SKILLS = new Set(['CR_ACIDDEMONSTRATION', 'CR_CULTIVATION', 'CR_SLIMPITCHER', 'CR_FULLPROTECTION']);
+const NON_PLAYER_PREFIXES = new Set(['MA']);
 const normalize = value => String(value ?? '').trim().toLocaleLowerCase().replace(/[_-]+/g, ' ');
 
 export function classFamilyForSkill(skillId) {
@@ -34,6 +35,7 @@ export function buildSkillGearIndex(items = [], skillNames = {}) {
     for (const boost of item.boosts || []) {
       if (boost.t3) continue;
       const skillId = boost.skill;
+      if (NON_PLAYER_PREFIXES.has(String(skillId).split('_')[0])) continue;
       const family = classFamilyForSkill(skillId);
       const amp = amplifiers.find(entry => entry.skill === skillId);
       if (!groups.has(skillId)) groups.set(skillId, { skillId, name: skillNames[skillId] || boost.name || skillId, family, items: [] });

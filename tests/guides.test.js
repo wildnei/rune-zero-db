@@ -35,6 +35,12 @@ test('rebalanced builds explorer supports both class and skill discovery', () =>
   }
 });
 
+test('rebalanced builds reports availability from the skills dataset it consumes', () => {
+  const source = fs.readFileSync('js/app.mjs', 'utf8');
+  assert.match(source, /builds:\s*'skills'/);
+  assert.doesNotMatch(source, /builds:\s*'builds'/);
+});
+
 test('classes are represented with existing repository sprites', () => {
   const source = fs.readFileSync('js/render/classes.mjs', 'utf8');
   assert.match(source, /assets\/classes/);
