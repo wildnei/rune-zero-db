@@ -23,5 +23,6 @@ test('optional datasets warn without blocking required wiki data', async () => {
 
   const result = await loadWikiData(fetcher);
   assert.equal(result.values.items[0].name, 'Red Potion');
-  assert.equal(result.warnings.length, 6);
+  assert.equal(result.warnings.length, 5);
+  assert.equal('builds' in result.values, false);
 });

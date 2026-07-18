@@ -33,6 +33,11 @@ test('rebalanced builds explorer supports both class and skill discovery', () =>
   for (const contract of ['data-rebalance-class', 'data-rebalance-query', 'data-rebalance-skill', 'data-rebalance-category', 'data-rebalance-only', 'aria-live="polite"']) {
     assert.match(source, new RegExp(contract));
   }
+  assert.doesNotMatch(source, /<main class="rebalance-results">/);
+  assert.match(source, /<div class="rebalance-results">/);
+  for (const contract of ['data-rebalance-live', 'category: state.category', 'rebalancedOnly: state.rebalancedOnly', 'window.clearTimeout', 'window.setTimeout']) {
+    assert.match(source, new RegExp(contract));
+  }
 });
 
 test('rebalanced builds reports availability from the skills dataset it consumes', () => {

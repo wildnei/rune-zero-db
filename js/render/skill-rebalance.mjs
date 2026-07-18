@@ -2,7 +2,7 @@ import { CLASS_FAMILIES, buildSkillGearIndex, countSkillGearItems, filterSkillGe
 import { readViewState, writeItemContext, writeViewState } from '../core/view-state.mjs';
 import { escapeHtml, itemIconUrl } from './entities.mjs';
 
-const DEFAULT_STATE = { classId: 'all', query: '', category: 'all', rebalancedOnly: false, skillId: '', scrollTop: 0 };
+const DEFAULT_STATE = { classId: 'all', query: '', category: 'all', rebalancedOnly: false, skillId: '' };
 
 function damageLabel(percent) {
   if (percent == null) return 'Skill support';
@@ -37,11 +37,12 @@ export function renderSkillRebalance({ items = [], skills = {} } = {}) {
         <label class="rebalance-check"><input type="checkbox" data-rebalance-only${state.rebalancedOnly ? ' checked' : ''}> Rebalanced Gear only</label>
         <button type="button" class="rebalance-reset" data-rebalance-reset>Reset filters</button>
       </aside>
-      <main class="rebalance-results">
+      <div class="rebalance-results">
         <div class="rebalance-skill-picker" data-rebalance-skills aria-label="Supported skills"></div>
-        <p class="rebalance-summary" aria-live="polite" data-rebalance-summary></p>
+        <p class="rebalance-summary" data-rebalance-summary></p>
+        <span class="sr-only" aria-live="polite" aria-atomic="true" data-rebalance-live></span>
         <div class="rebalance-groups" data-rebalance-results></div>
-      </main>
+      </div>
     </div>`;
 
   const query = page.querySelector('[data-rebalance-query]');
@@ -49,18 +50,29 @@ export function renderSkillRebalance({ items = [], skills = {} } = {}) {
   const only = page.querySelector('[data-rebalance-only]');
   const skillPicker = page.querySelector('[data-rebalance-skills]');
   const summary = page.querySelector('[data-rebalance-summary]');
+  const liveSummary = page.querySelector('[data-rebalance-live]');
   const results = page.querySelector('[data-rebalance-results]');
 
   const save = () => writeViewState('skill-rebalance', state);
 
   function refresh() {
     const groups = filterSkillGear(index, state);
-    const available = filterSkillGear(index, { classId: state.classId, query: state.query });
+    const available = filterSkillGear(index, {
+      classId: state.classId,
+      query: state.query,
+      category: state.category,
+      rebalancedOnly: state.rebalancedOnly,
+    });
     skillPicker.innerHTML = available.length
       ? `<button type="button" class="rebalance-skill" data-rebalance-skill="" aria-pressed="${!state.skillId}">All supported skills</button>${available.map(group => `<button type="button" class="rebalance-skill" data-rebalance-skill="${escapeHtml(group.skillId)}" aria-pressed="${state.skillId === group.skillId}">${escapeHtml(group.name)} <span>${group.items.length}</span></button>`).join('')}`
       : '';
     const itemCount = countSkillGearItems(groups);
-    summary.textContent = `${groups.length.toLocaleString()} supported skill${groups.length === 1 ? '' : 's'} · ${itemCount.toLocaleString()} item${itemCount === 1 ? '' : 's'}`;
+    const activeClass = CLASS_FAMILIES.find(family => family.id === state.classId)?.name || 'All classes';
+    const context = state.query ? `${activeClass} · “${state.query}”` : activeClass;
+    const summaryText = `${context} · ${groups.length.toLocaleString()} supported skill${groups.length === 1 ? '' : 's'} · ${itemCount.toLocaleString()} item${itemCount === 1 ? '' : 's'}`;
+    summary.textContent = summaryText;
+    window.clearTimeout(refresh.announceTimer);
+    refresh.announceTimer = window.setTimeout(() => { liveSummary.textContent = summaryText; }, 250);
     results.innerHTML = groups.length
       ? groups.map(group => `<section class="rebalance-skill-group" aria-labelledby="rebalance-${escapeHtml(group.skillId)}"><header><div><p class="eyebrow">${escapeHtml(group.family.name)}</p><h2 id="rebalance-${escapeHtml(group.skillId)}">${escapeHtml(group.name)}</h2></div><code>${escapeHtml(group.skillId)}</code></header><div class="rebalance-item-grid">${group.items.map(item => `<a class="rebalance-item" href="#item/${Number(item.id)}" data-rebalance-item="${Number(item.id)}" data-rebalance-family="${escapeHtml(group.family.name)}" data-rebalance-skill-name="${escapeHtml(group.name)}"><img src="${itemIconUrl(item.id)}" alt="" width="42" height="42" loading="lazy"><span><strong>${escapeHtml(item.name)}${item.slots ? ` [${Number(item.slots)}]` : ''}</strong><small>${escapeHtml(item.sub || item.category)}${item.custom ? ' · RuneZero' : ''}${item.rebalanced ? ' · Skill Rebalance' : ''}</small></span><b>${damageLabel(item.percent)}</b></a>`).join('')}</div></section>`).join('')
       : '<div class="database-empty"><strong>No supported gear found</strong><span>Clear a filter or try another class, skill, or item name.</span></div>';

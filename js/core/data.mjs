@@ -6,7 +6,7 @@ export async function loadJson(path, fetcher = fetch) {
 
 export async function loadWikiData(fetcher = fetch) {
   const required = ['meta', 'items', 'mobs'];
-  const optional = ['options', 'skills', 'skillchanges', 'builds', 'hunting', 'elements'];
+  const optional = ['options', 'skills', 'skillchanges', 'hunting', 'elements'];
   const entries = await Promise.all(
     required.map(async name => [name, await loadJson(`data/${name}.json`, fetcher)]),
   );
