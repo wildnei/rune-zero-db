@@ -35,3 +35,12 @@ test('mobile drawer traps focus and makes the page inert while open', () => {
   assert.match(source, /setPageInert\(true\)/);
   assert.match(source, /setPageInert\(false\)/);
 });
+
+test('skill rebalance explorer has responsive and visible-state contracts', () => {
+  const componentCss = fs.readFileSync('css/components.css', 'utf8');
+  const responsiveCss = fs.readFileSync('css/responsive.css', 'utf8');
+  assert.match(componentCss, /\.rebalance-layout/);
+  assert.match(componentCss, /\.rebalance-class\[aria-pressed="true"\]/);
+  assert.match(componentCss, /\.rebalance-results/);
+  assert.match(responsiveCss, /\.rebalance-layout/);
+});
