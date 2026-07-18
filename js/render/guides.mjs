@@ -1,4 +1,5 @@
-import { escapeHtml, estimateDamage } from './entities.mjs';
+import { escapeHtml } from './entities.mjs';
+import { renderSkillRebalance } from './skill-rebalance.mjs';
 
 const staticGuides = {
   systems: {
@@ -51,9 +52,8 @@ const rateGroups = [
 export function renderGuide({ view, data, route = {} }) {
   if (view === 'rates') return renderRates();
   if (view === 'balance') return renderBalance(data.skillchanges || []);
-  if (view === 'builds') return renderBuilds(data.builds || {});
+  if (view === 'builds' || view === 'skills') return renderSkillRebalance({ items: data.items || [], skills: data.skills || {} });
   if (view === 'hunting') return renderHunting(data.hunting || {});
-  if (view === 'skills') return renderSkillItems(data.items || []);
   if (view === 'enchants') return renderEnchants(data.options || {}, route.entity === 'group' ? route.id : null);
   if (view === 'customizations') return renderCustomizations(data.meta || {});
   return renderStaticGuide(staticGuides[view] || staticGuides.systems);
@@ -101,35 +101,11 @@ function renderBalance(changes) {
   return page;
 }
 
-function renderBuilds(buildData) {
-  const groups = buildData.groups || [];
-  const total = groups.reduce((sum, group) => sum + (group.builds || []).length, 0);
-  const page = document.createElement('section');
-  page.className = 'wiki-page editorial-page';
-  page.innerHTML = `${pageHeader({ eyebrow: 'Off-meta, fully supported', title: 'Fun builds', intro: `${total} build fantasies turn familiar gear into a reason to play skills the classic meta left behind.` })}<div class="container build-groups">${groups.map(group => `<section><header><p class="eyebrow">Class family</p><h2>${escapeHtml(group.group)}</h2></header><div class="build-grid">${(group.builds || []).map(build => { const skillAmps = (build.items || []).flatMap(item => (item.amps || []).filter(amp => amp.kind === 'skill').map(amp => ({ ...amp, item: item.name, slots: item.slots }))); return `<article><h3>${escapeHtml(build.fantasy)}</h3><div class="build-variants">${(build.items || []).map(item => `<section><h4><a href="#item/${Number(item.id)}">${escapeHtml(item.name)}${item.slots ? ` [${Number(item.slots)}]` : ''}</a>${item.slotted ? '<small>Slotted counterpart</small>' : ''}</h4><div class="amp-list">${(item.amps || []).map(amp => `<span>${escapeHtml(amp.name)} <b>+${Number(amp.pct)}%</b></span>`).join('')}</div></section>`).join('')}</div>${skillAmps.length ? `<div class="build-estimator"><label>Current average hit <input type="number" min="0" step="1" value="1000" data-build-damage></label>${skillAmps.map(amp => { const estimate = estimateDamage(1000, amp.pct); return `<p><span>${escapeHtml(amp.name)} · ${escapeHtml(amp.item)}${amp.slots ? ` [${Number(amp.slots)}]` : ''}</span><b data-build-result data-percent="${Number(amp.pct)}">${estimate.before.toLocaleString()} → ${estimate.after.toLocaleString()}</b></p>`; }).join('')}</div>` : ''}</article>`; }).join('')}</div></section>`).join('')}</div>`;
-  page.querySelectorAll('[data-build-damage]').forEach(input => input.addEventListener('input', () => {
-    const card = input.closest('article');
-    card.querySelectorAll('[data-build-result]').forEach(result => {
-      const estimate = estimateDamage(input.value, result.dataset.percent);
-      result.textContent = `${estimate.before.toLocaleString()} → ${estimate.after.toLocaleString()}`;
-    });
-  }));
-  return page;
-}
-
 function renderHunting(hunting) {
   const quests = [...(hunting.monster || []), ...(hunting.region || []), ...(hunting.dedication || [])];
   const page = document.createElement('section');
   page.className = 'wiki-page editorial-page';
   page.innerHTML = `${pageHeader({ eyebrow: 'Permanent progression', title: 'Hunting log', intro: `${quests.length} long-term milestones award permanent stats and wearable titles earned across your whole career.` })}<div class="container milestone-grid">${quests.map(quest => `<article class="milestone${quest.mvp ? ' is-mvp' : ''}"><span>${quest.mvp ? 'MVP' : quest.targets?.some(target => target.map) ? 'Region' : 'Milestone'}</span><h2>${escapeHtml(quest.title)}</h2><ul>${(quest.targets || []).map(target => `<li>${target.mob ? `Defeat ${Number(target.count || 0).toLocaleString()} × ${escapeHtml(target.mob)}` : escapeHtml(target.mapName || target.map || 'Career-wide objective')}</li>`).join('')}</ul><strong>${escapeHtml(quest.reward)}</strong></article>`).join('')}</div>`;
-  return page;
-}
-
-function renderSkillItems(items) {
-  const boosted = items.filter(item => item.boosts?.length);
-  const page = document.createElement('section');
-  page.className = 'wiki-page editorial-page';
-  page.innerHTML = `${pageHeader({ eyebrow: 'Buildcraft reference', title: 'Skill-boosting items', intro: `${boosted.length} items connect directly to a class skill. Use this index to begin a build from the skill you want to play.` })}<div class="container reference-grid">${boosted.slice(0, 400).map(item => `<a href="#item/${item.id}"><strong>${escapeHtml(item.name)}</strong><span>${item.boosts.map(boost => escapeHtml(boost.name || boost.skill)).join(' · ')}</span></a>`).join('')}</div>`;
   return page;
 }
 

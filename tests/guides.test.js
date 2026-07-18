@@ -28,12 +28,11 @@ test('class guides retain progression, early gear, essence costs, and next steps
   for (const fact of ['Best early grabs', '60 / 150 Hunter Coins', 'Build Librarian', 'Monster Hunter']) assert.match(source, new RegExp(fact));
 });
 
-test('fun builds compare every item variant and retain the shared damage estimator', () => {
-  const source = fs.readFileSync('js/render/guides.mjs', 'utf8');
-  assert.match(source, /build\.items \|\| \[\]/);
-  assert.match(source, /Slotted counterpart/);
-  assert.match(source, /data-build-damage/);
-  assert.match(source, /estimateDamage/);
+test('rebalanced builds explorer supports both class and skill discovery', () => {
+  const source = fs.readFileSync('js/render/skill-rebalance.mjs', 'utf8');
+  for (const contract of ['data-rebalance-class', 'data-rebalance-query', 'data-rebalance-skill', 'data-rebalance-category', 'data-rebalance-only', 'aria-live="polite"']) {
+    assert.match(source, new RegExp(contract));
+  }
 });
 
 test('classes are represented with existing repository sprites', () => {
