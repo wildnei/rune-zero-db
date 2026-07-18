@@ -86,11 +86,17 @@ function emptyArt(image, fallback) {
   }, { once: true });
 }
 
+export function itemReturnLink(itemId, returnContext) {
+  if (!returnContext || Number(returnContext.itemId) !== Number(itemId)) return '';
+  return `<p><a class="back-link entity-context-link" href="${escapeHtml(returnContext.href)}">← ${escapeHtml(returnContext.label)}</a></p>`;
+}
+
 export function renderItem(item, context = {}) {
   if (!item) return renderMissing('item', 'Items');
   const article = document.createElement('article');
   article.className = 'entity-detail';
   article.innerHTML = `
+    ${itemReturnLink(item.id, context.returnContext)}
     <header class="entity-header">
       <div class="entity-art">
         <img src="${itemArtUrl(item.id)}" alt="" width="118" height="118">

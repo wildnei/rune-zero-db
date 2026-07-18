@@ -37,3 +37,10 @@ test('monster archive preserves MVP and normal filters', async () => {
   assert.deepEqual(filterMonsters(mobs, { kind: 'mvp' }).map(mob => mob.id), [2]);
   assert.deepEqual(filterMonsters(mobs, { kind: 'normal' }).map(mob => mob.id), [1]);
 });
+
+test('saved item archive state rejects unsupported control values', async () => {
+  const { sanitizeItemState } = await import('../js/render/database.mjs');
+  assert.deepEqual(sanitizeItemState({ source: 'broken', direction: 'sideways', query: 'knife', scrollTop: -4 }), {
+    query: 'knife', type: 'all', source: 'all', subtype: 'all', slot: 'all', sort: '', direction: 'asc', scrollTop: 0,
+  });
+});

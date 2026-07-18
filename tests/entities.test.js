@@ -50,3 +50,10 @@ test('multiline refine blocks and else branches keep their conditions', async ()
   const orcBaby = 'if (getrefine()>=9) {\n bonus bFlee,15;\n}\nelse {\n bonus bFlee,10;\n}';
   assert.deepEqual(translateScript(orcBaby), ['If refined to +9 or higher: Flee +15', 'Otherwise (refined to +9 or higher is false): Flee +10']);
 });
+
+test('item details render a contextual return link only for the selected item', async () => {
+  const { itemReturnLink } = await import('../js/render/entities.mjs');
+  assert.match(itemReturnLink(1104, { itemId: 1104, href: '#builds', label: 'Back to Lord Knight → Magnum Break gear' }), /href="#builds"/);
+  assert.match(itemReturnLink(1104, { itemId: 1104, href: '#builds', label: '<unsafe>' }), /&lt;unsafe&gt;/);
+  assert.equal(itemReturnLink(1105, { itemId: 1104, href: '#builds', label: 'Back' }), '');
+});
