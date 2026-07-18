@@ -19,3 +19,12 @@ test('homepage derives database totals from metadata instead of hard-coding them
   assert.match(source, /meta\.mobs/);
   assert.doesNotMatch(source, /6,486|1,089/);
 });
+
+test('player-facing source contains no legacy fun-mod language', () => {
+  const files = ['js/render/home.mjs', 'js/render/guides.mjs', 'js/render/entities.mjs', 'js/render/database.mjs', 'js/render/skill-rebalance.mjs', 'js/ui/navigation.mjs'];
+  const source = files.map(file => fs.readFileSync(file, 'utf8')).join('\n');
+  assert.doesNotMatch(source, /Fun Mods|Fun mod|Fun-mod|Fun builds|fun-mod equipment/i);
+  assert.match(source, /Rebalanced Builds/);
+  assert.match(source, /Rebalanced Gear/);
+  assert.match(source, /Skill Rebalance/);
+});

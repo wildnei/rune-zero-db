@@ -2,7 +2,7 @@ const LINKS = [
   ['home', 'Discover'],
   ['systems', 'Features'],
   ['classes', 'Classes'],
-  ['builds', 'Builds'],
+  ['builds', 'Rebalanced Builds'],
   ['instances', 'Instances'],
   ['items', 'Database'],
 ];

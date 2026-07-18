@@ -104,7 +104,7 @@ export function renderItem(item, context = {}) {
       </div>
       <div><p class="eyebrow">${escapeHtml(item.type || 'Item')} · ID ${escapeHtml(item.id)}</p><h1>${escapeHtml(item.name)}</h1>
       <p class="entity-aegis">${escapeHtml(item.aegis || '')}</p>
-      <div class="entity-badges">${item.custom ? '<span>RuneZero</span>' : ''}${item.funmod ? '<span>Fun mod</span>' : ''}${item.slots ? `<span>${item.slots} slot${item.slots === 1 ? '' : 's'}</span>` : ''}</div></div>
+      <div class="entity-badges">${item.custom ? '<span>RuneZero</span>' : ''}${item.funmod ? '<span>Skill Rebalance</span>' : ''}${item.slots ? `<span>${item.slots} slot${item.slots === 1 ? '' : 's'}</span>` : ''}</div></div>
     </header>
     <section class="entity-section" aria-labelledby="item-overview"><h2 id="item-overview">At a glance</h2>
       <dl class="entity-stats">
@@ -160,7 +160,7 @@ export function renderMonster(mob, context = {}) {
 
 function renderDamageEstimator(item) {
   const amplifiers = skillAttackAmplifiers(item.script);
-  if (!item.funmod || !amplifiers.length) return '';
+  if (!amplifiers.length) return '';
   return `<section class="entity-section damage-estimator"><h2>Damage estimate</h2><label>Current average skill hit <input type="number" min="0" step="1" value="1000" data-damage-input></label>${amplifiers.map(entry => { const result = estimateDamage(1000, entry.percent); return `<p><strong>${escapeHtml(entry.skill.replace(/^[A-Z]{1,3}_/, '').replaceAll('_', ' '))}</strong><span data-damage-result data-percent="${entry.percent}">${result.before.toLocaleString()} → ${result.after.toLocaleString()} (+${entry.percent}%)</span></p>`; }).join('')}</section>`;
 }
 

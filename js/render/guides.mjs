@@ -82,14 +82,14 @@ function renderCustomizations(meta) {
   const cards = [
     ['Skills rebalanced', '119', 'Usability and damage passes open more viable class fantasies.'],
     ['Custom items', Number(meta.customItems || 0).toLocaleString(), 'New and rescued gear supports Episode 13 progression.'],
-    ['Fun-mod items', Number(meta.funmodItems || 0).toLocaleString(), 'Classic items gain off-meta skill amplifiers.'],
+    ['Rebalanced gear', Number(meta.funmodItems || 0).toLocaleString(), 'Classic items gain intentional skill amplifiers that open viable paths.'],
     ['Set combinations', Number(meta.comboSets || 0).toLocaleString(), 'Paired pieces create intentional build packages.'],
   ];
   const page = document.createElement('section');
   page.className = 'wiki-page editorial-page';
   page.innerHTML = `${pageHeader(staticGuides.customizations)}<div class="container article-stack"><div class="metric-grid">${cards.map(([label, value, body]) => `<article><strong>${value}</strong><h2>${label}</h2><p>${body}</p></article>`).join('')}</div>
   <section class="article-section"><p class="eyebrow">Balance philosophy</p><h2>More routes, worthy enemies</h2><p>52 overlooked skills were made cheaper or more usable and 15 received meaningful damage; 26 MVPs were strengthened to roughly 2.5–3× HP so the broader build ceiling still has opponents worth mastering. Eighteen usability-only changes include party-wide Impositio Manus and Suffragium, reliable Sage endows, a 5×5 Bowling Bash, and compatible Kyrie Eleison and Assumptio.</p></section>
-  <section class="article-section"><p class="eyebrow">Design guardrails</p><h2>Rules the customization never breaks</h2><div class="rule-list"><article><h3>Asura Strike caps at +50% per item</h3><p>No single fun-mod piece pushes it beyond that special-case ceiling.</p></article><article><h3>Transcendent skills earn larger amplifiers</h3><p>Deeper class investment receives stronger item support than comparable early-class skills.</p></article><article><h3>Customization never means rate inflation</h3><p>Damage and usability may change. Card rates never do.</p></article><article><h3>Every supported skill has card coverage</h3><p>95 fun-mod cards prevent an off-meta route from depending on one exact base item.</p></article></div></section></div>`;
+  <section class="article-section"><p class="eyebrow">Design guardrails</p><h2>Rules the customization never breaks</h2><div class="rule-list"><article><h3>Asura Strike caps at +50% per item</h3><p>No single rebalanced piece pushes it beyond that special-case ceiling.</p></article><article><h3>Transcendent skills earn larger amplifiers</h3><p>Deeper class investment receives stronger item support than comparable early-class skills.</p></article><article><h3>Customization never means rate inflation</h3><p>Damage and usability may change. Card rates never do.</p></article><article><h3>Every supported skill has card coverage</h3><p>95 skill-rebalance cards prevent an alternative route from depending on one exact base item.</p></article></div></section></div>`;
   return page;
 }
 

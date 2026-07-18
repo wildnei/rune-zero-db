@@ -11,7 +11,7 @@ const featureStories = [
     number: '02',
     title: 'Classic gear, surprising builds',
     body: 'Familiar equipment gains carefully chosen skill amplifiers, turning overlooked loot into the beginning of an unexpected build.',
-    link: 'Find a fun build',
+    link: 'Find rebalanced gear',
   },
   {
     view: 'instances',
@@ -35,7 +35,7 @@ const archiveLinks = [
   ['items', 'Items', 'Equipment, effects, drops, and enchant pools'],
   ['mobs', 'Monsters', 'Stats, elements, spawns, and complete loot tables'],
   ['classes', 'Classes', 'Every class path and what to keep along the way'],
-  ['builds', 'Fun builds', 'Off-meta skills powered by classic equipment'],
+  ['builds', 'Rebalanced Builds', 'Viable skill paths powered by classic equipment'],
   ['instances', 'Instances', 'Entry requirements, mechanics, and rewards'],
   ['systems', 'Server features', 'The complete RuneZero ruleset in plain language'],
 ];
@@ -84,7 +84,7 @@ export function renderHome({ data }) {
         </header>
         <div class="promise-grid">
           <article><span class="promise-icon" aria-hidden="true">Ⅰ</span><h3>A journey with weight</h3><p>Fixed low rates make every upgrade, card, and hard-won victory feel like part of your character’s story.</p></article>
-          <article><span class="promise-icon" aria-hidden="true">Ⅱ</span><h3>Your class, your path</h3><p>Rebalanced skills and fun-mod equipment create several viable fantasies for every class—not one prescribed build.</p></article>
+          <article><span class="promise-icon" aria-hidden="true">Ⅱ</span><h3>Your class, your path</h3><p>Rebalanced skills and skill-rebalanced equipment create several viable fantasies for every class—not one prescribed build.</p></article>
           <article><span class="promise-icon" aria-hidden="true">Ⅲ</span><h3>Comfort without shortcuts</h3><p>Account storage, safe refines, clear loot beams, and thoughtful onboarding remove friction without inflating rewards.</p></article>
         </div>
       </div>
@@ -113,7 +113,7 @@ export function renderHome({ data }) {
         <div class="journey-intro"><p class="eyebrow">Your first adventure</p><h2 id="journey-title">From novice to a path that feels like yours.</h2><p>RuneZero’s opening hour teaches the world without rushing you through it.</p><a class="text-link" href="#classes">Plan your first class <span aria-hidden="true">→</span></a></div>
         <ol class="journey-steps">
           <li><span>01</span><div><h3>Learn the essentials</h3><p>The Training Grounds introduces movement, combat, and a practical command cheat sheet.</p></div></li>
-          <li><span>02</span><div><h3>Choose your first spark</h3><p>Pick a free starter fun-mod weapon and see how familiar skills can grow in a new direction.</p></div></li>
+          <li><span>02</span><div><h3>Choose your first spark</h3><p>Pick a free starter rebalanced weapon and see how familiar skills can grow in a new direction.</p></div></li>
           <li><span>03</span><div><h3>Meet your guides</h3><p>The Weapon Sage explains your gear while the Build Librarian opens the full collection of build ideas.</p></div></li>
           <li><span>04</span><div><h3>Make the world your own</h3><p>Hire a companion with <code>@allies</code>, follow the path that interests you, and let the adventure unfold.</p></div></li>
         </ol>
