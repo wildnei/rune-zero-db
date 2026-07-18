@@ -39,3 +39,12 @@ test('mercenary-only skill aliases are not promoted as player class skills', asy
   const items = [{ id: 1, name: 'Mercenary Gear', boosts: [{ skill: 'MA_LANDMINE', t3: false }], script: 'bonus2 bSkillAtk,"MA_LANDMINE",100;' }];
   assert.deepEqual(buildSkillGearIndex(items, { MA_LANDMINE: 'Land_Mine' }), []);
 });
+
+test('result totals count unique items even when one item supports several skills', async () => {
+  const { countSkillGearItems } = await import('../js/core/skill-gear.mjs');
+  const groups = [
+    { items: [{ id: 1 }, { id: 2 }] },
+    { items: [{ id: 1 }] },
+  ];
+  assert.equal(countSkillGearItems(groups), 2);
+});

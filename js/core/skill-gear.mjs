@@ -59,3 +59,7 @@ export function filterSkillGear(index, { classId = 'all', query = '', category =
     return items.length ? [{ ...group, items }] : [];
   });
 }
+
+export function countSkillGearItems(groups = []) {
+  return new Set(groups.flatMap(group => group.items.map(item => Number(item.id)))).size;
+}

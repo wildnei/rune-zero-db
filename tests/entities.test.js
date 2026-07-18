@@ -35,6 +35,8 @@ test('refine-gated skill bonuses stay conditional and do not inflate estimates',
     'If refined to +7 or higher: HOLYCROSS damage +15%',
     'If refined to +9 or higher: HOLYCROSS damage +15%',
   ]);
+  const multiline = 'bonus2 bSkillAtk,"SM_BASH",13;\nif (getrefine()>=7) {\n bonus2 bSkillAtk,"SM_BASH",5;\n}\nif (getrefine()>=9) {\n bonus2 bSkillAtk,"SM_BASH",5;\n}';
+  assert.deepEqual(skillAttackAmplifiers(multiline), [{ skill: 'SM_BASH', percent: 13 }]);
 });
 
 test('effect translation covers race, element, status, cooldown, and drain bonuses', async () => {

@@ -20,11 +20,37 @@ export const itemArtUrl = id => `https://static.divine-pride.net/images/items/co
 export const monsterArtUrl = id => `https://static.divine-pride.net/images/mobs/png/${Number(id)}.png`;
 
 export function skillAttackAmplifiers(script = '') {
-  return String(script).split('\n').flatMap(line => {
-    if (/getrefine/i.test(line)) return [];
-    const match = /bonus2\s+bSkillAtk,\s*"([^"]+)",\s*(-?\d+)/i.exec(line);
-    return match ? [{ skill: match[1], percent: Number(match[2]) }] : [];
-  });
+  const amplifiers = [];
+  let conditionalDepth = 0;
+  let skipNextStatement = false;
+  for (const rawLine of String(script).split('\n')) {
+    let line = rawLine.replace(/\/\/.*$/, '').trim();
+    if (!line) continue;
+    const leadingCloses = line.match(/^}+\s*/)?.[0].match(/}/g)?.length || 0;
+    if (leadingCloses) {
+      conditionalDepth = Math.max(0, conditionalDepth - leadingCloses);
+      line = line.replace(/^}+\s*/, '');
+    }
+    if (!line) continue;
+    if (/^(if|else)\b/i.test(line)) {
+      const opens = (line.match(/{/g) || []).length;
+      const closes = (line.match(/}/g) || []).length;
+      conditionalDepth = Math.max(0, conditionalDepth + opens - closes);
+      if (!opens && !line.includes(';')) skipNextStatement = true;
+      continue;
+    }
+    if (skipNextStatement) {
+      skipNextStatement = false;
+      continue;
+    }
+    if (conditionalDepth === 0) {
+      for (const match of line.matchAll(/bonus2\s+bSkillAtk,\s*"([^"]+)",\s*(-?\d+)/ig)) {
+        amplifiers.push({ skill: match[1], percent: Number(match[2]) });
+      }
+    }
+    conditionalDepth = Math.max(0, conditionalDepth + (line.match(/{/g) || []).length - (line.match(/}/g) || []).length);
+  }
+  return amplifiers;
 }
 
 export function estimateDamage(before, percent) {

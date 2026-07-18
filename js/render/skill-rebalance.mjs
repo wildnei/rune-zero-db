@@ -1,4 +1,4 @@
-import { CLASS_FAMILIES, buildSkillGearIndex, filterSkillGear } from '../core/skill-gear.mjs';
+import { CLASS_FAMILIES, buildSkillGearIndex, countSkillGearItems, filterSkillGear } from '../core/skill-gear.mjs';
 import { readViewState, writeItemContext, writeViewState } from '../core/view-state.mjs';
 import { escapeHtml, itemIconUrl } from './entities.mjs';
 
@@ -59,7 +59,7 @@ export function renderSkillRebalance({ items = [], skills = {} } = {}) {
     skillPicker.innerHTML = available.length
       ? `<button type="button" class="rebalance-skill" data-rebalance-skill="" aria-pressed="${!state.skillId}">All supported skills</button>${available.map(group => `<button type="button" class="rebalance-skill" data-rebalance-skill="${escapeHtml(group.skillId)}" aria-pressed="${state.skillId === group.skillId}">${escapeHtml(group.name)} <span>${group.items.length}</span></button>`).join('')}`
       : '';
-    const itemCount = groups.reduce((sum, group) => sum + group.items.length, 0);
+    const itemCount = countSkillGearItems(groups);
     summary.textContent = `${groups.length.toLocaleString()} supported skill${groups.length === 1 ? '' : 's'} · ${itemCount.toLocaleString()} item${itemCount === 1 ? '' : 's'}`;
     results.innerHTML = groups.length
       ? groups.map(group => `<section class="rebalance-skill-group" aria-labelledby="rebalance-${escapeHtml(group.skillId)}"><header><div><p class="eyebrow">${escapeHtml(group.family.name)}</p><h2 id="rebalance-${escapeHtml(group.skillId)}">${escapeHtml(group.name)}</h2></div><code>${escapeHtml(group.skillId)}</code></header><div class="rebalance-item-grid">${group.items.map(item => `<a class="rebalance-item" href="#item/${Number(item.id)}" data-rebalance-item="${Number(item.id)}" data-rebalance-family="${escapeHtml(group.family.name)}" data-rebalance-skill-name="${escapeHtml(group.name)}"><img src="${itemIconUrl(item.id)}" alt="" width="42" height="42" loading="lazy"><span><strong>${escapeHtml(item.name)}${item.slots ? ` [${Number(item.slots)}]` : ''}</strong><small>${escapeHtml(item.sub || item.category)}${item.custom ? ' · RuneZero' : ''}${item.rebalanced ? ' · Skill Rebalance' : ''}</small></span><b>${damageLabel(item.percent)}</b></a>`).join('')}</div></section>`).join('')
