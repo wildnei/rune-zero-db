@@ -1,6 +1,6 @@
 export const VIEWS = Object.freeze([
   'home', 'items', 'builds', 'mobs', 'skills', 'enchants', 'hunting',
-  'systems', 'balance', 'rates', 'customizations', 'classes', 'instances'
+  'systems', 'masteries', 'balance', 'rates', 'customizations', 'classes', 'instances'
 ]);
 
 const VIEW_SET = new Set(VIEWS);

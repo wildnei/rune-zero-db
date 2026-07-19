@@ -56,6 +56,7 @@ export function renderGuide({ view, data, route = {} }) {
   if (view === 'hunting') return renderHunting(data.hunting || {});
   if (view === 'enchants') return renderEnchants(data.options || {}, route.entity === 'group' ? route.id : null);
   if (view === 'customizations') return renderCustomizations(data.meta || {});
+  if (view === 'masteries') return renderMasteries();
   return renderStaticGuide(staticGuides[view] || staticGuides.systems);
 }
 
@@ -82,14 +83,36 @@ function renderCustomizations(meta) {
   const cards = [
     ['Skills rebalanced', '119', 'Usability and damage passes open more viable class fantasies.'],
     ['Custom items', Number(meta.customItems || 0).toLocaleString(), 'New and rescued gear supports Episode 13 progression.'],
-    ['Rebalanced gear', Number(meta.funmodItems || 0).toLocaleString(), 'Classic items gain intentional skill amplifiers that open viable paths.'],
+    ['Weapon skill paths', '736 / 739', 'Every level-99-compatible supported weapon now carries an active damage-skill identity.'],
     ['Set combinations', Number(meta.comboSets || 0).toLocaleString(), 'Paired pieces create intentional build packages.'],
   ];
   const page = document.createElement('section');
   page.className = 'wiki-page editorial-page';
   page.innerHTML = `${pageHeader(staticGuides.customizations)}<div class="container article-stack"><div class="metric-grid">${cards.map(([label, value, body]) => `<article><strong>${value}</strong><h2>${label}</h2><p>${body}</p></article>`).join('')}</div>
   <section class="article-section"><p class="eyebrow">Balance philosophy</p><h2>More routes, worthy enemies</h2><p>52 overlooked skills were made cheaper or more usable and 15 received meaningful damage; 26 MVPs were strengthened to roughly 2.5–3× HP so the broader build ceiling still has opponents worth mastering. Eighteen usability-only changes include party-wide Impositio Manus and Suffragium, reliable Sage endows, a 5×5 Bowling Bash, and compatible Kyrie Eleison and Assumptio.</p></section>
-  <section class="article-section"><p class="eyebrow">Design guardrails</p><h2>Rules the customization never breaks</h2><div class="rule-list"><article><h3>Asura Strike caps at +50% per item</h3><p>No single rebalanced piece pushes it beyond that special-case ceiling.</p></article><article><h3>Transcendent skills earn larger amplifiers</h3><p>Deeper class investment receives stronger item support than comparable early-class skills.</p></article><article><h3>Customization never means rate inflation</h3><p>Damage and usability may change. Card rates never do.</p></article><article><h3>Every supported skill has card coverage</h3><p>95 skill-rebalance cards prevent an alternative route from depending on one exact base item.</p></article></div></section></div>`;
+  <section class="article-section"><p class="eyebrow">Design guardrails</p><h2>Rules the customization never breaks</h2><div class="rule-list"><article><h3>Asura Strike caps at +50% per item</h3><p>No single rebalanced piece pushes it beyond that special-case ceiling.</p></article><article><h3>Weak weapons specialize harder</h3><p>Low-stat common weapons receive the largest focused percentage. Strong weapons trade percentage for ATK/MATK, slots, sustain, and flexibility.</p></article><article><h3>Customization never means rate inflation</h3><p>Damage and usability may change. Card rates never do.</p></article><article><h3>Mastery cards stay optional</h3><p>Every imported PvE Mastery has a normal-monster card path; an MVP card is never required for the build to function.</p></article></div></section></div>`;
+  return page;
+}
+
+function renderMasteries() {
+  const item = (id, label) => `<a href="#item/${id}">${escapeHtml(label)}</a>`;
+  const paths = [
+    ['High Priest', 'Judex', 'Holy magic · rod/staff', `${item(1601, 'Rod [3]')} +120% → ${item(1607, 'Staff [2]')} +110% → ${item(1669, 'Thanos Staff [1]')} +30%`, `${item(4293, 'Cookie Card')} +15%`, 'Fast holy splash for solo farming without giving up support utility.'],
+    ['Whitesmith', 'Axe Tornado', 'Weapon ATK + VIT · axe', `${item(1351, 'Battle Axe [3]')} +100% → ${item(1359, 'Buster')} +55% → ${item(28100, 'Thanos Axe [1]')} +35%`, `${item(4255, 'Orc Lady Card')} +15%`, 'A close-range AoE alternative to single-target Cart Termination.'],
+    ['Sniper', 'Arrow Storm', 'Weapon ATK · bow', `${item(1701, 'Bow [3]')} +120% → ${item(1704, 'Composite Bow [3]')} +120% → ${item(18119, 'Thanos Bow [1]')} +35%`, `${item(4094, 'Archer Skeleton Card')} +12%`, 'Wide farming AoE alongside classic Sharp Shooting, falcon, and trap paths.'],
+    ['Professor', 'Psychic Wave', 'MATK + INT · book/staff', `${item(1551, 'Bible [2]')} +50% → ${item(1552, 'Tablet [1]')} +50% → ${item(2023, 'Thanos 2H Staff [1]')} +35%`, `${item(4219, 'Sage Worm Card')} +15%`, 'A genuine solo PvE identity for a class whose classic strengths lean toward PvP and support.'],
+    ['Creator', 'Cart Cannon', 'Weapon ATK + STR + cart load · sword/mace/axe', `${item(1501, 'Club [3]')} +120% → ${item(1304, 'Orcish Axe')} +85% → ${item(1306, 'War Axe [1]')} +50%`, `${item(4343, 'Holden Card')} +15%`, 'Physical ranged splash. INT adds no damage; a loaded cart supplies the final part of the ratio.'],
+    ['Clown / Gypsy', 'Severe Rainstorm', 'Weapon ATK + DEX/AGI · instrument/whip', `${item(1901, 'Violin [3]')} +100% / ${item(1952, 'Whip [2]')} +75% → ${item(1933, 'Thanos Violin [1]')} / ${item(1988, 'Thanos Whip [1]')} +35%`, `${item(4297, 'Cruiser Card')} +15%`, 'Equal male/female sustained AoE while songs and classic solo attacks remain relevant.'],
+  ];
+  const page = document.createElement('section');
+  page.className = 'wiki-page editorial-page';
+  page.innerHTML = `${pageHeader({ eyebrow: 'Solo-first PvE · earned at trans Job Level', title: 'PvE Masteries', intro: 'Six naturally weaker PvE paths receive one selected later-era attack rebuilt for RuneZero’s level-99 transcendent rules. Gear specializes these skills; it never unlocks them.' })}
+  <div class="container article-stack">
+    <section class="article-section"><p class="eyebrow">Unlocks</p><h2>One visit, three earned ranks</h2><div class="rate-grid"><div class="rate-card"><span>Trans Job 50</span><strong>Mastery Lv 1</strong></div><div class="rate-card"><span>Trans Job 60</span><strong>Mastery Lv 3</strong></div><div class="rate-card"><span>Trans Job 70</span><strong>Mastery Lv 5</strong></div><div class="rate-card is-guardrail"><span>Normal skill points</span><strong>0 spent</strong></div></div><p>Visit the <strong>Mastery Mentor at Prontera 164,184</strong>. Existing Job 50–70 characters should speak to her once; future ranks synchronize as Job Level rises. Masteries are permanent, separate from the normal tree, and never sold through Cash Shop items or costume stones.</p></section>
+    <section class="article-section"><p class="eyebrow">Class paths</p><h2>Skills, weapons, cards, and purpose</h2><div class="enchant-grid">${paths.map(([cls, skill, scale, weapons, card, purpose]) => `<article class="milestone"><span>${escapeHtml(cls)}</span><h2>${escapeHtml(skill)}</h2><p><strong>Scaling:</strong> ${escapeHtml(scale)}</p><p><strong>Weapon path:</strong> ${weapons}</p><p><strong>Normal card:</strong> ${card}</p><p>${escapeHtml(purpose)}</p></article>`).join('')}</div></section>
+    <section class="article-section"><p class="eyebrow">Inverse progression</p><h2>Why the cheap weapon has the larger number</h2><div class="rule-list"><article><h3>Starter specialization</h3><p>Low-stat common weapons can carry roughly 100–140%. They excel at one skill and make ordinary drops meaningful.</p></article><article><h3>Midgame tradeoffs</h3><p>As base stats and built-in effects rise, the native amplifier falls. Every slot also consumes budget because cards add power.</p></article><article><h3>Thanos flexibility</h3><p>Thanos wins through base stats, sustain, one slot, and multi-skill coverage—not the biggest tooltip percentage.</p></article><article><h3>Exact values stay searchable</h3><p>Open an item above or use Items and Rebalanced Builds. Those views read the generated live database.</p></article></div></section>
+    <section class="article-section"><p class="eyebrow">Thanos identities</p><h2>Endgame endpoints stay weapon-appropriate</h2><p><strong>Thanos Dagger</strong> keeps its damaging trap package, including Freezing Trap, and excludes non-damaging Shockwave Trap. <strong>Thanos 2H Spear</strong> supports Brandish Spear, Spiral Pierce, and Holy Cross. Instruments and whips receive equal Severe Rainstorm support; swords, maces, and axes provide physical Cart Cannon routes.</p></section>
+  </div>`;
   return page;
 }
 
@@ -131,4 +154,4 @@ function renderEnchants(options, selectedId = null) {
   return page;
 }
 
-export const GUIDE_VIEWS = new Set(['systems', 'rates', 'customizations', 'balance', 'builds', 'hunting', 'skills', 'enchants']);
+export const GUIDE_VIEWS = new Set(['systems', 'masteries', 'rates', 'customizations', 'balance', 'builds', 'hunting', 'skills', 'enchants']);
