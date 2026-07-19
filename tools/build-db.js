@@ -58,6 +58,8 @@ const itemFiles = [
   path.join(CUSTOM, 'item_db_funmods2.yml'),        // fun-mod skill-amp overrides, batch 3: elemental garments/shields + headgear wave 2
   path.join(CUSTOM, 'item_db_funmods_cards.yml'),   // fun-mod skill-amp overrides, batch 3: low-tier card Script overrides (Type:Card stock items, same merge path)
   path.join(CUSTOM, 'item_db_funmods_lifesteal.yml'), // fun-mod overrides, batch 4: bHPDrainRate vampiric daggers (Dirk/Stiletto/Damascus) — NEW mechanic axis, not bSkillAtk. NOTE: FUNMOD_FAMILIES below has no Dirk/Stiletto/Damascus entries yet — the assertion at the bottom of this file WILL fail until those are added (flagged, not fixed, per this task's scope).
+  path.join(CUSTOM, 'item_db_masteries.yml'),       // PvE Mastery inverse-curve weapons + normal cards
+  path.join(CUSTOM, 'item_db_skill_progression.yml'), // generated final inverse-curve weapon overlay
   // NOT read: item_db_dropbeams.yml (flag-only DropEffect overrides, no displayable
   // fields — merging it is a no-op for existing items and can't create phantom ones,
   // since itemArr is filtered to i.name at write time).
