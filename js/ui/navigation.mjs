@@ -1,6 +1,7 @@
 const LINKS = [
   ['home', 'Discover'],
   ['systems', 'Features'],
+  ['runes', 'Rune Planner'],
   ['masteries', 'PvE Masteries'],
   ['classes', 'Classes'],
   ['builds', 'Rebalanced Builds'],

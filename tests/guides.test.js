@@ -9,6 +9,16 @@ test('guide registry covers every non-database legacy section', () => {
   }
 });
 
+test('rune planner exposes every family, level, slot, and cumulative budget', async () => {
+  const { RUNE_FAMILIES, RUNE_LEVELS } = await import('../js/render/runes.mjs');
+  assert.equal(RUNE_FAMILIES.length, 9);
+  assert.equal(RUNE_LEVELS.length, 5);
+  assert.deepEqual(RUNE_FAMILIES.find(family => family.name === 'Flow').values, ['-3%', '-6%', '-10%', '-15%', '-20%']);
+  assert.deepEqual(RUNE_FAMILIES.find(family => family.name === 'Haste').slots, ['Garment', 'Footgear']);
+  assert.match(RUNE_LEVELS[4].total, /2,550,000z/);
+  assert.match(RUNE_LEVELS[4].total, /500 MVP Points or 15 Temporal Crystals/);
+});
+
 test('instances preserve all six current dungeon names', () => {
   const source = fs.readFileSync('js/render/instances.mjs', 'utf8');
   for (const name of ['Old Glast Heim', 'Assault on the Airship', 'Ghost Palace', 'Bakonawa Lake', 'Bangungot Hospital', 'Buwaya Cave']) {

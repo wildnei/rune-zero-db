@@ -35,6 +35,7 @@ const archiveLinks = [
   ['items', 'Items', 'Equipment, effects, drops, and enchant pools'],
   ['mobs', 'Monsters', 'Stats, elements, spawns, and complete loot tables'],
   ['classes', 'Classes', 'Every class path and what to keep along the way'],
+  ['runes', 'Rune Planner', 'Every family, level bonus, slot rule, and material cost'],
   ['builds', 'Rebalanced Builds', 'Viable skill paths powered by classic equipment'],
   ['instances', 'Instances', 'Entry requirements, mechanics, and rewards'],
   ['systems', 'Server features', 'The complete RuneZero ruleset in plain language'],

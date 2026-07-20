@@ -302,6 +302,14 @@
 .data-table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: .8rem; }
 .data-table-wrap table { width: 100%; min-width: 620px; border-collapse: collapse; }
 .data-table-wrap th, .data-table-wrap td { padding: .75rem; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+.rune-filter { display: flex; flex-wrap: wrap; gap: .55rem; margin-bottom: .75rem; }
+.rune-family-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+.rune-family { padding: 1.25rem; border: 1px solid var(--line); border-radius: var(--radius-sm); background: white; }
+.rune-family h2 { margin-bottom: .45rem; }
+.rune-levels { display: grid; grid-template-columns: repeat(5, 1fr); gap: .3rem; margin: 1rem 0; }
+.rune-levels span { padding: .55rem .25rem; border-radius: .45rem; background: var(--sky-50); text-align: center; }
+.rune-levels small, .rune-levels strong { display: block; }
+.rune-levels small { color: var(--navy-500); font-size: .66rem; }
 .drop-list, .relation-list { display: grid; gap: .45rem; }
 .drop-list a, .relation-list > div { display: flex; min-height: 54px; align-items: center; justify-content: space-between; gap: 1rem; padding: .7rem .85rem; border: 1px solid var(--line); border-radius: .65rem; background: #fbfdfc; color: var(--navy-950); text-decoration: none; }
 .drop-list a:hover { border-color: var(--sky-300); background: var(--sky-50); }

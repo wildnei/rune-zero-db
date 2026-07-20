@@ -6,6 +6,7 @@ import { renderDatabase } from './render/database.mjs';
 import { GUIDE_VIEWS, renderGuide } from './render/guides.mjs';
 import { renderClasses } from './render/classes.mjs';
 import { renderInstances } from './render/instances.mjs';
+import { renderRunes } from './render/runes.mjs';
 import { createGlobalSearch } from './ui/global-search.mjs';
 
 const app = document.querySelector('#app');
@@ -59,6 +60,7 @@ function renderRoute() {
   else if (route.view === 'items' || route.view === 'mobs') app.replaceChildren(renderDatabase({ view: route.view, data: wikiData, route }));
   else if (route.view === 'classes') app.replaceChildren(renderClasses());
   else if (route.view === 'instances') app.replaceChildren(renderInstances(route.entity === 'instance' ? route.id : null));
+  else if (route.view === 'runes') app.replaceChildren(renderRunes());
   else if (GUIDE_VIEWS.has(route.view)) app.replaceChildren(renderGuide({ view: route.view, data: wikiData, route }));
   else renderTemporaryRoute(route);
   const unavailable = DATASET_BY_VIEW[route.view];
