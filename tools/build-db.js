@@ -271,11 +271,23 @@ for (const m of mobs.values()) {
 // Any item whose script boosts a skill's damage (bSkillAtk) is a "skill item".
 // Tier by skill prefix: 3rd-class (+expanded) vs up-to-trans.
 const TIER3 = /^(RK_|WL_|RA_|AB_|GC_|SC_|LG_|SR_|SO_|GN_|NC_|WM_|KO_|RL_|SP_|EM_|SU_|HN_)/;
+function level99SkillPercent(expression) {
+  let value = expression.trim()
+    .replace(/BaseLevel\s*\/\s*(\d+)/g, (_all, divisor) => String(Math.trunc(99 / Number(divisor))))
+    .replace(/BaseLevel/g, '99');
+  if (!/^[\d\s()+*/-]+$/.test(value)) return null;
+  try { return Math.trunc(Function(`"use strict"; return (${value})`)()); }
+  catch { return null; }
+}
 for (const it of items.values()) {
   it.boosts = [];
   if (!it.script) continue;
-    const boosts = new Map(); let m; const re = /bSkillAtk,"([A-Z_0-9]+)",(-?\d+)/g;
-    while ((m = re.exec(it.script))) boosts.set(m[1], Math.max(boosts.get(m[1]) || 0, Number(m[2])));
+    const boosts = new Map(); let m; const re = /bSkillAtk,"([A-Z_0-9]+)",([^;]+)/g;
+    while ((m = re.exec(it.script))) {
+      const percent = level99SkillPercent(m[2]);
+      const previous = boosts.get(m[1]);
+      boosts.set(m[1], percent == null ? previous ?? null : Math.max(previous ?? 0, percent));
+    }
     it.boosts = [...boosts].map(([skill, percent]) => ({ skill, percent, t3: TIER3.test(skill) }));
 }
 
