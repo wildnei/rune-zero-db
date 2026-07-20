@@ -19,7 +19,13 @@ const ROOT = path.resolve(__dirname, '..', '..');
 // straight from db/import instead (see item_randomopt_db/group below).
 const PRE = path.join(ROOT, 'server', 'rathena', 'db', 'pre-re');
 const CUSTOM = path.join(ROOT, 'custom', 'db-import');
-const OUT = path.join(ROOT, 'wiki', 'data');
+// The progression generator needs one clean catalog without its own generated
+// overlay.  Keep that bootstrap path explicit so normal wiki builds are
+// unchanged and the generator never has to rename shared files on disk.
+const OUT = process.env.RZ_WIKI_OUT
+  ? path.resolve(process.env.RZ_WIKI_OUT)
+  : path.join(ROOT, 'wiki', 'data');
+const SKIP_SKILL_PROGRESSION = process.env.RZ_SKIP_SKILL_PROGRESSION === '1';
 
 function load(file) {
   if (!fs.existsSync(file)) { console.warn('skip (missing):', file); return []; }
@@ -60,7 +66,9 @@ const itemFiles = [
   path.join(CUSTOM, 'item_db_funmods_cards.yml'),   // fun-mod skill-amp overrides, batch 3: low-tier card Script overrides (Type:Card stock items, same merge path)
   path.join(CUSTOM, 'item_db_funmods_lifesteal.yml'), // fun-mod overrides, batch 4: bHPDrainRate vampiric daggers (Dirk/Stiletto/Damascus) — NEW mechanic axis, not bSkillAtk. NOTE: FUNMOD_FAMILIES below has no Dirk/Stiletto/Damascus entries yet — the assertion at the bottom of this file WILL fail until those are added (flagged, not fixed, per this task's scope).
   path.join(CUSTOM, 'item_db_masteries.yml'),       // PvE Mastery inverse-curve weapons + normal cards
-  path.join(CUSTOM, 'item_db_skill_progression.yml'), // generated final inverse-curve weapon overlay
+  ...(SKIP_SKILL_PROGRESSION ? [] : [
+    path.join(CUSTOM, 'item_db_skill_progression.yml'), // generated final inverse-curve weapon overlay
+  ]),
   // NOT read: item_db_dropbeams.yml (flag-only DropEffect overrides, no displayable
   // fields — merging it is a no-op for existing items and can't create phantom ones,
   // since itemArr is filtered to i.name at write time).
@@ -676,6 +684,8 @@ const expectedFunmodCount = funmodSourceIds.size;
 if (!fs.existsSync(OUT)) fs.mkdirSync(OUT, { recursive: true });
 const itemArr = [...items.values()].filter(i => i.name).sort((a,b)=>a.id-b.id);
 const mobArr  = [...mobs.values()].filter(m => m.name).sort((a,b)=>a.id-b.id);
+const supportedSkillCount = new Set(itemArr.flatMap(i => (i.boosts || []).filter(boost => !boost.t3).map(boost => boost.skill))).size;
+const weapons = itemArr.filter(i => i.type === 'Weapon');
 
 fs.writeFileSync(path.join(OUT,'items.json'), JSON.stringify(itemArr));
 fs.writeFileSync(path.join(OUT,'mobs.json'),  JSON.stringify(mobArr));
@@ -694,6 +704,9 @@ fs.writeFileSync(path.join(OUT,'meta.json'), JSON.stringify({
   spawnedMobs: mobArr.filter(m=>m.spawns&&m.spawns.length).length,
   optionGroups: optGroups.length, optionTypes: Object.keys(optTypes).length,
   skillItems: itemArr.filter(i=>i.boosts&&i.boosts.length).length,
+  supportedSkills: supportedSkillCount,
+  weaponSkillItems: weapons.filter(i=>i.boosts&&i.boosts.length).length,
+  weapons: weapons.length,
 }));
 
 console.log(`items: ${itemArr.length}  (custom: ${itemArr.filter(i=>i.custom).length}, funmod: ${itemArr.filter(i=>i.funmod).length})`);

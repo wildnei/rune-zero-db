@@ -81,9 +81,9 @@ function renderRates() {
 
 function renderCustomizations(meta) {
   const cards = [
-    ['Skills rebalanced', '119', 'Usability and damage passes open more viable class fantasies.'],
+    ['Skills rebalanced', Number(meta.supportedSkills || 0).toLocaleString(), 'Usability and damage passes open more viable class fantasies.'],
     ['Custom items', Number(meta.customItems || 0).toLocaleString(), 'New and rescued gear supports Episode 13 progression.'],
-    ['Weapon skill paths', '736 / 739', 'Every level-99-compatible supported weapon now carries an active damage-skill identity.'],
+    ['Weapon skill paths', `${Number(meta.weaponSkillItems || 0).toLocaleString()} / ${Number(meta.weapons || 0).toLocaleString()}`, 'Every compatible level-99 weapon family carries balanced active damage-skill identities; unsupported special weapons remain unchanged.'],
     ['Set combinations', Number(meta.comboSets || 0).toLocaleString(), 'Paired pieces create intentional build packages.'],
   ];
   const page = document.createElement('section');
