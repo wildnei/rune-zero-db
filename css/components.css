@@ -307,7 +307,9 @@
 .drop-list a:hover { border-color: var(--sky-300); background: var(--sky-50); }
 .drop-list a > span, .relation-list > div > span { display: grid; }
 .drop-list small, .relation-list span { color: var(--navy-500); font-size: .75rem; }
-.drop-list b { color: var(--leaf-700); font-size: .85rem; white-space: nowrap; }
+  .drop-list b { color: var(--leaf-700); font-size: .85rem; white-space: nowrap; }
+  .acquisition-list { margin-top: .65rem; }
+  .acquisition-list b { color: var(--leaf-700); font-size: .85rem; text-align: right; }
 .drop-item { display: flex !important; align-items: center; gap: .65rem; }
 .drop-item img { width: 32px; height: 32px; object-fit: contain; image-rendering: pixelated; }
 .reward-section { margin-inline: -1rem; padding-inline: 1rem; border-radius: .9rem; background: #fffaf0; }

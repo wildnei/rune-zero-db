@@ -58,7 +58,7 @@ export function renderDatabase({ view, data, route }) {
   const shell = document.createElement('section');
   shell.className = 'wiki-page database-page';
   shell.innerHTML = `
-    <header class="wiki-masthead"><div class="container"><p class="eyebrow">RuneZero database</p><h1>${isItems ? 'Item archive' : 'Monster bestiary'}</h1><p>${isItems ? 'Find equipment, consumables, effects, drop sources, and every custom RuneZero item.' : 'Study levels, elements, combat stats, spawn locations, and complete drop tables.'}</p></div></header>
+    <header class="wiki-masthead"><div class="container"><p class="eyebrow">RuneZero database</p><h1>${isItems ? 'Item archive' : 'Monster bestiary'}</h1><p>${isItems ? 'Find equipment, consumables, effects, monster drops, shops, exchanges, scripted rewards, and every custom RuneZero item.' : 'Study levels, elements, combat stats, spawn locations, and complete drop tables.'}</p></div></header>
     <div class="container entity-browser">
       <aside class="entity-list-panel" aria-label="${isItems ? 'Items' : 'Monsters'}">
         <div class="database-tools"><label for="database-query">Search ${isItems ? 'items' : 'monsters'}</label><input id="database-query" type="search" placeholder="Name, ID${isItems ? ', aegis, or type' : ', race, or element'}…" autocomplete="off" data-database-query>
