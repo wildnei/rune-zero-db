@@ -11,6 +11,8 @@ test('legacy hashes resolve to stable views and entity ids', async () => {
   assert.deepEqual(parseRoute('#instance/amdarais'), { view: 'instances', entity: 'instance', id: 'amdarais' });
   assert.deepEqual(parseRoute('#promise'), { view: 'home', entity: 'section', id: 'promise' });
   assert.deepEqual(parseRoute('#runes'), { view: 'runes', entity: null, id: null });
+  assert.deepEqual(parseRoute('#monster-hunter'), { view: 'monster-hunter', entity: null, id: null });
+  assert.deepEqual(parseRoute('#monster-hunter/bounties'), { view: 'monster-hunter', entity: 'section', id: 'hunter-bounties' });
 });
 
 test('unknown and invalid hashes return the home route', async () => {
