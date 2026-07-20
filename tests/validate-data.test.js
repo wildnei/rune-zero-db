@@ -30,3 +30,11 @@ test('ported level-scaled skill gear is available and evaluated at the level cap
   assert.ok(emerald.acquiredFrom.some(source => source.kind === 'item-shop' && source.currency === 40001));
   assert.ok(emerald.acquiredFrom.some(source => source.kind === 'script-reward'));
 });
+
+test('Golden Gear uses the valid Cart Revolution skill identifier', () => {
+  const items = JSON.parse(fs.readFileSync('data/items.json', 'utf8'));
+  const goldenGear = items.find(item => item.id === 5159);
+  assert.ok(goldenGear, 'Golden Gear must be indexed');
+  assert.match(goldenGear.script, /"MC_CARTREVOLUTION"/);
+  assert.doesNotMatch(goldenGear.script, /"BS_CARTREVOLUTION"/);
+});
