@@ -8,7 +8,7 @@ test('Monster Hunter archive separates skill-shop gear and bounty rewards', asyn
   const hunterItems = monsterHunterItems(items);
   const shop = hunterItems.filter(item => item.hunterSources.some(source => source.name === 'Hunter Skill Gear Shop'));
   const bounties = hunterItems.filter(item => item.hunterSources.some(source => source.name === 'Monster Hunter'));
-  assert.equal(shop.length, 48);
+  assert.equal(shop.length, 89);
   assert.equal(bounties.length, 12);
   assert.ok(shop.some(item => item.id === 28573));
   assert.ok(bounties.some(item => item.id === 28573));
