@@ -19,6 +19,8 @@
   .milestone-grid, .reference-grid { grid-template-columns: repeat(2, 1fr); }
   .class-guide-grid { grid-template-columns: 1fr; }
   .rebalance-layout { grid-template-columns: 1fr; }
+  .hunter-layout { grid-template-columns: 1fr; }
+  .hunter-controls { position: static; }
   .rebalance-controls { position: static; }
   .rebalance-classes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .rune-materials { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -29,6 +31,7 @@
   .entity-results { max-height: 390px; }
   .stat-bars, .matchup-grid { grid-template-columns: 1fr; }
   .rebalance-item-grid { grid-template-columns: 1fr; }
+  .hunter-item-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 600px) {
@@ -80,6 +83,7 @@
   .spawn-grid { grid-template-columns: 1fr; }
   .editorial-feature { grid-template-columns: 2.5rem minmax(0, 1fr); gap: 1rem; padding-block: 2rem; }
   .rate-grid, .metric-grid, .vip-split, .build-grid, .milestone-grid, .reference-grid, .class-guide-grid, .instance-grid, .rune-family-grid { grid-template-columns: 1fr; }
+  .hunter-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .class-guide-grid article { grid-template-columns: 100px 1fr; padding: 1rem; }
   .class-guide-sprite { height: 150px; }
   .class-guide-sprite img { max-width: 95px; max-height: 140px; }

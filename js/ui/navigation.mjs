@@ -2,6 +2,7 @@ const LINKS = [
   ['home', 'Discover'],
   ['systems', 'Features'],
   ['runes', 'Rune Planner'],
+  ['monster-hunter', 'Monster Hunter'],
   ['masteries', 'PvE Masteries'],
   ['classes', 'Classes'],
   ['builds', 'Rebalanced Builds'],
