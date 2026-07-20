@@ -306,10 +306,19 @@
 .rune-family-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
 .rune-family { padding: 1.25rem; border: 1px solid var(--line); border-radius: var(--radius-sm); background: white; }
 .rune-family h2 { margin-bottom: .45rem; }
+.rune-family-heading { display: flex; align-items: center; gap: .85rem; }
+.rune-family-heading img { flex: 0 0 auto; }
+.rune-family-heading .eyebrow { margin-bottom: .2rem; }
+.rune-family-heading h2 { font-size: clamp(1.55rem, 3vw, 2.25rem); }
 .rune-levels { display: grid; grid-template-columns: repeat(5, 1fr); gap: .3rem; margin: 1rem 0; }
 .rune-levels span { padding: .55rem .25rem; border-radius: .45rem; background: var(--sky-50); text-align: center; }
 .rune-levels small, .rune-levels strong { display: block; }
 .rune-levels small { color: var(--navy-500); font-size: .66rem; }
+.rune-materials { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .65rem; margin-bottom: 1.25rem; }
+.rune-materials a { display: flex; min-width: 0; align-items: center; gap: .55rem; padding: .7rem; border: 1px solid var(--line); border-radius: .7rem; background: white; color: var(--navy-950); text-decoration: none; }
+.rune-materials span, .rune-materials small { display: block; min-width: 0; }
+.rune-materials small { color: var(--navy-500); font-size: .68rem; }
+.rune-cost-table { width: 100%; max-width: 100%; }
 .drop-list, .relation-list { display: grid; gap: .45rem; }
 .drop-list a, .relation-list > div { display: flex; min-height: 54px; align-items: center; justify-content: space-between; gap: 1rem; padding: .7rem .85rem; border: 1px solid var(--line); border-radius: .65rem; background: #fbfdfc; color: var(--navy-950); text-decoration: none; }
 .drop-list a:hover { border-color: var(--sky-300); background: var(--sky-50); }
@@ -338,6 +347,7 @@
 .editorial-feature h2 { font-size: clamp(2rem, 4vw, 3.2rem); }
 .editorial-feature p:last-child { color: var(--navy-500); font-size: 1.08rem; }
 .article-stack { display: grid; gap: 5rem; padding-block: clamp(4rem, 8vw, 7rem); }
+.article-section { min-width: 0; max-width: 100%; }
 .article-section > h2 { margin-bottom: 1.5rem; }
 .rate-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .75rem; }
 .rate-card { display: grid; min-height: 130px; align-content: space-between; padding: 1.25rem; border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--paper); }

@@ -13,8 +13,16 @@ export function formatDropRate(rate) {
   return `${value.toFixed(Number.isInteger(value) ? 0 : 2)}%`;
 }
 
-const ART_DONORS = { 40980: 20744, 40981: 20744, 40982: 1004 };
-const artId = id => ART_DONORS[Number(id)] || Number(id);
+const ART_DONORS = { 40900: 7321, 40901: 985, 40980: 20744, 40981: 20744, 40982: 1004,
+  41150: 731, 41151: 732, 41152: 733, 41153: 985 };
+const RUNE_DONORS = [7563, 7511, 715, 716, 717, 6223];
+const STONE_DONORS = [4808, 4814, 4869, 4877, 4880, 4861, 4875, 4826, 4832];
+const artId = value => {
+  const id = Number(value);
+  if (id >= 40902 && id <= 40913) return RUNE_DONORS[(id - 40902) % 6];
+  if (id >= 41100 && id <= 41144) return STONE_DONORS[Math.floor((id - 41100) / 5)];
+  return ART_DONORS[id] || id;
+};
 export const itemIconUrl = id => `https://static.divine-pride.net/images/items/item/${artId(id)}.png`;
 export const itemArtUrl = id => `https://static.divine-pride.net/images/items/collection/${artId(id)}.png`;
 export const monsterArtUrl = id => `https://static.divine-pride.net/images/mobs/png/${Number(id)}.png`;

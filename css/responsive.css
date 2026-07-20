@@ -1,3 +1,9 @@
+@media (max-width: 1120px) {
+  .primary-nav, .search-button span:nth-child(2), .search-button kbd { display: none; }
+  .search-button { min-width: 44px; width: 44px; justify-content: center; padding: 0; }
+  .menu-button { display: grid; }
+}
+
 @media (max-width: 960px) {
   .primary-nav, .search-button span:nth-child(2), .search-button kbd { display: none; }
   .search-button { min-width: 44px; width: 44px; justify-content: center; padding: 0; }
@@ -15,6 +21,7 @@
   .rebalance-layout { grid-template-columns: 1fr; }
   .rebalance-controls { position: static; }
   .rebalance-classes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .rune-materials { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 760px) {
@@ -93,6 +100,9 @@
   .rebalance-item { grid-template-columns: 36px minmax(0, 1fr); }
   .rebalance-item img { width: 36px; height: 36px; }
   .rebalance-item b { grid-column: 2; width: fit-content; }
+  .rune-cost-table table { min-width: 0; table-layout: fixed; }
+  .rune-cost-table th, .rune-cost-table td { padding: .55rem; white-space: normal; overflow-wrap: anywhere; }
+  .rune-cost-table th:first-child { width: 3.5rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
