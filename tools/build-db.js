@@ -286,7 +286,9 @@ for (const it of items.values()) {
     while ((m = re.exec(it.script))) {
       const percent = level99SkillPercent(m[2]);
       const previous = boosts.get(m[1]);
-      boosts.set(m[1], percent == null ? previous ?? null : Math.max(previous ?? 0, percent));
+      // Separate bSkillAtk statements stack in rAthena, including cumulative
+      // +7/+8/+9 refine tiers. Show the fully-qualified build potential.
+      boosts.set(m[1], percent == null ? previous ?? null : (previous ?? 0) + percent);
     }
     it.boosts = [...boosts].map(([skill, percent]) => ({ skill, percent, t3: TIER3.test(skill) }));
 }

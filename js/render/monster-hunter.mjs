@@ -1,4 +1,4 @@
-import { acquisitionLabel, escapeHtml, itemIconUrl } from './entities.mjs';
+import { acquisitionLabel, escapeHtml, itemIconUrl, translateScript } from './entities.mjs';
 
 const HUNTER_SOURCES = new Set(['Hunter Skill Gear Shop', 'Monster Hunter']);
 
@@ -12,9 +12,10 @@ export function monsterHunterItems(items = []) {
 function itemCard(item) {
   const source = item.hunterSources[0];
   const skills = (item.boosts || []).map(boost => `${boost.name || boost.skill}${Number.isFinite(boost.percent) ? ` +${boost.percent}%` : ''}`);
+  const effects = translateScript(item.script || '').slice(0, 3);
   return `<a class="hunter-item" href="#item/${Number(item.id)}" data-hunter-item data-name="${escapeHtml(`${item.name} ${item.aegis || ''}`.toLowerCase())}" data-type="${escapeHtml(item.type || 'Other')}">
     <img src="${itemIconUrl(item.id)}" alt="" width="48" height="48" loading="lazy">
-    <span><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml([item.type, item.reqlv ? `Lv ${item.reqlv}` : '', skills.slice(0, 2).join(' · ')].filter(Boolean).join(' · '))}</small></span>
+    <span><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml([item.type, item.reqlv ? `Lv ${item.reqlv}` : '', effects.join(' · '), skills.slice(0, 2).join(' · ')].filter(Boolean).join(' · '))}</small></span>
     <b>${escapeHtml(source.kind === 'script-reward' ? 'Bounty reward' : acquisitionLabel(source))}</b>
   </a>`;
 }

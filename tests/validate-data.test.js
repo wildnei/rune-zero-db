@@ -29,6 +29,8 @@ test('ported level-scaled skill gear is available and evaluated at the level cap
   assert.equal(bomber.boosts.find(boost => boost.skill === 'HT_CLAYMORETRAP').percent, 49);
   assert.ok(emerald.acquiredFrom.some(source => source.kind === 'item-shop' && source.currency === 40001));
   assert.ok(emerald.acquiredFrom.some(source => source.kind === 'script-reward'));
+  const kungJin = items.find(item => item.id === 15879);
+  assert.equal(kungJin.boosts.find(boost => boost.skill === 'SN_SHARPSHOOTING').percent, 45);
 });
 
 test('Golden Gear uses the valid Cart Revolution skill identifier', () => {
