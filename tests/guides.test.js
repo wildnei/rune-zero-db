@@ -11,10 +11,12 @@ test('guide registry covers every non-database legacy section', () => {
 
 test('rune planner exposes every family, level, slot, and cumulative budget', async () => {
   const { RUNE_FAMILIES, RUNE_LEVELS } = await import('../js/render/runes.mjs');
-  assert.equal(RUNE_FAMILIES.length, 9);
+  assert.equal(RUNE_FAMILIES.length, 10);
   assert.equal(RUNE_LEVELS.length, 5);
   assert.deepEqual(RUNE_FAMILIES.find(family => family.name === 'Flow').values, ['-3%', '-6%', '-10%', '-15%', '-20%']);
   assert.deepEqual(RUNE_FAMILIES.find(family => family.name === 'Haste').slots, ['Garment', 'Footgear']);
+  assert.deepEqual(RUNE_FAMILIES.find(family => family.name === 'Flow').slots, ['Headgear', 'Armor', 'Accessory']);
+  assert.deepEqual(RUNE_FAMILIES.find(family => family.name === 'Windrunner').values, ['+2%', '+4%', '+6%', '+8%', '+10%']);
   assert.match(RUNE_LEVELS[4].total, /2,550,000z/);
   assert.match(RUNE_LEVELS[4].total, /500 MVP Points or 15 Temporal Crystals/);
 });

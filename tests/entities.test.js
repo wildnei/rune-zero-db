@@ -21,6 +21,7 @@ test('rune and enchant-stone art uses the same donor icons as the live client', 
   assert.match(itemIconUrl(40902), /7563\.png$/);
   assert.match(itemIconUrl(41100), /4808\.png$/);
   assert.match(itemIconUrl(41135), /4826\.png$/);
+  assert.match(itemIconUrl(41145), /4869\.png$/);
   assert.match(itemIconUrl(41153), /985\.png$/);
 });
 
