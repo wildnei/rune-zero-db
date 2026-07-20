@@ -16,11 +16,11 @@ export function formatDropRate(rate) {
 const ART_DONORS = { 40900: 7321, 40901: 985, 40980: 20744, 40981: 20744, 40982: 1004,
   41150: 731, 41151: 732, 41152: 733, 41153: 985 };
 const RUNE_DONORS = [7563, 7511, 715, 716, 717, 6223];
-const STONE_DONORS = [4808, 4814, 4869, 4877, 4880, 4861, 4875, 4826, 4832];
+const STONE_DONORS = [4808, 4814, 4869, 4877, 4880, 4861, 4875, 4826, 4832, 4869];
 const artId = value => {
   const id = Number(value);
   if (id >= 40902 && id <= 40913) return RUNE_DONORS[(id - 40902) % 6];
-  if (id >= 41100 && id <= 41144) return STONE_DONORS[Math.floor((id - 41100) / 5)];
+  if (id >= 41100 && id <= 41149) return STONE_DONORS[Math.floor((id - 41100) / 5)];
   return ART_DONORS[id] || id;
 };
 export const itemIconUrl = id => `https://static.divine-pride.net/images/items/item/${artId(id)}.png`;
@@ -173,7 +173,7 @@ export function renderItem(item, context = {}) {
     </section>
     ${item.script ? `<section class="entity-section" aria-labelledby="item-effect"><h2 id="item-effect">Effect</h2><div class="effect-list">${translateScript(item.script).map(effect => `<p>${escapeHtml(effect)}</p>`).join('') || `<p>${escapeHtml(summarizeScript(item.script))}</p>`}</div><details><summary>View server script</summary><pre><code>${escapeHtml(item.script)}</code></pre></details></section>` : ''}
     ${renderDamageEstimator(item)}
-    ${(item.boosts || []).length ? `<section class="entity-section"><h2>Skills empowered</h2><div class="relation-list">${item.boosts.map(boost => `<div><strong>${escapeHtml(boost.name || boost.skill)}</strong><span>${boost.t3 ? 'Third class' : 'Up to transcendent'}</span></div>`).join('')}</div></section>` : ''}
+    ${(item.boosts || []).length ? `<section class="entity-section"><h2>Skills empowered</h2><div class="relation-list">${item.boosts.map(boost => `<div><strong>${escapeHtml(boost.name || boost.skill)}</strong><span>${Number.isFinite(boost.percent) ? `+${boost.percent}% damage · ` : ''}${boost.t3 ? 'Third class' : 'Up to transcendent'}</span></div>`).join('')}</div></section>` : ''}
     ${renderAcquisition(item)}
     ${(item.combos || []).length ? `<section class="entity-section"><h2>Set combinations</h2><div class="relation-list">${item.combos.map(combo => `<div><strong>${(combo.with || []).map(entry => entry.id ? `<a href="#item/${Number(entry.id)}">${escapeHtml(entry.name || entry.id)}</a>` : escapeHtml(entry.name || entry)).join(' + ')}</strong><span>${escapeHtml(summarizeScript(combo.script || ''))}</span></div>`).join('')}</div></section>` : ''}
     ${renderSibling(item, context.items)}

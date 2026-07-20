@@ -7,7 +7,7 @@ const staticGuides = {
     intro: 'Modern conveniences, richer build choices, and long-term goals—without turning a low-rate world into a shortcut.',
     sections: [
       ['Progression', 'Low-rate identity', 'Fixed 5× Base and Job EXP with 3× ordinary drops keeps each find meaningful. Cards remain a hard 1×, always.'],
-      ['Buildcraft', 'Enchant Stones', 'Nine leveled enchant families let you shape equipment with a no-fail cost ladder. Stones can be removed for zeny and traded normally.'],
+      ['Buildcraft', 'Enchant Stones', 'Ten leveled enchant families let you shape equipment with a no-fail cost ladder. Stones can be removed for zeny and traded normally.'],
       ['Visibility', 'Rare-drop beams', 'Notable equipment and cards cast a colored pillar on the ground. It changes visibility—not probability.'],
       ['Refining', 'Safe refinement', 'Protected refine options let players plan progression without erasing the value of materials and zeny.'],
       ['Convenience', 'Quality-of-life for everyone', 'Account storage, stylist access, offline vending, practical commands, and clear onboarding reduce friction without inflating rewards.'],

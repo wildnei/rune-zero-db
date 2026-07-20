@@ -274,9 +274,9 @@ const TIER3 = /^(RK_|WL_|RA_|AB_|GC_|SC_|LG_|SR_|SO_|GN_|NC_|WM_|KO_|RL_|SP_|EM_
 for (const it of items.values()) {
   it.boosts = [];
   if (!it.script) continue;
-  const set = new Set(); let m; const re = /bSkillAtk,"([A-Z_0-9]+)"/g;
-  while ((m = re.exec(it.script))) set.add(m[1]);
-  it.boosts = [...set].map(s => ({ skill: s, t3: TIER3.test(s) }));
+    const boosts = new Map(); let m; const re = /bSkillAtk,"([A-Z_0-9]+)",(-?\d+)/g;
+    while ((m = re.exec(it.script))) boosts.set(m[1], Math.max(boosts.get(m[1]) || 0, Number(m[2])));
+    it.boosts = [...boosts].map(([skill, percent]) => ({ skill, percent, t3: TIER3.test(skill) }));
 }
 
 // ---- spawn locations (npc/re/mobs/**) --------------------------------------
