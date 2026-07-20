@@ -84,6 +84,15 @@ const itemFiles = [
 const ignoredServerItemImports = new Set(['item_db_dropbeams.yml']);
 const serverItemRoot = fs.readFileSync(path.join(CUSTOM, 'item_db.yml'), 'utf8');
 const serverItemImports = [...serverItemRoot.matchAll(/Path:\s+db\/import\/(item_db[^\s#]+\.yml)/g)].map(match => match[1]);
+// Recompose the effective list from the Footer so membership and overlay order
+// exactly match the server. The declarations above remain useful annotations,
+// but are not trusted as runtime configuration.
+itemFiles.splice(3, itemFiles.length - 3,
+  path.join(CUSTOM, 'item_db.yml'),
+  ...serverItemImports
+    .filter(file => !ignoredServerItemImports.has(file))
+    .filter(file => !(SKIP_SKILL_PROGRESSION && file === 'item_db_skill_progression.yml'))
+    .map(file => path.join(CUSTOM, file)));
 const wikiItemImports = new Set(itemFiles.map(file => path.basename(file)));
 const missingWikiImports = serverItemImports.filter(file =>
   !(SKIP_SKILL_PROGRESSION && file === 'item_db_skill_progression.yml')
