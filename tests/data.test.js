@@ -1,5 +1,12 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+
+test('indexed monster drop overrides preserve untouched stock drops', () => {
+  const source = fs.readFileSync('tools/build-db.js', 'utf8');
+  assert.match(source, /Number\.isInteger\(d\.Index\)/);
+  assert.match(source, /mapDrops\(e\.Drops, prev\.drops\)/);
+});
 
 test('loadJson returns parsed JSON and reports a useful path on failure', async () => {
   const { loadJson } = await import('../js/core/data.mjs');

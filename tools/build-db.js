@@ -201,13 +201,21 @@ const RE = path.join(ROOT, 'server', 'rathena', 'db', 're');
 const mobFiles = [ path.join(PRE, 'mob_db.yml'), path.join(CUSTOM, 'mob_db.yml') ];
 const mobs = new Map();
 
-function mapDrops(list) {
+function mapDrops(list, previous = []) {
   if (!Array.isArray(list)) return [];
-  return list.map(d => ({
-    item: d.Item, name: (byAegis.get(d.Item) || {}).name || d.Item,
-    id: (byAegis.get(d.Item) || {}).id || null,
-    rate: d.Rate || 0,
-  }));
+  const merged = previous.map(drop => ({ ...drop }));
+  list.forEach((d, position) => {
+    const index = Number.isInteger(d.Index) ? d.Index : position;
+    const prior = merged[index] || {};
+    const item = d.Item ?? prior.item;
+    merged[index] = {
+      item,
+      name: (byAegis.get(item) || {}).name || item,
+      id: (byAegis.get(item) || {}).id || null,
+      rate: d.Rate ?? prior.rate ?? 0,
+    };
+  });
+  return merged.filter(drop => drop.item);
 }
 
 // A mob is "genuinely custom" (no guaranteed real divine-pride art) only if its Id
@@ -243,8 +251,8 @@ for (const f of mobFiles) {
       eleLv: e.ElementLevel ?? prev.eleLv, size: e.Size ?? prev.size,
       mvp: e.Class === 'Boss' || !!e.MvpDrops || prev.mvp || false,
       stats: e.Str != null ? { str:e.Str,agi:e.Agi,vit:e.Vit,int:e.Int,dex:e.Dex,luk:e.Luk } : prev.stats,
-      drops: e.Drops ? mapDrops(e.Drops) : (prev.drops || []),
-      mvpDrops: e.MvpDrops ? mapDrops(e.MvpDrops) : (prev.mvpDrops || []),
+      drops: e.Drops ? mapDrops(e.Drops, prev.drops) : (prev.drops || []),
+      mvpDrops: e.MvpDrops ? mapDrops(e.MvpDrops, prev.mvpDrops) : (prev.mvpDrops || []),
       custom: custom && !stockMobIds.has(e.Id),
     });
     mobs.set(e.Id, m);
@@ -554,6 +562,13 @@ const FUNMOD_FAMILY = {
   Blue_Coif:           { group: 'Mage / Wizard / Sage',                fantasy: 'Soul Coif' },
   Magician_Hat:        { group: 'Mage / Wizard / Sage',                fantasy: 'Elemental Magician' },
   Loard_Circlet:       { group: 'Swordsman / Crusader',                fantasy: 'Lordly Spellblade' },
+  Helm:                { group: 'Swordsman / Crusader',                fantasy: 'Valkyrie Vanguard' },
+  Ulle_Cap:            { group: 'Archer / Hunter / Bard-Dancer',       fantasy: "Atroce's Sharpshooter" },
+  Kiss_Of_Angel:       { group: 'Novice / Any Class',                  fantasy: "Angel's Apprentice" },
+  Golden_Gear:         { group: 'Merchant / Crusader',                 fantasy: 'Golden Bulwark' },
+  Bone_Helm:           { group: 'Swordsman / Merchant',                fantasy: 'Dark Vanguard' },
+  Bone_Head:           { group: 'Swordsman / Merchant',                fantasy: 'Mammoth Vanguard' },
+  Diabolus_Helmet:     { group: 'Swordsman / Mage / Thief',            fantasy: 'Morroc Conqueror' },
   // --- batch 3: universally-skipped low-tier CARDS (item_db_funmods_cards.yml) ---
   // Each card is its own single-item family (no unslotted/slotted pairing — cards
   // don't come in a "_"-suffixed twin), grouped under a dedicated "Fun Cards" bucket
