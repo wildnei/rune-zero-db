@@ -16,6 +16,14 @@ test('entity lookup tolerates numeric strings and missing ids', async () => {
   assert.equal(findEntity(values, 999), null);
 });
 
+test('rune and enchant-stone art uses the same donor icons as the live client', async () => {
+  const { itemIconUrl } = await import('../js/render/entities.mjs');
+  assert.match(itemIconUrl(40902), /7563\.png$/);
+  assert.match(itemIconUrl(41100), /4808\.png$/);
+  assert.match(itemIconUrl(41135), /4826\.png$/);
+  assert.match(itemIconUrl(41153), /985\.png$/);
+});
+
 test('text escaping protects data-derived entity labels', async () => {
   const { escapeHtml } = await import('../js/render/entities.mjs');
   assert.equal(escapeHtml('<img onerror="alert(1)">'), '&lt;img onerror=&quot;alert(1)&quot;&gt;');
