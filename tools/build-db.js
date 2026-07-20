@@ -63,17 +63,33 @@ const itemFiles = [
   path.join(CUSTOM, 'item_db_funmods.yml'),         // fun-mod skill-amp overrides (accessories/armor)
   path.join(CUSTOM, 'item_db_funmods_weapons.yml'), // fun-mod skill-amp overrides (weapons, batch 2)
   path.join(CUSTOM, 'item_db_funmods2.yml'),        // fun-mod skill-amp overrides, batch 3: elemental garments/shields + headgear wave 2
+  path.join(CUSTOM, 'item_db_funmods_hats.yml'),    // curated obsolete-headgear class/build identity pass
   path.join(CUSTOM, 'item_db_funmods_cards.yml'),   // fun-mod skill-amp overrides, batch 3: low-tier card Script overrides (Type:Card stock items, same merge path)
   path.join(CUSTOM, 'item_db_funmods_lifesteal.yml'), // fun-mod overrides, batch 4: bHPDrainRate vampiric daggers (Dirk/Stiletto/Damascus) — NEW mechanic axis, not bSkillAtk. NOTE: FUNMOD_FAMILIES below has no Dirk/Stiletto/Damascus entries yet — the assertion at the bottom of this file WILL fail until those are added (flagged, not fixed, per this task's scope).
   path.join(CUSTOM, 'item_db_masteries.yml'),       // PvE Mastery inverse-curve weapons + normal cards
   ...(SKIP_SKILL_PROGRESSION ? [] : [
     path.join(CUSTOM, 'item_db_skill_progression.yml'), // generated final inverse-curve weapon overlay
   ]),
+  path.join(CUSTOM, 'item_db_enchantcards.yml'),       // Enchant Stone cards and crafting materials
+  path.join(CUSTOM, 'item_db_temporal_enchants.yml'),  // rescued Temporal Boots enchant cards
   // NOT read: item_db_dropbeams.yml (flag-only DropEffect overrides, no displayable
   // fields — merging it is a no-op for existing items and can't create phantom ones,
   // since itemArr is filtered to i.name at write time).
   // NOT read: item_enchant.yml — different schema (ITEM_ENCHANT_DB, not ITEM_DB).
 ];
+
+// Keep the player database aligned with the live server import chain. Files
+// explicitly ignored here must be metadata-only overlays with no fields the
+// wiki displays. Any new item import otherwise has to be added above.
+const ignoredServerItemImports = new Set(['item_db_dropbeams.yml']);
+const serverItemRoot = fs.readFileSync(path.join(CUSTOM, 'item_db.yml'), 'utf8');
+const serverItemImports = [...serverItemRoot.matchAll(/Path:\s+db\/import\/(item_db[^\s#]+\.yml)/g)].map(match => match[1]);
+const wikiItemImports = new Set(itemFiles.map(file => path.basename(file)));
+const missingWikiImports = serverItemImports.filter(file =>
+  !(SKIP_SKILL_PROGRESSION && file === 'item_db_skill_progression.yml')
+  && !ignoredServerItemImports.has(file)
+  && !wikiItemImports.has(file));
+if (missingWikiImports.length) throw new Error(`wiki item source list is missing live server imports: ${missingWikiImports.join(', ')}`);
 // Fun-mod files only restate { Id, AegisName, Script } on existing STOCK items (see their
 // file headers) — they never introduce new Ids, so reading them above just merges the new
 // Script onto the item already created from db/pre-re (same per-Id deep-merge every other
@@ -493,6 +509,19 @@ const FUNMOD_FAMILY = {
   Goggle:                { group: 'Merchant',                            fantasy: 'Battle-Ready Adventurer' },
   Gemmed_Sallet:        { group: 'Thief / Assassin / Rogue',            fantasy: 'Jeweled Duelist' },
   Flu_Mask:            { group: 'Thief / Assassin / Rogue',            fantasy: "Plague Doctor's Mask" },
+  // --- curated obsolete/MVP headgear identities (item_db_funmods_hats.yml) ---
+  Helm_Of_Angel:       { group: 'Thief / Assassin / Rogue',            fantasy: 'Angelic Assassin' },
+  Angelic_Helm:        { group: 'Thief / Assassin / Rogue',            fantasy: 'Angelic Assassin' },
+  Headgear_Of_Queen:   { group: 'Mage / Wizard / Sage',                fantasy: 'Royal Spellcaster' },
+  Mistress_Crown:      { group: 'Mage / Wizard / Sage',                fantasy: 'Mistress of Storms' },
+  Coronet:             { group: 'Mage / Wizard / Sage',                fantasy: 'Psychic Coronet' },
+  Assassin_Mask:       { group: 'Thief / Assassin / Rogue',            fantasy: 'Masked Assassin' },
+  'Ph.D_Hat':          { group: 'Mage / Wizard / Sage',                fantasy: 'Arcane Scholar' },
+  Gemmed_Crown:        { group: 'Mage / Wizard / Sage',                fantasy: 'Gemmed Exorcist' },
+  Mr_Scream:           { group: 'Acolyte / Priest / Monk',             fantasy: 'Screaming Brawler' },
+  Blue_Coif:           { group: 'Mage / Wizard / Sage',                fantasy: 'Soul Coif' },
+  Magician_Hat:        { group: 'Mage / Wizard / Sage',                fantasy: 'Elemental Magician' },
+  Loard_Circlet:       { group: 'Swordsman / Crusader',                fantasy: 'Lordly Spellblade' },
   // --- batch 3: universally-skipped low-tier CARDS (item_db_funmods_cards.yml) ---
   // Each card is its own single-item family (no unslotted/slotted pairing — cards
   // don't come in a "_"-suffixed twin), grouped under a dedicated "Fun Cards" bucket
