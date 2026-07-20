@@ -1,6 +1,14 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
+test('acquisition labels distinguish zeny, item currency, barter, and rewards', async () => {
+  const { acquisitionLabel } = await import('../js/render/entities.mjs');
+  assert.equal(acquisitionLabel({ kind: 'shop', price: 5000 }), '5,000 zeny');
+  assert.equal(acquisitionLabel({ kind: 'item-shop', price: 60, currencyName: 'Hunter Coin' }), '60 Hunter Coin');
+  assert.equal(acquisitionLabel({ kind: 'barter', costs: [{ name: 'Jellopy', amount: 50 }] }), '50× Jellopy');
+  assert.equal(acquisitionLabel({ kind: 'script-reward', amount: 1, bound: true }), '1× Bound scripted reward');
+});
+
 test('entity lookup tolerates numeric strings and missing ids', async () => {
   const { findEntity } = await import('../js/render/entities.mjs');
   const values = [{ id: 501, name: 'Red Potion' }];

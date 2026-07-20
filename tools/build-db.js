@@ -10,6 +10,7 @@
 const fs = require('fs');
 const path = require('path');
 const YAML = require('yaml');   // tolerant of rAthena's duplicate keys (uniqueKeys:false)
+const { mergeLedgers, parseBarters, parseNpcScript } = require('./acquisition');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 // Server runs PRE-RENEWAL (switched 2026-07-09, patch 0017 #define PRERE) — stock db/npc
@@ -151,6 +152,28 @@ for (const f of itemFiles) {
 // quick lookup by aegis for drop cross-ref
 const byAegis = new Map();
 for (const it of items.values()) if (it.aegis) byAegis.set(it.aegis, it);
+
+// ---- acquisition ledger ---------------------------------------------------
+// Only scan scripts the live loader actually includes. Direct numeric grants
+// are high-confidence; dynamic variables remain intentionally unresolved.
+const acquisition = new Map();
+const loader = fs.readFileSync(path.join(ROOT, 'custom', 'npc', 'scripts_newro.conf'), 'utf8');
+const loadedNpcPaths = [...loader.matchAll(/^\s*npc:\s+([^\s]+\.txt)/gm)].map(match => match[1]);
+for (const npcPath of loadedNpcPaths) {
+  const file = npcPath.startsWith('npc/newro/')
+    ? path.join(ROOT, 'custom', 'npc', path.basename(npcPath))
+    : path.join(ROOT, 'server', 'rathena', ...npcPath.split('/'));
+  if (!fs.existsSync(file)) {
+    console.warn('acquisition: loaded NPC file missing:', npcPath);
+    continue;
+  }
+  mergeLedgers(acquisition, parseNpcScript(fs.readFileSync(file, 'utf8'), file));
+}
+mergeLedgers(acquisition, parseBarters(load(path.join(CUSTOM, 'barter_db.yml')), byAegis));
+for (const it of items.values()) it.acquiredFrom = (acquisition.get(Number(it.id)) || []).map(source => ({
+  ...source,
+  currencyName: source.currency ? items.get(Number(source.currency))?.name : undefined,
+}));
 
 // ---- item set combos (item_combos.yml) --------------------------------
 // Fun-mods batch 2: pairs of fun-mod items grant a bonus skill amp when worn together.
@@ -742,6 +765,8 @@ fs.writeFileSync(path.join(OUT,'meta.json'), JSON.stringify({
   spawnedMobs: mobArr.filter(m=>m.spawns&&m.spawns.length).length,
   optionGroups: optGroups.length, optionTypes: Object.keys(optTypes).length,
   skillItems: itemArr.filter(i=>i.boosts&&i.boosts.length).length,
+  acquisitionItems: itemArr.filter(i=>(i.acquiredFrom||[]).length).length,
+  confirmedSourceItems: itemArr.filter(i=>(i.droppedBy||[]).length || (i.acquiredFrom||[]).length).length,
   supportedSkills: supportedSkillCount,
   weaponSkillItems: weapons.filter(i=>i.boosts&&i.boosts.length).length,
   weapons: weapons.length,

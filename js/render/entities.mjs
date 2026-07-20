@@ -117,6 +117,28 @@ export function itemReturnLink(itemId, returnContext) {
   return `<p><a class="back-link entity-context-link" href="${escapeHtml(returnContext.href)}">← ${escapeHtml(returnContext.label)}</a></p>`;
 }
 
+export function acquisitionLabel(source = {}) {
+  if (source.kind === 'shop') return `${Number(source.price || 0).toLocaleString()} zeny`;
+  if (source.kind === 'cash-shop') return `${Number(source.price || 0).toLocaleString()} Cash Points`;
+  if (source.kind === 'item-shop') return `${Number(source.price || 0).toLocaleString()} ${source.currencyName || `item ${source.currency}`}`;
+  if (source.kind === 'barter') {
+    const costs = (source.costs || []).map(cost => `${Number(cost.amount || 1).toLocaleString()}× ${cost.name}`).join(' + ');
+    return [source.zeny ? `${Number(source.zeny).toLocaleString()} zeny` : '', costs].filter(Boolean).join(' + ') || 'Barter exchange';
+  }
+  if (source.kind === 'script-reward') return `${source.amount ? `${Number(source.amount).toLocaleString()}× ` : ''}${source.bound ? 'Bound scripted reward' : 'Scripted reward'}`;
+  return 'Confirmed source';
+}
+
+function renderAcquisition(item) {
+  const drops = item.droppedBy || [];
+  const sources = item.acquiredFrom || [];
+  if (!drops.length && !sources.length) return '<section class="entity-section"><h2>How to obtain it</h2><p class="muted-copy">No confirmed source is indexed yet. Dynamic quest, crafting, and variable-driven rewards may still apply.</p></section>';
+  return `<section class="entity-section"><h2>How to obtain it</h2>
+    ${drops.length ? `<p class="muted-copy">Monster drop chances use the live database rate. Colored rarity bars mirror in-game rarity.</p><div class="drop-list">${drops.map(drop => `<a href="#mob/${Number(drop.id)}"><span><i class="beam-dot ${item.type === 'Card' ? (drop.mvp ? 'is-purple' : 'is-blue') : Number(drop.rate) <= 10 ? 'is-red' : Number(drop.rate) <= 100 ? 'is-green' : ''}" aria-hidden="true"></i><strong>${escapeHtml(drop.mob)}</strong>${drop.mvp ? '<small>MVP source</small>' : ''}</span>${rateVisual(drop.rate)}</a>`).join('')}</div>` : ''}
+    ${sources.length ? `<p class="muted-copy">Shop, barter, and reward sources are derived from currently loaded server scripts.</p><div class="relation-list acquisition-list">${sources.map(source => `<div><span><strong>${escapeHtml(source.name || 'Server reward')}</strong><small>${escapeHtml([source.kind?.replaceAll('-', ' '), source.map].filter(Boolean).join(' · '))}</small></span><b>${escapeHtml(acquisitionLabel(source))}</b></div>`).join('')}</div>` : ''}
+  </section>`;
+}
+
 export function renderItem(item, context = {}) {
   if (!item) return renderMissing('item', 'Items');
   const article = document.createElement('article');
@@ -144,7 +166,7 @@ export function renderItem(item, context = {}) {
     ${item.script ? `<section class="entity-section" aria-labelledby="item-effect"><h2 id="item-effect">Effect</h2><div class="effect-list">${translateScript(item.script).map(effect => `<p>${escapeHtml(effect)}</p>`).join('') || `<p>${escapeHtml(summarizeScript(item.script))}</p>`}</div><details><summary>View server script</summary><pre><code>${escapeHtml(item.script)}</code></pre></details></section>` : ''}
     ${renderDamageEstimator(item)}
     ${(item.boosts || []).length ? `<section class="entity-section"><h2>Skills empowered</h2><div class="relation-list">${item.boosts.map(boost => `<div><strong>${escapeHtml(boost.name || boost.skill)}</strong><span>${boost.t3 ? 'Third class' : 'Up to transcendent'}</span></div>`).join('')}</div></section>` : ''}
-    ${(item.droppedBy || []).length ? `<section class="entity-section"><h2>Dropped by</h2><p class="muted-copy">Colored rarity bars mirror the chance; cards and very rare equipment also receive in-game loot beams.</p><div class="drop-list">${item.droppedBy.map(drop => `<a href="#mob/${Number(drop.id)}"><span><i class="beam-dot ${item.type === 'Card' ? (drop.mvp ? 'is-purple' : 'is-blue') : Number(drop.rate) <= 10 ? 'is-red' : Number(drop.rate) <= 100 ? 'is-green' : ''}" aria-hidden="true"></i><strong>${escapeHtml(drop.mob)}</strong>${drop.mvp ? '<small>MVP source</small>' : ''}</span>${rateVisual(drop.rate)}</a>`).join('')}</div></section>` : '<section class="entity-section"><h2>How to obtain it</h2><p class="muted-copy">No fixed monster drop source is recorded; it may come from forging, shops, or another system.</p></section>'}
+    ${renderAcquisition(item)}
     ${(item.combos || []).length ? `<section class="entity-section"><h2>Set combinations</h2><div class="relation-list">${item.combos.map(combo => `<div><strong>${(combo.with || []).map(entry => entry.id ? `<a href="#item/${Number(entry.id)}">${escapeHtml(entry.name || entry.id)}</a>` : escapeHtml(entry.name || entry)).join(' + ')}</strong><span>${escapeHtml(summarizeScript(combo.script || ''))}</span></div>`).join('')}</div></section>` : ''}
     ${renderSibling(item, context.items)}
     ${renderOptionPool(item, context.options)}`;
