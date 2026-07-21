@@ -1,10 +1,17 @@
 import { acquisitionLabel, escapeHtml, itemIconUrl, translateScript } from './entities.mjs';
 
 const HUNTER_SOURCES = new Set(['Hunter Skill Gear Shop', 'Monster Hunter']);
+const NEW_JRO_IDS = new Set([
+  1337, 1868, 1869, 1942, 1948, 1998, 2061, 2062, 2400, 18196, 18197,
+  20900, 21056, 21057, 26170, 26171, 26204, 26218, 28637, 28738, 28777,
+  28778, 28779, 28780, 32029, 32113, 32261, 32293, 32354, 32405, 32407,
+  470010, 490028, 490034, 570004, 580004, 640006, 27371, 27380, 31002, 300351,
+]);
 
 export function monsterHunterItems(items = []) {
   return items.map(item => ({
     ...item,
+    jroAddition: NEW_JRO_IDS.has(Number(item.id)),
     hunterSources: (item.acquiredFrom || []).filter(source => HUNTER_SOURCES.has(source.name)),
   })).filter(item => item.hunterSources.length);
 }
@@ -29,12 +36,14 @@ export function renderMonsterHunter(items = []) {
   page.className = 'wiki-page hunter-page';
   const all = monsterHunterItems(items);
   const shop = all.filter(item => item.hunterSources.some(source => source.name === 'Hunter Skill Gear Shop'));
+  const jro = shop.filter(item => item.jroAddition);
+  const original = shop.filter(item => !item.jroAddition);
   const bounties = all.filter(item => item.hunterSources.some(source => source.name === 'Monster Hunter'));
   const types = [...new Set(all.map(item => item.type || 'Other'))].sort();
-  page.innerHTML = `<header class="wiki-masthead editorial-masthead"><div class="container"><p class="eyebrow">Hunter's Guild · dedicated equipment archive</p><h1>Monster Hunter</h1><p>Plan your bounty route without digging through the general database. Signature bounty rewards and the imported Pre-Renewal skill collection are separated below.</p><div class="hunter-metrics"><div><strong>${all.length}</strong><span>unique items</span></div><div><strong>${shop.length}</strong><span>skill-shop choices</span></div><div><strong>${bounties.length}</strong><span>bounty rewards</span></div><div><strong>150</strong><span>Hunter Coins per shop item</span></div></div></div></header>
+  page.innerHTML = `<header class="wiki-masthead editorial-masthead"><div class="container"><p class="eyebrow">Hunter's Guild · dedicated equipment archive</p><h1>Monster Hunter</h1><p>Plan your bounty route without digging through the general database. New jRO additions, the original imported collection, and signature bounty rewards are visibly separated below.</p><div class="hunter-metrics"><div><strong>${jro.length}</strong><span>new jRO additions</span></div><div><strong>${shop.length}</strong><span>skill-shop choices</span></div><div><strong>${bounties.length}</strong><span>bounty rewards</span></div><div><strong>150</strong><span>Hunter Coins per shop item</span></div></div></div></header>
     <div class="container hunter-layout">
-      <aside class="hunter-controls" aria-label="Filter Monster Hunter equipment"><label for="hunter-search">Find equipment</label><input id="hunter-search" type="search" placeholder="Item or Aegis name" data-hunter-search><label for="hunter-type">Equipment type</label><select id="hunter-type" data-hunter-type><option value="">All types</option>${types.map(type => `<option>${escapeHtml(type)}</option>`).join('')}</select><p data-hunter-count>${all.length} items shown</p><nav aria-label="Monster Hunter sections"><a href="#monster-hunter/shop">Skill Gear Shop</a><a href="#monster-hunter/bounties">Bounty rewards</a></nav></aside>
-      <div class="hunter-results">${itemSection('hunter-shop', 'Hunter Skill Gear Shop', 'The LegionBR-inspired collection adapted for RuneZero Pre-Renewal. Every item costs 150 Hunter Coins and uses compatible level and skill rules.', shop)}${itemSection('hunter-bounties', 'Monster Hunter bounty rewards', 'Signature equipment granted directly by marked-target contracts. Open an item to see every indexed acquisition path and effect.', bounties)}<p class="hunter-empty" hidden data-hunter-empty>No Monster Hunter equipment matches those filters.</p></div>
+      <aside class="hunter-controls" aria-label="Filter Monster Hunter equipment"><label for="hunter-search">Find equipment</label><input id="hunter-search" type="search" placeholder="Item or Aegis name" data-hunter-search><label for="hunter-type">Equipment type</label><select id="hunter-type" data-hunter-type><option value="">All types</option>${types.map(type => `<option>${escapeHtml(type)}</option>`).join('')}</select><p data-hunter-count>${all.length} items shown</p><nav aria-label="Monster Hunter sections"><a href="#monster-hunter/new-jro">New jRO additions</a><a href="#monster-hunter/shop">Original collection</a><a href="#monster-hunter/bounties">Bounty rewards</a></nav></aside>
+      <div class="hunter-results">${itemSection('hunter-new-jro', 'New: jRO skill equipment', 'These 41 newly added jRO-tagged pieces support first, second, transcendent, and expanded-class skills. Their level and class rules are adapted for Pre-Renewal.', jro)}${itemSection('hunter-shop', 'Original Hunter Skill Gear collection', 'The original 48 LegionBR-inspired choices adapted for RuneZero Pre-Renewal. Every shop item costs 150 Hunter Coins.', original)}${itemSection('hunter-bounties', 'Monster Hunter bounty rewards', 'Signature equipment granted directly by marked-target contracts. Open an item to see every indexed acquisition path and effect.', bounties)}<p class="hunter-empty" hidden data-hunter-empty>No Monster Hunter equipment matches those filters.</p></div>
     </div>`;
 
   const update = () => {
