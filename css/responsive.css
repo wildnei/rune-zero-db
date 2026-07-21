@@ -1,11 +1,13 @@
 @media (max-width: 1120px) {
-  .primary-nav, .search-button span:nth-child(2), .search-button kbd { display: none; }
+  .site-sidebar, .search-button span:nth-child(2), .search-button kbd { display: none; }
+  #app { margin-left: 0; }
   .search-button { min-width: 44px; width: 44px; justify-content: center; padding: 0; }
   .menu-button { display: grid; }
 }
 
 @media (max-width: 960px) {
-  .primary-nav, .search-button span:nth-child(2), .search-button kbd { display: none; }
+  .site-sidebar, .search-button span:nth-child(2), .search-button kbd { display: none; }
+  #app { margin-left: 0; }
   .search-button { min-width: 44px; width: 44px; justify-content: center; padding: 0; }
   .menu-button { display: grid; }
   .split-heading, .journey-layout, .archive-shell { grid-template-columns: 1fr; gap: 2.5rem; }

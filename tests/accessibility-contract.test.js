@@ -8,6 +8,7 @@ test('application shell includes core keyboard and landmark contracts', () => {
   assert.match(html, /class="skip-link"/);
   assert.match(html, /<main id="app" tabindex="-1"/);
   assert.match(html, /aria-label="Primary"/);
+  assert.match(html, /class="site-sidebar"/);
   assert.match(html, /aria-controls="mobile-nav"/);
   assert.match(css, /:focus-visible/);
   assert.match(css, /prefers-reduced-motion/);
@@ -34,6 +35,7 @@ test('mobile drawer traps focus and makes the page inert while open', () => {
   assert.match(source, /trapFocus/);
   assert.match(source, /setPageInert\(true\)/);
   assert.match(source, /setPageInert\(false\)/);
+  assert.match(source, /\.site-sidebar/);
 });
 
 test('skill rebalance explorer has responsive and visible-state contracts', () => {
