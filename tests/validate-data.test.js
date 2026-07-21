@@ -42,6 +42,24 @@ test('item formulas expose no third- or fourth-class skill boosts', () => {
   assert.deepEqual(leaked, []);
 });
 
+test('cash preparation boxes expose their exact contents and Boutique source', () => {
+  const items = JSON.parse(fs.readFileSync('data/items.json', 'utf8'));
+  const expected = new Map([
+    [41010, ['12075,3', '12100,3']],
+    [41011, ['14534,10', '14535,5', '14537,5']],
+    [41012, ['12436,10', '12298,5', '505,25']],
+    [41013, ['12208,5', '12210,5', '14534,5', '12436,5']],
+    [41014, ['645,10', '656,10', '657,10', '12437,5']],
+  ]);
+  for (const [id, contents] of expected) {
+    const item = items.find(entry => entry.id === id);
+    assert.ok(item, `missing preparation box ${id}`);
+    assert.ok(item.acquiredFrom.some(source => source.kind === 'cash-shop' && source.name === 'Rune Zero Boutique'));
+    for (const content of contents) assert.match(item.script, new RegExp(content));
+    assert.match(item.script, /BOUND_ACCOUNT/);
+  }
+});
+
 test('Golden Gear uses the valid Cart Revolution skill identifier', () => {
   const items = JSON.parse(fs.readFileSync('data/items.json', 'utf8'));
   const goldenGear = items.find(item => item.id === 5159);
