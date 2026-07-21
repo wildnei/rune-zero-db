@@ -271,10 +271,35 @@ for (const m of mobs.values()) {
 // Any item whose script boosts a skill's damage (bSkillAtk) is a "skill item".
 // Tier by skill prefix: 3rd-class (+expanded) vs up-to-trans.
 const TIER3 = /^(RK_|WL_|RA_|AB_|GC_|SC_|LG_|SR_|SO_|GN_|NC_|WM_|KO_|RL_|SP_|EM_|SU_|HN_)/;
-function level99SkillPercent(expression) {
+function maxQualifiedVariables(script) {
+  const values = { r: 10 };
+  const evaluate = expression => {
+    let value = String(expression)
+      .replace(/BaseLevel\s*\/\s*(\d+)/g, (_all, divisor) => String(Math.trunc(99 / Number(divisor))))
+      .replace(/BaseLevel/g, '99')
+      .replace(/getrefine\(\)/gi, '10')
+      .replace(/getskilllv\("[A-Z0-9_]+"\)/gi, '10')
+      .replace(/\.@([a-zA-Z0-9_]+)/g, (_all, name) => values[name] == null ? '0' : String(values[name]));
+    if (!/^[\d\s()+*/-]+$/.test(value)) return null;
+    try { return Math.trunc(Function(`"use strict"; return (${value})`)()); }
+    catch { return null; }
+  };
+  for (const match of String(script).matchAll(/\.@([a-zA-Z0-9_]+)\s*(=|\+=|-=)\s*([^;]+);/g)) {
+    const result = evaluate(match[3]);
+    if (result == null) continue;
+    if (match[2] === '=') values[match[1]] = result;
+    else if (match[2] === '+=') values[match[1]] = (values[match[1]] || 0) + result;
+    else values[match[1]] = (values[match[1]] || 0) - result;
+  }
+  return values;
+}
+function level99SkillPercent(expression, variables = {}) {
   let value = expression.trim()
     .replace(/BaseLevel\s*\/\s*(\d+)/g, (_all, divisor) => String(Math.trunc(99 / Number(divisor))))
-    .replace(/BaseLevel/g, '99');
+    .replace(/BaseLevel/g, '99')
+    .replace(/getrefine\(\)/gi, '10')
+    .replace(/getskilllv\("[A-Z0-9_]+"\)/gi, '10')
+    .replace(/\.@([a-zA-Z0-9_]+)/g, (_all, name) => variables[name] == null ? '0' : String(variables[name]));
   if (!/^[\d\s()+*/-]+$/.test(value)) return null;
   try { return Math.trunc(Function(`"use strict"; return (${value})`)()); }
   catch { return null; }
@@ -282,9 +307,10 @@ function level99SkillPercent(expression) {
 for (const it of items.values()) {
   it.boosts = [];
   if (!it.script) continue;
+    const variables = maxQualifiedVariables(it.script);
     const boosts = new Map(); let m; const re = /bSkillAtk,"([A-Z_0-9]+)",([^;]+)/g;
     while ((m = re.exec(it.script))) {
-      const percent = level99SkillPercent(m[2]);
+      const percent = level99SkillPercent(m[2], variables);
       const previous = boosts.get(m[1]);
       // Separate bSkillAtk statements stack in rAthena, including cumulative
       // +7/+8/+9 refine tiers. Show the fully-qualified build potential.

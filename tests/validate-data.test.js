@@ -40,3 +40,9 @@ test('Golden Gear uses the valid Cart Revolution skill identifier', () => {
   assert.match(goldenGear.script, /"MC_CARTREVOLUTION"/);
   assert.doesNotMatch(goldenGear.script, /"BS_CARTREVOLUTION"/);
 });
+
+test('every indexed skill item exposes a numeric maximum instead of vague support text', () => {
+  const items = JSON.parse(fs.readFileSync('data/items.json', 'utf8'));
+  const missing = items.flatMap(item => (item.boosts || []).filter(boost => boost.percent == null).map(boost => `${item.id}:${boost.skill}`));
+  assert.deepEqual(missing, []);
+});

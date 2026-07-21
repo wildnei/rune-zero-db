@@ -5,7 +5,7 @@ import { escapeHtml, itemIconUrl } from './entities.mjs';
 const DEFAULT_STATE = { classId: 'all', query: '', category: 'all', rebalancedOnly: false, skillId: '' };
 
 function damageLabel(percent) {
-  if (percent == null) return 'Skill support';
+  if (percent == null) return 'Open for exact formula';
   const value = Number(percent);
   return `${value > 0 ? '+' : ''}${value}% damage`;
 }
