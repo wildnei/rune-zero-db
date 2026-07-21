@@ -1,13 +1,8 @@
-const LINKS = [
-  ['home', 'Discover'],
-  ['systems', 'Features'],
-  ['runes', 'Rune Planner'],
-  ['monster-hunter', 'Monster Hunter'],
-  ['masteries', 'PvE Masteries'],
-  ['classes', 'Classes'],
-  ['builds', 'Rebalanced Builds'],
-  ['instances', 'Instances'],
-  ['items', 'Database'],
+const LINK_GROUPS = [
+  ['Start here', [['home', 'Discover'], ['systems', 'Features'], ['classes', 'Classes']]],
+  ['Build planning', [['builds', 'Rebalanced Builds'], ['runes', 'Rune Planner'], ['masteries', 'PvE Masteries']]],
+  ['Activities', [['monster-hunter', 'Monster Hunter'], ['instances', 'Instances'], ['hunting', 'Hunting Milestones']]],
+  ['Archives', [['items', 'Item Database'], ['mobs', 'Monster Database'], ['enchants', 'Enchants'], ['balance', 'Skill Changes']]],
 ];
 const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
@@ -22,11 +17,11 @@ function trapFocus(event, container) {
 }
 
 function setPageInert(value) {
-  document.querySelectorAll('[data-site-header], #app, [data-site-status]').forEach(element => { element.inert = value; });
+  document.querySelectorAll('[data-site-header], .site-sidebar, #app, [data-site-status]').forEach(element => { element.inert = value; });
 }
 
 function linksMarkup() {
-  return LINKS.map(([view, label]) => `<a href="#${view}" data-view="${view}">${label}</a>`).join('');
+  return LINK_GROUPS.map(([label, links]) => `<section class="nav-group"><h2>${label}</h2>${links.map(([view, name]) => `<a href="#${view}" data-view="${view}">${name}</a>`).join('')}</section>`).join('');
 }
 
 export function createNavigation({ onNavigate = () => {} } = {}) {

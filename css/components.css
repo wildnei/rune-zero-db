@@ -18,16 +18,30 @@
 .brand-name { color: var(--navy-950); font-family: var(--font-display); font-size: 1.25rem; letter-spacing: -.03em; }
 .brand-name span { color: var(--sky-700); }
 
-.primary-nav { display: flex; align-items: center; gap: .2rem; margin-left: clamp(1.5rem, 4vw, 4rem); }
-.primary-nav a {
-  padding: .7rem .85rem;
-  border-radius: .65rem;
+.site-sidebar {
+  position: fixed;
+  z-index: 80;
+  inset: var(--header-height) auto 0 0;
+  width: 248px;
+  overflow-y: auto;
+  padding: 1.25rem .85rem 2rem;
+  border-right: 1px solid var(--line);
+  background: rgb(255 253 245 / 96%);
+}
+.site-sidebar nav { display: grid; gap: 1.1rem; }
+.nav-group { display: grid; gap: .16rem; }
+.nav-group h2 { margin: 0; padding: .25rem .75rem; color: var(--navy-500); font-family: var(--font-body); font-size: .65rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.nav-group a {
+  display: block;
+  padding: .56rem .75rem;
+  border-radius: .6rem;
   color: var(--navy-700);
-  font-size: .92rem;
+  font-size: .86rem;
   font-weight: 600;
   text-decoration: none;
 }
-.primary-nav a:hover, .primary-nav a[aria-current='page'] { background: var(--sky-50); color: var(--sky-700); }
+.nav-group a:hover, .nav-group a[aria-current='page'] { background: var(--sky-50); color: var(--sky-700); }
+.nav-group a[aria-current='page'] { box-shadow: inset 3px 0 var(--sky-500); }
 
 .header-tools { display: flex; align-items: center; gap: .65rem; margin-left: auto; }
 .search-button {
@@ -62,7 +76,9 @@
 }
 .mobile-drawer[hidden], .drawer-backdrop[hidden] { display: none; }
 .mobile-drawer-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
-.mobile-drawer nav { display: grid; gap: .4rem; padding-top: 1rem; }
+.mobile-drawer nav { display: grid; gap: 1rem; padding-top: 1rem; }
+.mobile-drawer .nav-group { gap: .3rem; }
+.mobile-drawer .nav-group h2 { padding-inline: 1rem; }
 .mobile-drawer nav a { display: block; padding: .8rem 1rem; border-radius: .75rem; color: var(--navy-950); font-weight: 600; text-decoration: none; }
 .mobile-drawer nav a:hover { background: var(--sky-50); }
 .drawer-backdrop { position: fixed; z-index: 100; inset: 0; background: rgb(20 37 58 / 42%); backdrop-filter: blur(3px); }
