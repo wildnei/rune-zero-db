@@ -25,12 +25,21 @@ test('ported level-scaled skill gear is available and evaluated at the level cap
   const bomber = items.find(item => item.id === 490537);
   assert.equal(emerald.reqlv, 99);
   assert.equal(emerald.boosts.find(boost => boost.skill === 'AC_DOUBLE').percent, 99);
-  assert.equal(emerald.boosts.find(boost => boost.skill === 'WM_SEVERE_RAINSTORM_MELEE').percent, 18);
+  assert.equal(emerald.boosts.some(boost => boost.skill === 'WM_SEVERE_RAINSTORM_MELEE'), false);
   assert.equal(bomber.boosts.find(boost => boost.skill === 'HT_CLAYMORETRAP').percent, 49);
   assert.ok(emerald.acquiredFrom.some(source => source.kind === 'item-shop' && source.currency === 40001));
   assert.ok(emerald.acquiredFrom.some(source => source.kind === 'script-reward'));
   const kungJin = items.find(item => item.id === 15879);
   assert.equal(kungJin.boosts.find(boost => boost.skill === 'SN_SHARPSHOOTING').percent, 45);
+});
+
+test('item formulas expose no third- or fourth-class skill boosts', () => {
+  const items = JSON.parse(fs.readFileSync('data/items.json', 'utf8'));
+  const laterPrefix = /^(RK|GC|RA|NC|WL|WM|AB|SC|LG|SR|SO|GN|KO|OB|RL|SU|DK|IG|AG|CD|SHC|ABC|WH|TR|EM|MT|BO|HN|NW|SOA)_/;
+  const leaked = items.flatMap(item => (item.boosts || [])
+    .filter(boost => laterPrefix.test(boost.skill))
+    .map(boost => `${item.id}:${boost.skill}`));
+  assert.deepEqual(leaked, []);
 });
 
 test('Golden Gear uses the valid Cart Revolution skill identifier', () => {
